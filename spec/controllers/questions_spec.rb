@@ -4,7 +4,7 @@ describe QuestionsController do
   describe "POST #create" do
     context 'with valid parameters' do
       it 'creates a question' do
-        question = FactoryGirl.create
+        question = FactoryGirl.create :question
       end
 
       it 'render show view'
