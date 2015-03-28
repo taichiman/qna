@@ -35,4 +35,19 @@ describe QuestionsController do
       end
     end
   end
+
+  describe "GET #show" do
+    let(:question) { create :question }
+    before do
+      get :show, id: question
+    end
+
+    it "assigns @question" do
+      expect(assigns(:question)).to be_eql(question)
+    end
+
+    it "render template :show" do
+      expect(response).to render_template :show
+    end
+  end
 end
