@@ -9,9 +9,9 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params)
 
     if @answer.save
-      head :created
+      redirect_to question_path( @question )
     else
-      head :forbidden
+      render :new
     end
   end
   
