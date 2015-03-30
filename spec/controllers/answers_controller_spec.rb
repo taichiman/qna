@@ -59,23 +59,23 @@ describe AnswersController do
   end
 
   describe "GET #show" do
-    it { binding.pry }
+    let( :question ) { create :question_with_answers }
+    let( :answer )   { question.answers[1] }
 
-    # let(:question) { create question }
-    # # let(:answer) { question.answers << ( create :answer ) }
-    # let(:answer) { create :answer }
-    #
-    # before do
-    #   get :show, id: answer
-    # end
-    #
-    # it "assigns @answer" do
-    #   expect(assigns(:answer)).to be_eql(answer)
-    # end
-    #
-    # it "render template :show" do
-    #   expect(response).to render_template :show
-    # end
+    before do
+      get :show, question_id: question, id: answer
+    end
+
+    it "assigns @question" do
+      expect( assigns( :question ) ).to be_eql( question )
+    end
+
+    it "assigns @answer" do
+      expect( assigns( :answer) ).to be_eql( answer ) end
+
+    it "render template :show" do
+      expect(response).to render_template :show
+    end
   end
 
 end

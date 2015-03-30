@@ -4,6 +4,11 @@ class AnswersController < ApplicationController
     @answer = Answer.new
   end
 
+  def show
+    @question = Question.find( params[ :question_id ])
+    @answer = Answer.find( params[ :id ])
+  end
+
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.build(answer_params)
