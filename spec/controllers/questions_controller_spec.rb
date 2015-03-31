@@ -4,7 +4,7 @@ describe QuestionsController do
   describe 'GET #new' do
     before { get :new }
 
-    it 'should creates instance variable' do
+    it 'should creates @question' do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
@@ -27,10 +27,10 @@ describe QuestionsController do
 
     context 'with invalid attributes' do
       it 'does not create the question' do
-        expect{ post :create, question: attributes_for(:invalid_question) }.to_not change(Question,:count)
+        expect{ post :create, question: attributes_for(:question, title: nil) }.not_to change{ Question.count }
       end
-      it 'renders new view' do
-        post :create, question: attributes_for(:invalid_question)
+      it 're-renders new view' do
+        post :create, question: attributes_for(:question, title: nil)
         expect(response).to render_template :new
       end
     end

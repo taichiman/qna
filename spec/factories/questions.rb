@@ -13,8 +13,4 @@ FactoryGirl.define do
       end
     end
   end
-
-  factory :invalid_question, class: Question do
-    title { Faker::Lorem.sentence }
-  end
 end

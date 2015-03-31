@@ -5,7 +5,7 @@ describe AnswersController do
     let(:question) {create :question}
 
     before do
-      get :new, {question_id:question.id}
+      get :new, { question_id:question.id }
     end
 
     it 'assigns the question to @question' do
@@ -32,7 +32,7 @@ describe AnswersController do
 
       it 'creates an answer' do
         question = create :question
-        expect{post :create, {question_id: question.id , answer: attributes_for(:answer)}}.to change(question.answers,:count).by(1)
+        expect{ post :create, {question_id: question.id , answer: attributes_for(:answer)} }.to change(question.answers,:count).by(1)
       end
 
 
@@ -48,10 +48,10 @@ describe AnswersController do
       let(:question){ create :question }
 
       it 'does not create an answer' do
-        expect{post :create, {question_id: question.id , answer: attributes_for( :answer, body: nil )}}.to change(question.answers,:count).by(0)
+        expect{post :create, {question_id: question.id , answer: attributes_for( :answer, body: nil )}}.not_to change{ question.answers.count }
       end
 
-      it 'renders new view' do
+      it 're-renders new view' do
         post :create, {question_id: question.id , answer: attributes_for( :answer, body: nil )}
         expect(response).to render_template( :new )
       end
