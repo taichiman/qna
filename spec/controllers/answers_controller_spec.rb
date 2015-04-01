@@ -5,7 +5,7 @@ describe AnswersController do
     let(:question) { create :question }
 
     before do
-      get(:new, {question_id: question.id})
+      get(:new, question_id: question.id)
     end
 
     it 'assigns the question to @question' do
@@ -25,28 +25,28 @@ describe AnswersController do
     context 'with valid attributes' do
       it 'assigns the question to @question' do
         question = create(:question)
-        post(:create, {
+        post :create,
           question_id: question.id,
           answer: attributes_for(:answer)
-        })
+
         expect(assigns (:question)).to eql(question)
       end
 
       it 'creates an answer' do
         question = create :question
-        expect{ post(:create, {
+        expect{ post :create,
                   question_id: question.id,
                   answer: attributes_for(:answer)
-                })
+
         }.to change(question.answers, :count).by(1)
       end
 
       it 'redirects to show answer' do
         question = create(:question)
-        post(:create, {
+        post :create,
           question_id: question.id,
           answer: attributes_for(:answer)
-        })
+
         should redirect_to(question_path(question))
       end
     end
@@ -55,18 +55,18 @@ describe AnswersController do
       let(:question){ create(:question) }
 
       it 'does not create an answer' do
-        expect{ post(:create, {
+        expect{ post :create,
                   question_id: question.id,
                   answer: attributes_for(:answer, body: nil)
-                })
+
         }.not_to change{ question.answers.count }
       end
 
       it 're-renders new view' do
-        post(:create, {
+        post :create,
           question_id: question.id,
           answer: attributes_for(:answer, body: nil)
-        })
+
         expect(response).to render_template(:new)
       end
     end

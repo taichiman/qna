@@ -9,14 +9,16 @@ describe QuestionsController do
     end
 
     it 'should renders new view' do
-      expect(response).to render_template :new
+      expect(response).to render_template(:new)
     end
   end
 
   describe "POST #create" do
     context 'with valid attributes' do
       it 'creates a question' do
-        expect{ post :create, question: attributes_for(:question) }.to change(Question,:count).by(1)
+        expect{ post :create,
+                  question: attributes_for(:question)
+        }.to change(Question,:count).by(1)
       end
 
       it 'redirects to show view' do
@@ -27,11 +29,15 @@ describe QuestionsController do
 
     context 'with invalid attributes' do
       it 'does not create the question' do
-        expect{ post :create, question: attributes_for(:question, title: nil) }.not_to change{ Question.count }
+        expect{ post :create,
+                  question: attributes_for(:question, title: nil)
+        }.not_to change{ Question.count }
       end
+
       it 're-renders new view' do
-        post :create, question: attributes_for(:question, title: nil)
-        expect(response).to render_template :new
+        post :create,
+          question: attributes_for(:question, title: nil)
+        expect(response).to render_template(:new)
       end
     end
   end
@@ -47,7 +53,7 @@ describe QuestionsController do
     end
 
     it "render template :show" do
-      expect(response).to render_template :show
+      expect(response).to render_template(:show)
     end
   end
 end
