@@ -4,11 +4,11 @@ describe QuestionsController do
   describe 'GET #new' do
     before { get :new }
 
-    it 'should creates @question' do
+    it 'creates @question' do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
-    it 'should renders new view' do
+    it 'renders new view' do
       expect(response).to render_template(:new)
     end
   end
@@ -32,6 +32,15 @@ describe QuestionsController do
         expect{ post :create,
                   question: attributes_for(:question, title: nil)
         }.not_to change{ Question.count }
+
+        expect{ post :create,
+                  question: attributes_for(:question, body: nil)
+        }.not_to change{ Question.count }
+
+        expect{ post :create,
+                     question: attributes_for(:question, title:nil, body: nil)
+        }.not_to change{ Question.count }
+
       end
 
       it 're-renders new view' do
@@ -44,9 +53,7 @@ describe QuestionsController do
 
   describe "GET #show" do
     let(:question) { create :question }
-    before do
-      get :show, id: question
-    end
+    before { get :show, id: question }
 
     it "assigns @question" do
       expect(assigns(:question)).to be_eql(question)

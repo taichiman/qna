@@ -77,7 +77,10 @@ describe AnswersController do
     let(:answer) { question.answers[1] }
 
     before do
-      get(:show, question_id: question, id: answer)
+      get(:show,
+        question_id: question,
+        id: answer
+      )
     end
 
     it "assigns @question" do
