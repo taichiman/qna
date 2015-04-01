@@ -4,7 +4,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.find( params[ :id ] )
+    @question = Question.find(params[:id])
   end
 
   def new
@@ -14,9 +14,8 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
 
-
     if @question.save
-      redirect_to @question, notice: 'Question was successfully created.'
+      redirect_to( @question, notice: 'Question was successfully created.' )
     else
       render :new
     end

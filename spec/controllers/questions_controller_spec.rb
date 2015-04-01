@@ -41,6 +41,10 @@ describe QuestionsController do
                      question: attributes_for(:question, title:nil, body: nil)
         }.not_to change{ Question.count }
 
+        expect{ post :create,
+                     question: {foo: 'bar'}
+        }.not_to change{ Question.count }
+
       end
 
       it 're-renders new view' do

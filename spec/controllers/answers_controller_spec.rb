@@ -91,7 +91,7 @@ describe AnswersController do
       expect(assigns(:answer)).to be_eql(answer)
     end
 
-    it "render template :show" do
+    it "renders template :show" do
       expect(response).to render_template(:show)
     end
   end
