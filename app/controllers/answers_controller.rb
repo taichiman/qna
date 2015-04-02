@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_question, only: [ :new, :show, :create ]
+  before_action :set_question, only: [:new, :show, :create]
 
   def new
     @answer = Answer.new
@@ -18,8 +18,9 @@ class AnswersController < ApplicationController
       render :new
     end
   end
-  
+
   private
+
   def answer_params
     params.require(:answer).permit(:body)
   end
