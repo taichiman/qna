@@ -54,15 +54,15 @@ describe AnswersController do
     context 'with invalid attributes' do
       let(:question){ create(:question) }
 
-      it 'does not create an answer' do
+      it 'does not create answer' do
         expect{ post :create,
                   question_id: question.id,
                   answer: attributes_for(:answer, body: nil)
 
-        }.not_to change{ question.answers.count }
+        }.not_to change(Answer, :count)
       end
 
-      it 're-renders new view' do
+      it 're-renders the new view' do
         post :create,
           question_id: question.id,
           answer: attributes_for(:answer, body: nil)
