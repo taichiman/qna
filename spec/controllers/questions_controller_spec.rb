@@ -30,21 +30,8 @@ describe QuestionsController do
     context 'with invalid attributes' do
       it 'does not create the question' do
         expect{ post :create,
-                  question: attributes_for(:question, title: nil)
-        }.not_to change{ Question.count }
-
-        expect{ post :create,
-                  question: attributes_for(:question, body: nil)
-        }.not_to change{ Question.count }
-
-        expect{ post :create,
-                     question: attributes_for(:question, title:nil, body: nil)
-        }.not_to change{ Question.count }
-
-        expect{ post :create,
-                     question: {foo: 'bar'}
-        }.not_to change{ Question.count }
-
+                  question: attributes_for(:invalid_question)
+        }.not_to change(Question, :count)
       end
 
       it 're-renders new view' do

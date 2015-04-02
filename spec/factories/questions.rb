@@ -15,5 +15,10 @@ FactoryGirl.define do
         )
       end
     end
+
+    factory :invalid_question do
+      title nil
+      body nil
+    end
   end
 end

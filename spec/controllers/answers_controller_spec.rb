@@ -57,7 +57,7 @@ describe AnswersController do
       it 'does not create answer' do
         expect{ post :create,
                   question_id: question.id,
-                  answer: attributes_for(:answer, body: nil)
+                  answer: attributes_for(:invalid_answer)
 
         }.not_to change(Answer, :count)
       end
