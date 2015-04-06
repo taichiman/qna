@@ -33,4 +33,5 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'fuubar'
+  gem 'capybara'
 end
