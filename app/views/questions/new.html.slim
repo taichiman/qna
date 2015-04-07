@@ -1,7 +1,9 @@
 = form_for @question, url: {action: :create} do |f|
-  = f.label :title, 'Title'
-  = f.text_field :title
-  = f.label :body, 'Body'
-  = f.text_area :body
+  .form-group
+    = f.label :title, 'Title'
+    = f.text_field :title, class: 'form-control'
+  .form-group
+    = f.label :body, 'Body'
+    = f.text_area :body, class: 'form-control', rows: 3
 
-  = submit_tag 'Post Your Question'
+  = submit_tag 'Post Your Question', class: 'btn btn-default'

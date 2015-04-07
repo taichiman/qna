@@ -27,7 +27,7 @@ feature 'User can ask a question', %q{
   scenario 'The user submits the question form with a validate error' do
     visit root_path
     click_on 'Ask Question'
-    expect(current_path).to eq(new_question)
+    expect(current_path).to eq(new_question_path)
 
     fill_in 'Title', with: title
     click_on 'Post Your Question'
