@@ -35,4 +35,5 @@ group :test do
   gem 'shoulda-matchers'
   gem 'fuubar'
   gem 'capybara'
+  gem 'launchy'
 end

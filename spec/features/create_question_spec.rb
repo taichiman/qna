@@ -12,7 +12,7 @@ feature 'User can ask a question', %q{
 
     visit root_path
     click_on 'Ask Question'
-    expect(current_path).to eq(new_question)
+    expect(current_path).to eq(new_question_path)
 
     fill_in 'Title', with: title
     fill_in 'Body', with: body
