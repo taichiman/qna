@@ -1,3 +1,5 @@
-
-| #{@question.title}
-| #{@question.body}
+.panel.panel-default
+  .panel-heading
+    .panel-title = @question.title
+  .panel-body
+    | #{@question.body}
