@@ -6,4 +6,16 @@ html
     = javascript_include_tag 'application'
     = csrf_meta_tags
 body
-  == yield
+
+  nav.navbar.navbar-default
+    .container-fluid
+      ul.nav.navbar-nav
+        li
+          a.navbar-brand href='/' title='QnA homepage' QnA
+
+  .container#main-container
+    .row
+      .col-xs-3#sidebar
+        | Sidebar content
+      .col-xs-9#sidebar
+        == yield
