@@ -19,5 +19,11 @@ html
       .row
         .col-xs-3#sidebar
           == yield :sidebar
+
         .col-xs-9#content
-          == yield
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title
+                == yield :section_title
+            .panel-body
+              == yield
