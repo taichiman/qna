@@ -29,6 +29,7 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'faker'
+  gem 'quiet_assets'
 end
 
 group :test do
