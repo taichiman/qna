@@ -26,6 +26,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'byebug'
   gem 'pry'
+  gem 'pry-doc'
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'faker'
