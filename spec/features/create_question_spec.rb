@@ -29,10 +29,10 @@ feature 'User can ask a question', %q{
     click_on 'Ask Question'
     expect(current_path).to eq(new_question_path)
 
-    fill_in 'Title', with: title
     click_on 'Post Your Question'
 
-    expect(page).to have_content('validation error')
-    expect(current_path).to eq(new_question)
+    expect(page).to have_content('Title can\'t be blank')
+    expect(page).to have_content('Body can\'t be blank')
+    expect(current_path).to eq(questions_path)
   end
 end
