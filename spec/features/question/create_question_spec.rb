@@ -6,22 +6,21 @@ feature 'User can ask a question', %q{
   I want to be able to fill and to submit a question form
 } do
 
-  scenario 'An user fills and submits a question form' do
-    title = 'foo'
-    body = 'bar'
+  given(:question) { build :question }
 
+  scenario 'An user fills and submits a question form' do
     visit root_path
     click_on 'Ask Question'
     expect(current_path).to eq(new_question_path)
 
-    fill_in 'Title', with: title
-    fill_in 'Body', with: body
+    fill_in 'Title', with: question.title
+    fill_in 'Body', with: question.body
     click_on 'Post Your Question'
 
     expect(page).to have_content('The Question created')
     expect(current_path).to eq(question_path(Question.last))
-    expect(page).to have_content(title)
-    expect(page).to have_content(body)
+    expect(page).to have_content(question.title)
+    expect(page).to have_content(question.body)
   end
 
   scenario 'The user submits the question form with a validate error' do
