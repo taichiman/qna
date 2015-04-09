@@ -22,3 +22,6 @@
 en:
   hello: "Hello world"
   all_questions: 'All Questions'
+
+  questions:
+    new: 'New Question'
