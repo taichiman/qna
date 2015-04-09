@@ -20,10 +20,14 @@ feature 'User can see list of questions', %q{
   end
 
   scenario 'An user clicks a link in navbar' do
-    click_on 'All Question'
+    visit '/'
+    click_on 'All Questions'
 
-    expect(page).to have_content('All Questions')
-    expect(page).to have_content('Questions1')
-    expect(page).to have_content('Questions2')
+    expect(page).to have_content(t(:all_questions))
+
+    expect(page).to have_content(questions.first.title)
+    expect(page).to have_content(questions.first.body)
+    expect(page).to have_content(questions.second.title)
+    expect(page).to have_content(questions.second.body)
   end
 end
