@@ -6,14 +6,17 @@ feature 'User can see list of questions', %q{
   I want to be able to go to Home page of the site
 } do
 
-  given(:questions){ create_pair :question }
+  given!(:questions){ create_pair :question }
 
   scenario 'An user visits Home page' do
     visit '/'
 
     expect(page).to have_content(t(:all_questions))
-    expect(page).to have_content('Questions1')
-    expect(page).to have_content('Questions2')
+
+    expect(page).to have_content(questions.first.title)
+    expect(page).to have_content(questions.first.body)
+    expect(page).to have_content(questions.second.title)
+    expect(page).to have_content(questions.second.body)
   end
 
   scenario 'An user clicks a link in navbar' do
