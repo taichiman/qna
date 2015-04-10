@@ -1,5 +1,6 @@
 .panel.panel-default
   .panel-heading
-    .panel-title = @question.title
+    .panel-title
+      h4.text-primary = link_to @question.title, question_path(@question), class: 'question-hyperlink'
   .panel-body
     | #{@question.body}

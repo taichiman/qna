@@ -1,6 +1,6 @@
 .question
   .title
-    h4.text-primary = question.title
+    h4.text-primary = link_to question.title, question_path(question), class: 'question-hyperlink'
   .body
     p = question.body
 br
