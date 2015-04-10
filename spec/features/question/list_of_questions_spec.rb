@@ -8,26 +8,16 @@ feature 'User can see list of questions', %q{
 
   given!(:questions){ create_pair :question }
 
-  scenario 'An user visits Home page' do
+  background do
     visit '/'
-
-    expect(page).to have_content(t(:all_questions))
-
-    expect(page).to have_content(questions.first.title)
-    expect(page).to have_content(questions.first.body)
-    expect(page).to have_content(questions.second.title)
-    expect(page).to have_content(questions.second.body)
   end
 
-  scenario 'An user clicks a link in navbar' do
-    visit '/'
+  scenario 'An user visits Home page' do
+    page_have_content_question_list
+  end
+
+  scenario 'An user clicks link in navbar' do
     click_on 'All Questions'
-
-    expect(page).to have_content(t(:all_questions))
-
-    expect(page).to have_content(questions.first.title)
-    expect(page).to have_content(questions.first.body)
-    expect(page).to have_content(questions.second.title)
-    expect(page).to have_content(questions.second.body)
+    page_have_content_question_list
   end
 end
