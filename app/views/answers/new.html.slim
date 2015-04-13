@@ -1,0 +1,16 @@
+- if @answer.errors.any?
+  /- binding.pry
+  #error_explanation
+    h4 #{pluralize(@answer.errors.count, "error")} prohibited this answer from being saved:
+    ul
+      - @answer.errors.full_messages.each do |msg|
+        li = msg
+
+= 
+
+= form_for [@question, @answer] do |f|
+  .form-group
+    = f.label :body, 'Body'
+    = f.text_area :body, class: 'form-control'
+
+  = submit_tag 'Post Your Answer'

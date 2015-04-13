@@ -4,3 +4,5 @@
       h4.text-primary = link_to @question.title, question_path(@question), class: 'question-hyperlink'
   .panel-body
     | #{@question.body}
+  .panel-footer
+    = link_to 'Create answer', new_question_answer_path(@question), class: 'text-success'

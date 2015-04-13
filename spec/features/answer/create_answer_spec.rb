@@ -15,18 +15,19 @@ feature 'User can create answers', %q{
   scenario 'An user select the question from question list' do
     visit '/'
     click_on question.title
+
     expect(page).to have_selector('a.question-hyperlink', text: question.title, count: 1)
     expect(page).to have_content(question.body)
   end
 
   scenario 'An user creates an answer' do
     visit question_path(question)
+    click_on 'Create answer'
 
-    #
-    # click_on 'Create Answer'
-    #
     # have_content('form new_answer')
-    #
+
+    expect(page).to have_field('Body')
+
     # fill_in #question body
     #
     # click_on 'Post Your Answer'
