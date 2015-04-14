@@ -24,13 +24,13 @@ feature 'User can create answers', %q{
     visit question_path(question)
     click_on 'Create answer'
 
-    # have_content('form new_answer')
-
-    expect(page).to have_field('Body')
-
-    # fill_in #question body
-    #
-    # click_on 'Post Your Answer'
+    expect(page).to have_content(question.title)
+    expect(page).to have_content(question.body)
+    expect(page).to have_field('Your Answer')
+    
+    fill_in 'Your Answer', with: attributes_for(:answer)[:body]
+    
+    expect{ click_on 'Post Your Answer' }.to change(Answer, :count)
   end
 
   scenario 'An user can\'t creates an invalid answer' do

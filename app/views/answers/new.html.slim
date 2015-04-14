@@ -1,3 +1,6 @@
+- content_for :section_title
+  h4= 'Create new answer'
+
 - if @answer.errors.any?
   /- binding.pry
   #error_explanation
@@ -6,11 +9,14 @@
       - @answer.errors.full_messages.each do |msg|
         li = msg
 
-= 
+.panel.panel-default
+  .panel-body
+    h4.text-warning= @question.title
+    p.text-success= @question.body
 
 = form_for [@question, @answer] do |f|
   .form-group
-    = f.label :body, 'Body'
+    = f.label :body, 'Your Answer'
     = f.text_area :body, class: 'form-control'
 
   = submit_tag 'Post Your Answer'

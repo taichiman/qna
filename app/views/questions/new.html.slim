@@ -2,7 +2,6 @@
     h4 = t('.')
 
 - if @question.errors.any?
-  /- binding.pry
   #error_explanation
     h4 #{pluralize(@question.errors.count, "error")} prohibited this question from being saved:
     ul
