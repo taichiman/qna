@@ -31,10 +31,22 @@ feature 'User can create answers', %q{
     fill_in 'Your Answer', with: attributes_for(:answer)[:body]
     
     expect{ click_on 'Post Your Answer' }.to change(Answer, :count)
+    expect(current_path).to eq(question_path(question))
   end
 
   scenario 'An user can\'t creates an invalid answer' do
-    # given(## answer with blank body)
+    visit question_path(question)
+    click_on 'Create answer'
+
+    expect(page).to have_content(question.title)
+    expect(page).to have_content(question.body)
+    expect(page).to have_field('Your Answer')
+    
+    fill_in 'Your Answer', with: nil
+    
+    expect{ click_on 'Post Your Answer' }.not_to change(Answer, :count)
+    expect(page).to have_content('Body can\'t be blank')
+    expect(current_path).to eq(question_answers_path(question))
   end
 
 end
