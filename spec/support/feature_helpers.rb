@@ -9,6 +9,12 @@ module Features
       expect(page).to have_content(questions.second.title)
       expect(page).to have_content(questions.second.body)
     end
+
+    def page_have_content_create_answer(question)
+      expect(page).to have_content(question.title)
+      expect(page).to have_content(question.body)
+      expect(page).to have_field('Your Answer') 
+    end
   end
 end
 
