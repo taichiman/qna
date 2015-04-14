@@ -7,3 +7,4 @@
 
 config/database.yml
 .rubocop_todo.yml
+.vimrc
