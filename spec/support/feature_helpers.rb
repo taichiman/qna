@@ -1,4 +1,5 @@
 module Features
+
   module ContentHelpers
     def page_have_content_question_list
       expect(page).to have_content(t(:all_questions))
@@ -15,6 +16,7 @@ module Features
       expect(page).to have_content(question.body)
       expect(page).to have_field('Your Answer') 
     end
+
   end
 end
 

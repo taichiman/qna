@@ -1,8 +1,13 @@
 .panel.panel-default
   .panel-heading
-    .panel-title
+    .panel-title#question_title
       h4.text-primary = link_to @question.title, question_path(@question), class: 'question-hyperlink'
-  .panel-body
+  .panel-body#question_body
     | #{@question.body}
+    .answer_label
+      br
+      h4= answer_count_legend(@question.answers.count)
+      hr 
+      = render partial: 'questions/answer', collection: @question.answers
   .panel-footer
     = link_to 'Create answer', new_question_answer_path(@question), class: 'text-success'
