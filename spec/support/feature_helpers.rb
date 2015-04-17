@@ -18,5 +18,14 @@ module Features
     end
 
   end
+
+  module AuthentificationHelpers
+    def fill_and_click_sign_up(user)
+      fill_in 'Email', with: user[:email]
+      fill_in 'Password', with: user[:password]
+      fill_in 'Password confirmation', with: user[:password_confirmation]
+      click_button 'Sign up'
+    end
+  end
 end
 
