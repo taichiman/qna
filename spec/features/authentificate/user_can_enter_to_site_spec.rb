@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User can login to the site', %q{
+feature 'User can login', %q{
   In order to be able to ack question
   As an User
   I want to be able to signin
