@@ -26,6 +26,15 @@ module Features
       fill_in 'Password confirmation', with: user[:password_confirmation]
       click_button 'Sign up'
     end
+
+    def fill_form_and_sign_in
+      User.create(email:'user@test.com', password: 123)
+      visit new_user_session_path
+      fill_in 'Email', with: 'user@test.com'
+      fill_in 'Password', with: '123'
+      click_button 'Log in'
+    end
   end
+
 end
 

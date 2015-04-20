@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe QuestionsController do
   describe 'GET #new' do
+    sign_in_user
     before { get :new }
 
     it 'creates @question' do
@@ -14,6 +15,8 @@ describe QuestionsController do
   end
 
   describe "POST #create" do
+    sign_in_user
+
     context 'with valid attributes' do
       it 'creates a question' do
         expect{ post :create,
