@@ -7,7 +7,7 @@ feature 'Authenticated user can ask a question', %q{
 } do
 
   given(:question) { build :question }
-
+  
   scenario 'An authenticated user ask question' do
     fill_form_and_sign_in
 
