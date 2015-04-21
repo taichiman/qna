@@ -13,7 +13,7 @@ feature 'User can signup', %q{
 
   feature 'when succesfull signup' do
     scenario 'with valid email and password' do
-      fill_and_click_sign_up( attributes_for(:user) )
+      fill_and_sign_up( attributes_for(:user) )
 
       expect(page).to have_content('Welcome! You have signed up successfully')
       expect(current_path).to eq(root_path)
@@ -22,7 +22,7 @@ feature 'User can signup', %q{
 
   feature 'when unsuccessfull signup' do
     scenario 'with invalid email' do
-      fill_and_click_sign_up( attributes_for(:user, :invalid_email) ) 
+      fill_and_sign_up( attributes_for(:user, :invalid_email) ) 
 
       expect(page).not_to have_content('Welcome! You have signed up successfully')
       expect(page).to have_content('Email can\'t be blank')
@@ -30,7 +30,7 @@ feature 'User can signup', %q{
     end
 
     scenario 'with invalid pasword' do
-      fill_and_click_sign_up( attributes_for(:user, :invalid_password) ) 
+      fill_and_sign_up( attributes_for(:user, :invalid_password) ) 
       
       expect(page).not_to have_content('Welcome! You have signed up successfully')
       expect(page).to have_content('Password can\'t be blank')
