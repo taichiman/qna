@@ -2,7 +2,6 @@
   h4= 'Create new answer'
 
 - if @answer.errors.any?
-  /- binding.pry
   #error_explanation
     h4 #{pluralize(@answer.errors.count, "error")} prohibited this answer from being saved:
     ul
@@ -20,3 +19,4 @@
     = f.text_area :body, class: 'form-control'
 
   = submit_tag 'Post Your Answer'
+

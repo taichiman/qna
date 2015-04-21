@@ -4,21 +4,31 @@ describe AnswersController do
   describe 'GET #new' do
     let(:question) { create :question }
 
-    before do
-      get(:new, question_id: question.id)
+    context 'authenticated user' do
+      sign_in_user
+      before{ get(:new, question_id: question.id) }
+
+      it 'assigns the question to @question' do
+        expect(assigns(:question)).to eql(question)
+      end
+
+      it 'assigns a new record to @answer' do
+        expect(assigns(:answer)).to be_a_new(Answer)
+      end
+
+      it 'renders new view' do
+        expect(response).to render_template(:new)
+      end
+
     end
 
-    it 'assigns the question to @question' do
-      expect(assigns(:question)).to eql(question)
-    end
+    context 'unauthenticated user' do
+      before{ get :new, question_id: question.id }
 
-    it 'assigns a new record to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
+      it { should set_flash[:alert].to('You need to sign in or sign up before continuing.') }
+      it { should redirect_to(new_user_session_path) }
+   end
 
-    it 'renders new view' do
-      expect(response).to render_template(:new)
-    end
   end
 
   describe 'POST #create' do
