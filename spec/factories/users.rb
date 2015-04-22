@@ -17,6 +17,10 @@ FactoryGirl.define do
     email 
     password { password }
     password_confirmation { password }
+
+    factory :user_with_questions do
+      after(:create) { |user| create_pair :question_with_answers, user: user }
+    end
   end
 
 end
