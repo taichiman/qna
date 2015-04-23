@@ -27,7 +27,7 @@ module Features
       click_button 'Sign up'
     end
 
-    def fill_form_and_sign_in    
+    def fill_form_and_sign_in
       visit new_user_session_path
       @user = create :user
       fill_in 'Email', with: @user.email
