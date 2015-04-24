@@ -7,6 +7,10 @@ feature 'User can see lists of his questions', %q{
 } do
 
   given(:user){ create :user_with_questions }
+  
+  background do
+    create_pair :user_with_questions
+  end
 
   scenario 'list of my questions' do
     fill_form_and_sign_in(user)
