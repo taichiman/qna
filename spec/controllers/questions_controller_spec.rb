@@ -22,7 +22,7 @@ describe QuestionsController do
       it 'creates a question' do
         expect{ post :create,
                   question: attributes_for(:question)
-        }.to change(Question,:count).by(1)
+        }.to change(user.questions,:count).by(1)
       end
 
       it 'redirects to show view' do

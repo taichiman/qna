@@ -1,4 +1,8 @@
 - content_for :section_title
-  h4 = t(:all_questions)
+  - if params[:scope] == 'my'
+    h4 = t('.my-questions')
+  - else  
+    h4 = t('.all-questions')
 
 = render partial: 'questions/question', collection: @questions
+
