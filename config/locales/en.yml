@@ -21,10 +21,15 @@
 
 en:
   hello: "Hello world"
-  all_questions: 'All Questions'
 
   questions:
     new: 'New Question'
+    index:
+      my-questions: 'List of my questions'
+      all-questions: 'All Questions'
 
   answer_count_legend: Answer
+
+  links: 
+    my-questions: 'My Questions'
 

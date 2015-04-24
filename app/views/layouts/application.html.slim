@@ -12,7 +12,10 @@ html
           li
             a.navbar-brand href='/' title='QnA homepage' QnA
           li = link_to 'All Questions', questions_path
-          li = link_to 'Ask Question', new_question_path
+          li.bg-info
+            = link_to 'Ask Question', new_question_path
+          - if user_signed_in? 
+            li = link_to t('links.my-questions'), my_questions_path
 
           li = render 'devise/menu/login_items'
           li = render 'devise/menu/registration_items'

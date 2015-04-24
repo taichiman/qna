@@ -5,5 +5,7 @@ class Question < ActiveRecord::Base
 
   belongs_to :user
  
-  scope :my, -> (user){ where( user: user) } 
+  scope :my, -> (user) { where( user: user) }
+
 end
+
