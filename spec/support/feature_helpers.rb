@@ -27,11 +27,11 @@ module Features
       click_button 'Sign up'
     end
 
-    def fill_form_and_sign_in
+    def fill_form_and_sign_in(user=nil)
       visit new_user_session_path
-      @user = create :user
-      fill_in 'Email', with: @user.email
-      fill_in 'Password', with: @user.password
+      user_dup = user.nil? ? create(:user) : user
+      fill_in 'Email', with: user_dup.email
+      fill_in 'Password', with: user_dup.password
       click_button 'Log in'
     end
 
