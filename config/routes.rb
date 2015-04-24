@@ -6,4 +6,8 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers
   end
+  
+  get '/my_questions', to: 'questions#index', scope: 'my', as: 'my_questions'
+
 end
+

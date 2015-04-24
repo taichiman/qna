@@ -3,6 +3,7 @@ require 'rails_helper'
 describe QuestionsController do
   describe 'GET #new' do
     sign_in_user
+
     before { get :new }
 
     it 'creates @question' do
@@ -57,4 +58,20 @@ describe QuestionsController do
       expect(response).to render_template(:show)
     end
   end
+
+  describe 'GET #my_questions' do
+    before { create_pair :user_with_questions }
+
+    sign_in_user :user_with_questions
+    before{ get :index, scope: 'my' }
+
+    it 'assigns @questions with only my questions' do
+      expect(assigns(:questions)).to match_array(user.questions)
+    end
+
+    it { should render_template(:index) }
+
+  end
+
 end
+

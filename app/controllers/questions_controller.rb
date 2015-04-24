@@ -2,7 +2,11 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   
   def index
-    @questions = Question.all
+    if params[:scope] == 'my' then
+      @questions = Question.my(current_user)
+    else
+      @questions = Question.all
+    end
   end
 
   def show
@@ -30,3 +34,4 @@ class QuestionsController < ApplicationController
   end
 
 end
+

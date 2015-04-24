@@ -8,7 +8,7 @@ describe WelcomeController do
 
     it 'assigns @questions' do
       create_pair :question
-      expect(assigns(@question)[:questions]).to match_array(Question.all)
+      expect(assigns(:questions)).to match_array(Question.all)
     end
 
     it 'renders index view' do
