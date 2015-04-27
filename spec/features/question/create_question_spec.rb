@@ -17,7 +17,7 @@ feature 'Authenticated user can ask a question', %q{
 
       fill_in 'Title', with: question.title
       fill_in 'Body', with: question.body
-      click_on 'Post Your Question'
+      click_on t('questions.form.submit')
 
       expect(page).to have_content('The Question created')
       expect(current_path).to eq(question_path(Question.last))
@@ -32,7 +32,7 @@ feature 'Authenticated user can ask a question', %q{
       click_on 'Ask Question'
       expect(current_path).to eq(new_question_path)
 
-      click_on 'Post Your Question'
+      click_on t('questions.form.submit')
 
       expect(page).to have_content('Title can\'t be blank')
       expect(page).to have_content('Body can\'t be blank')
