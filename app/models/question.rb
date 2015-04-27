@@ -1,5 +1,5 @@
 class Question < ActiveRecord::Base
-  has_many :answers, dependent: :destroy
+  has_many :answers, dependent: :restrict_with_exception
 
   validates :title, :body, presence: true
 
