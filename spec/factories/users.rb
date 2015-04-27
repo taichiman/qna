@@ -4,7 +4,7 @@ FactoryGirl.define do
   end
 
   factory :user do
-    password = Faker::Internet.password
+    password = 123
 
     trait :invalid_email do
       email nil
@@ -19,7 +19,16 @@ FactoryGirl.define do
     password_confirmation { password }
 
     factory :user_with_questions do
-      after(:create) { |user| create_pair :question_with_answers, user: user }
+      transient do 
+        questions_count 2
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:question_with_answers,
+          evaluator.questions_count,
+          user: user 
+        )
+      end
     end
   end
 

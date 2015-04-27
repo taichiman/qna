@@ -9,6 +9,23 @@ describe QuestionsHelper do
     ].each do |count, legend|
       expect(answer_count_legend(count)).to eq(legend)
     end
+  
   end
+
+  describe 'shows count of my questions' do
+    it 'there are some questions' do
+      user = create :user_with_questions
+      expect(my_questions_count(user)).to eq(" (#{Question.my(user).count})")
+
+    end
+
+    it 'there are no questions' do
+      user = create :user_with_questions, questions_count: 0
+      expect(my_questions_count(user)).to eq('')
+    
+    end
+
+  end
+
 end
 
