@@ -6,6 +6,30 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-FactoryGirl.create :question
-FactoryGirl.create_list :question_with_answers, 4
+include FactoryGirl::Syntax::Methods
+
+# user
+#   without questions
+create :user
+
+# user:
+#   with question
+create :user do |user|
+  user.questions.create(attributes_for(:question))
+end
+
+#   with question with one answer
+create :user do |user|
+  create :question_with_answers, answers_count: 1, user: user
+  #user.questions << create(:question_with_answers, answers_count: 1) 
+end
+#   with question with answers
+create :user do |user|
+  create(:question_with_answers, user: user)
+end
+
+# user:
+#   with questions with answers
+#
+create_list :user_with_questions, 2
 
