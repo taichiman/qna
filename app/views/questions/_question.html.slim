@@ -1,6 +1,14 @@
-.question
-  .title
-    h4.text-primary = link_to question.title, question_path(question), class: 'question-hyperlink'
-  .body
-    p = question.body
+.question.clearfix
+  .pull-left
+    .title
+      h4.text-primary = link_to question.title, question_path(question), class: 'question-hyperlink'
+    .body
+      p = question.body
+
+  .pull-right
+    - if current_page?(my_questions_path)
+      ul.nav.navbar-nav
+        li = link_to edit_question_path(question), class: 'edit-question' do
+               span.glyphicon.glyphicon-pencil
 br
+

@@ -73,5 +73,30 @@ describe QuestionsController do
 
   end
 
+  describe 'GET #edit' do
+    sign_in_user(:user_with_questions)
+    let(:question){ user.questions.first }
+    
+    before do
+      get :edit, id: question
+    end
+    
+    context 'user owns the edited question' do
+      it { should use_before_action(:authenticate_user!) }
+      it { should use_before_action(:set_question) }
+      it { expect(assigns(:question)).to eq(question) }
+      it { should render_template('edit') }
+
+    end
+
+    context 'only owner should be able to edit the question' do
+      let(:question){ create :question }
+
+      it { should redirect_to my_questions_path }
+      it { should set_flash[:notice].to(t('question-not-owner')) }
+
+    end
+  end
+
 end
 

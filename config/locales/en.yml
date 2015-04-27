@@ -27,7 +27,11 @@ en:
     index:
       my-questions: 'List of my questions'
       all-questions: 'All Questions'
-
+    question:
+      edit: 'Edit'
+    edit: 'Edit question'
+      
+  question-not-owner: 'You can only edit your own questions'
   answer_count_legend: Answer
 
   links: 

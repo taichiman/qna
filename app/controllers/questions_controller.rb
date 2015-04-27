@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_question, only: [:show, :edit]
   
   def index
     if params[:scope] == 'my' then
@@ -9,12 +10,16 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def show
-    @question = Question.find(params[:id])
-  end
+  def show; end
 
   def new
     @question = Question.new
+  end
+
+  def edit; 
+    unless @question.user == current_user
+      redirect_to my_questions_path, notice: t('question-not-owner')
+    end
   end
 
   def create
@@ -31,6 +36,10 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body)
+  end
+
+  def set_question
+    @question = Question.find(params[:id])
   end
 
 end
