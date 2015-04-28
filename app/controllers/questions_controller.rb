@@ -1,7 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :edit, :update]
-  
+  before_action :only_owner, only: [:edit, :update] 
+
   def index
     if params[:scope] == 'my' then
       @questions = Question.my(current_user)
@@ -18,12 +19,7 @@ class QuestionsController < ApplicationController
 
   end
 
-  def edit; 
-    unless @question.user == current_user
-      redirect_to my_questions_path, notice: t('question-not-owner')
-    end
-
-  end
+  def edit; end
 
   def create
     @question = current_user.questions.build(question_params)
@@ -55,6 +51,14 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+
+  end
+
+  def only_owner
+    unless @question.user == current_user
+      redirect_to my_questions_path, notice: t('question-not-owner')
+      return
+    end
 
   end
 

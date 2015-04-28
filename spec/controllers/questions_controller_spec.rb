@@ -155,6 +155,14 @@ describe QuestionsController do
         end
       end
 
+      context 'tries update when not question owner' do
+        let(:question){ create :question }
+
+        it { should redirect_to(my_questions_path) }
+        it { should set_flash[:notice].to t('question-not-owner') }
+
+      end
+
     end
   end
 

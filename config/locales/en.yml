@@ -8,8 +8,8 @@ en:
     edit:
       title: Edit question
     update:
-      succesfully: 'Succesfully updated'
-      unsuccesfully: 'Unsuccesfully updated'
+      succesfully: Succesfully updated
+      unsuccesfully: Unsuccesfully updated
 
     question:
       edit: Edit
