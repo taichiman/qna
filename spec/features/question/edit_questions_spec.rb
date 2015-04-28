@@ -18,8 +18,8 @@ feature 'User can edit question', %q{
 
       fill_form_and_sign_in(user)
       visit '/'
-      click_on t('links.my-questions')
-      first('a.edit-question').click
+      click_on t('links.my-questions')      
+      first("a.edit-question[href='#{edit_question_path(question)}']").click
 
       fill_in 'Title', with: find('#question_title').value.upcase
       fill_in 'Body', with: find('#question_body').value.upcase
