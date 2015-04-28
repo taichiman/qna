@@ -98,5 +98,65 @@ describe QuestionsController do
     end
   end
 
+  describe 'PATCH #update' do
+    sign_in_user(:user_with_questions) 
+    
+    let(:question){ user.questions.first }
+    let(:title){ question.title }
+    let(:body){ question.body }
+
+    describe 'updates question' do      
+      before do
+        patch :update, 
+          id: question, 
+          question: {
+            title: title.upcase,
+            body: body.upcase
+          }
+      end
+
+      context 'with valid attributes' do
+        it { expect(assigns(:question)).to eq(question) }
+        it { should use_before_action(:authenticate_user!) }
+        it { should use_before_action(:set_question) }
+        it { should redirect_to(question) }
+        it { should set_flash[:notice].to t('questions.update.succesfully') }
+
+        it 'changes title of the question' do
+          expect(Question.find(question.id).title).to eq(question.title.upcase)
+        end
+        it 'changes body of the question' do
+          expect(Question.find(question.id).body).to eq(question.body.upcase)
+        end
+      end
+
+      context 'with invalid attributes' do
+        let(:title) { '' }
+        
+        it { should render_template 'edit' }
+        it { should set_flash[:alert].to t('questions.update.unsuccesfully') }
+
+        it 'not changes number of all questions' do
+          expect{ patch :update, 
+                    id: question, 
+                    question: {
+                    title: title,
+                    body: body }
+          }.not_to change(Question, :count)
+        end
+
+        it 'does not changes title' do
+          expect(Question.find(question.id).title).to eq(question.title)
+        end
+
+        it 'does not changes body' do                                       
+          expect(Question.find(question.id).body).to eq(question.body)
+        
+        end
+      end
+
+    end
+  end
+
 end
 

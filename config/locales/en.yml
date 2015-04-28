@@ -7,6 +7,10 @@ en:
       all-questions: All Questions
     edit:
       title: Edit question
+    update:
+      succesfully: 'Succesfully updated'
+      unsuccesfully: 'Unsuccesfully updated'
+
     question:
       edit: Edit
     form:
