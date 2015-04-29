@@ -34,6 +34,7 @@ group :development, :test do
   gem 'spring'
   gem 'faker'
   gem 'quiet_assets'
+
 end
 
 group :test do
@@ -42,4 +43,8 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
+  #gem 'selenium-webdriver'
+  gem 'capybara-webkit'
+
 end
+
