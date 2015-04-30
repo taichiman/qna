@@ -12,8 +12,8 @@ en:
       unsuccesfully: Unsuccesfully updated
     destroy:
       deleted: Succesfully deleted
-      not_deleted: Question with answer(s) can't be deleted
-      only_owner_can_delete: You can only delete your own question
+      not-deleted: Question with answer(s) can't be deleted
+      only-owner-can-delete: You can only delete your own question
 
     question:
       edit: Edit
@@ -21,7 +21,7 @@ en:
       submit: Post question
 
   question-not-owner: You can only edit your own questions
-  answer_count_legend: Answer
+  answer-count-legend: Answer
 
   links: 
     my-questions: My Questions

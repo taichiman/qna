@@ -1,6 +1,6 @@
 module QuestionsHelper
   def answer_count_legend(count)
-    "#{count} #{t(:answer_count_legend).pluralize(count)}"
+    "#{count} #{t('answer-count-legend').pluralize(count)}"
   end
 
   def my_questions_count(user)

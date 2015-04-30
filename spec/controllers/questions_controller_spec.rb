@@ -223,11 +223,11 @@ describe QuestionsController do
 
       it_behaves_like 'redirect to my_questions path'
 
-      it { should set_flash[:alert].to t('questions.destroy.not_deleted')}
+      it { should set_flash[:alert].to t('questions.destroy.not-deleted')}
 
     end
         
-    it_behaves_like 'only owner handling question', message: 'questions.destroy.only_owner_can_delete'
+    it_behaves_like 'only owner handling question', message: 'questions.destroy.only-owner-can-delete'
     
     describe 'when unauthenticated', skip_request: true do
       before do 

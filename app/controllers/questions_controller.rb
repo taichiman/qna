@@ -49,7 +49,7 @@ class QuestionsController < ApplicationController
     @question.destroy
 
   rescue ActiveRecord::DeleteRestrictionError
-    message = { alert: t('.not_deleted') }  
+    message = { alert: t('.not-deleted') }  
   else
     message = { notice: t('.deleted') }    
   ensure
@@ -75,7 +75,7 @@ class QuestionsController < ApplicationController
         when :edit, :update
           'question-not-owner'
         else
-          '.only_owner_can_delete'
+          '.only-owner-can-delete'
         end
 
       redirect_to my_questions_path, alert: t(message)
