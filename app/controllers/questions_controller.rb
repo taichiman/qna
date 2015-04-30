@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:show, :edit, :update]
-  before_action :only_owner, only: [:edit, :update] 
+  before_action :set_question, only: [:show, :edit, :update, :destroy]
+  before_action :only_owner, only: [:edit, :update, :destroy] 
 
   def index
     if params[:scope] == 'my' then
@@ -41,6 +41,20 @@ class QuestionsController < ApplicationController
     end
 
   end
+
+  def destroy
+    #  params: {"authenticity_token"=>"tD5DlBbcCN/ZTk6COssYZowvQAK93zPsWe1wcRlb5ztVgsCFVYkCx4RI//B8YPWVndaOglJt+A5fjBB2R56r0g==",
+    #           "id"=>"8"}
+
+    @question.destroy
+
+  rescue ActiveRecord::DeleteRestrictionError
+    message = { alert: t('.not_deleted') }  
+  else
+    message = { notice: t('.deleted') }    
+  ensure
+    redirect_to my_questions_path, message
+  end
   
   private
 
@@ -56,10 +70,19 @@ class QuestionsController < ApplicationController
 
   def only_owner
     unless @question.user == current_user
-      redirect_to my_questions_path, notice: t('question-not-owner')
-      return
-    end
+      message = 
+        case action_name.to_sym
+        when :edit, :update
+          'question-not-owner'
+        else
+          '.only_owner_can_delete'
+        end
 
+      redirect_to my_questions_path, alert: t(message)
+
+      return
+
+    end
   end
 
 end

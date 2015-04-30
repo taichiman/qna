@@ -10,6 +10,10 @@ en:
     update:
       succesfully: Succesfully updated
       unsuccesfully: Unsuccesfully updated
+    destroy:
+      deleted: Succesfully deleted
+      not_deleted: Question with answer(s) can't be deleted
+      only_owner_can_delete: You can only delete your own question
 
     question:
       edit: Edit

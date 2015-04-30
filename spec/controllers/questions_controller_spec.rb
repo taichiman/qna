@@ -1,6 +1,15 @@
 require 'rails_helper'
 
 describe QuestionsController do
+  
+  shared_examples 'only owner handling question' do |message|
+    let(:question){ create :question }
+
+    it { should redirect_to my_questions_path }
+    it { should set_flash[:alert].to(t(message[:message])) }
+
+  end
+  
   describe 'GET #new' do
     sign_in_user
 
@@ -89,13 +98,8 @@ describe QuestionsController do
 
     end
 
-    context 'only owner should be able to edit the question' do
-      let(:question){ create :question }
+    it_behaves_like 'only owner handling question', message: 'question-not-owner'
 
-      it { should redirect_to my_questions_path }
-      it { should set_flash[:notice].to(t('question-not-owner')) }
-
-    end
   end
 
   describe 'PATCH #update' do
@@ -155,15 +159,86 @@ describe QuestionsController do
         end
       end
 
-      context 'tries update when not question owner' do
-        let(:question){ create :question }
+      it_behaves_like 'only owner handling question', message: 'question-not-owner'
 
-        it { should redirect_to(my_questions_path) }
-        it { should set_flash[:notice].to t('question-not-owner') }
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    sign_in_user(:user_with_questions)
+    let(:question){ user.questions.first }
+
+    before do |example|
+      unless example.metadata[:skip_request]
+        delete :destroy, id: question
+      end
+    end
+
+    shared_examples 'redirect to my_questions path' do
+      it { should redirect_to(my_questions_path) }
+    end
+
+    describe 'should has before filters' do
+      it { should use_before_action(:authenticate_user!) }
+      it { should use_before_action(:set_question) }
+    end
+
+    context 'when it has not an answers' do
+      let!(:question) { create :question, user: user }
+      
+      it 'asigns @question' do
+        expect(assigns(:question)).to eq(question)
 
       end
 
+      it 'decreases number of questions', skip_request: true do
+        expect{ delete :destroy,
+                  id: question 
+        }.to change(Question, :count).by(-1) 
+
+      end
+
+      it 'removes question from Question', skip_request: true do
+        delete :destroy, id: question 
+        expect{Question.find(question.id)}.to raise_error(ActiveRecord::RecordNotFound)
+
+      end
+
+      it_behaves_like 'redirect to my_questions path'
+
+      it { should set_flash[:notice].to t('questions.destroy.deleted')}
     end
+
+    context 'when it has an answers' do
+
+      it 'catches DeleteRestrictionError answer association exception', skip_request: true do
+        expect{ delete :destroy, id: question }.not_to raise_error
+
+      end
+
+      it 'does not delete question' do
+        expect(Question.find(question.id)).to eq(question)
+
+      end
+
+      it_behaves_like 'redirect to my_questions path'
+
+      it { should set_flash[:alert].to t('questions.destroy.not_deleted')}
+
+    end
+        
+    it_behaves_like 'only owner handling question', message: 'questions.destroy.only_owner_can_delete'
+    
+    describe 'when unauthenticated', skip_request: true do
+      before do 
+        sign_out user
+        delete :destroy, id: question
+      end
+
+      it { should redirect_to new_user_session_path }
+      
+    end
+
   end
 
 end
