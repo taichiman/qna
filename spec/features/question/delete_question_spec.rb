@@ -5,15 +5,17 @@ feature 'User can delete question', %q{
   As authentificated user
   I want to be able to delete my question
 } do
-  
   feature 'delete question' do
+    def delete_link
+      find("a.delete-question[href='#{question_path(question)}']")
+    end
+
     feature 'when authenticated user' do
       background do
         fill_form_and_sign_in(user)
         visit '/'
         click_on t('links.my-questions')      
-        link = find("a.delete-question[href='#{question_path(question)}']")
-        link.click
+        delete_link.click
       end
 
       feature 'owned question with an answers' do
@@ -37,18 +39,24 @@ feature 'User can delete question', %q{
         end
         given(:question) { user.questions.first }
 
-         scenario 'should deletes', js: true do 
+        scenario 'should deletes', js: true do 
            expect(page).to have_content(t('questions.destroy.deleted'))
           
         end
       end
-
-      scenario 'deletes not owned him question'
-
+      
     end
+    
+    feature 'when unauthenticated user tries' do
+      given(:question){ create :question }
+      scenario 'should not see delete link' do
+        visit '/'
+        expect{ delete_link }.to raise_exception(Capybara::ElementNotFound)
+
+      end
+    end
+
   end
     
-  scenario 'when unauthenticated user'
-
 end
 
