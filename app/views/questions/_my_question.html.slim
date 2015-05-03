@@ -6,12 +6,9 @@
       p = my_question.body
 
   .pull-right
-    - if current_page?(my_questions_path)
-      ul.nav.navbar-nav.question-menubar
-        li = link_to edit_question_path(my_question), class: 'edit-question' do
-               span.glyphicon.glyphicon-pencil
-        li = link_to question_path(my_question), method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete-question' do
-               span.glyphicon.glyphicon-scissors
-   
-br
-
+    ul.nav.navbar-nav.question-menubar
+      li = link_to edit_question_path(my_question), class: 'edit-question' do
+             span.glyphicon.glyphicon-pencil
+      li = link_to question_path(my_question), method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete-question' do
+             span.glyphicon.glyphicon-scissors
+ 
