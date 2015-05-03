@@ -235,6 +235,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap-sass (~> 3.3.4)
+  byebug
   capybara
   capybara-webkit
   coffee-rails (~> 4.1.0)

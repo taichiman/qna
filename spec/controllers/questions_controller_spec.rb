@@ -78,7 +78,7 @@ describe QuestionsController do
       expect(assigns(:questions)).to match_array(user.questions)
     end
 
-    it { should render_template(:index) }
+    it { should render_template(:my_index) }
 
   end
 

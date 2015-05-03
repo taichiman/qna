@@ -3,8 +3,9 @@ en:
     new:
       title: New Question
     index:
-      my-questions: List of my questions
       all-questions: All Questions
+    my_index:
+      my-questions: List of my questions
     edit:
       title: Edit question
     update:

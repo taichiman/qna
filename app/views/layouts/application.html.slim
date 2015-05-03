@@ -16,11 +16,11 @@ html
           - if user_signed_in? 
             li = link_to "#{t('links.my-questions')}#{my_questions_count(current_user)}", my_questions_path
 
-          li
-            = link_to 'Ask Question', new_question_path
-
-          li = render 'devise/menu/login_items'
+          li = link_to 'Ask Question', new_question_path
+          
+        ul.nav.navbar-nav.navbar-right.login-profile-navbar
           li = render 'devise/menu/registration_items'
+          li = render 'devise/menu/login_items'
 
     - flash.each do |name,msg|
       = content_tag :div, msg, class: name
