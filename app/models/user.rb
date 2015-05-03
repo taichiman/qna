@@ -5,6 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :questions, dependent: :restrict_with_exception
-  
+  has_many :answers, dependent: :nullify
 end
 
