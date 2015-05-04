@@ -27,5 +27,27 @@ describe QuestionsHelper do
 
   end
 
+  describe 'count of my answers' do
+
+    context 'some answers are answered' do
+      let(:user){ create :user_with_questions, with_test_answers: true }
+
+      it 'returns its number' do
+        expect(my_answers_count(user)).to eq(" (#{user.answers.count})")
+      end
+
+    end
+
+    context 'when no answer was given' do
+      let(:user){ create(:user) }
+
+      it 'be empty' do
+        expect(my_answers_count(user)).to be_empty
+
+      end
+
+    end
+  end
+
 end
 

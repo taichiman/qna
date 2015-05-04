@@ -7,5 +7,9 @@ module QuestionsHelper
     user.questions.count > 0 ? " (#{user.questions.count})" : ''
   end
 
+  def my_answers_count(user)
+    user.answers.count > 0 ? " (#{user.answers.count})" : ''
+  end
+
 end
 
