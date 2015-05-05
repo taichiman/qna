@@ -13,7 +13,7 @@ feature '', %q{
     user = create :user_with_questions, with_test_answers: true
     fill_form_and_sign_in(user)
     visit '/'
-    click_on 'My Answers'
+    click_on t('links.my-answers')
 
     page_have_content_answers_list(
       title: t('answers.index.my-answers'),
@@ -22,7 +22,11 @@ feature '', %q{
 
   end
   
-  scenario 'when authenticated user'
-  scenario 'when unauthenticated user'
+  scenario 'does not show when unauthenticated user' do
+    visit '/'
+    expect(page).to_not have_content(t('links.my-answers'))
+
+  end
 
 end
+
