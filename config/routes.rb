@@ -7,7 +7,8 @@ Rails.application.routes.draw do
     resources :answers
   end
   
-  get '/my_questions', to: 'questions#index', scope: 'my', as: 'my_questions'
+  get '/my-questions', to: 'questions#index', scope: 'my', as: 'my_questions'
+  get '/my-answers', to: 'answers#index', as: 'my_answers'
 
 end
 

@@ -21,6 +21,7 @@ FactoryGirl.define do
     factory :user_with_questions do
       transient do 
         questions_count 2
+        with_test_answers false
       end
 
       after(:create) do |user, evaluator|
@@ -28,6 +29,10 @@ FactoryGirl.define do
           evaluator.questions_count,
           user: user 
         )
+
+        if evaluator.with_test_answers
+          create_pair :answer, user: user
+        end
       end
     end
   end

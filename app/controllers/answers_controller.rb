@@ -1,6 +1,10 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: [:show]
   before_action :set_question, only: [:new, :show, :create]
+
+  def index
+    @answers = Answer.my(current_user)
+  end
 
   def new 
     @answer = Answer.new
@@ -11,7 +15,8 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.build(answer_params)
+    attrs = answer_params.merge( user: current_user )
+    @answer = @question.answers.build(attrs)
 
     if @answer.save
       redirect_to question_path(@question)

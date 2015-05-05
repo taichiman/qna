@@ -109,4 +109,36 @@ describe AnswersController do
       expect(response).to render_template(:show)
     end
   end
+
+  describe 'GET#my-answers' do
+
+    context 'when authenticated' do
+      sign_in_user(:user_with_questions, with_test_answers: true)
+
+      before do
+        create :user_with_questions, with_test_answers: true #some alien answers for mass        
+        get :index
+      end
+
+      context 'when I have answers' do
+        it 'assigns @answers with all my answers' do
+          expect(assigns(:answers)).to match_array(Answer.my(user))
+        end
+
+        it { should render_template('index') }
+
+      end
+    end
+
+    context 'when unauthenticated' do
+        it 'redirects to devise LogIn' do
+          get :index
+          expect(response).to redirect_to(new_user_session_path)
+        
+        end
+    end
+
+  end
+
 end
+
