@@ -21,6 +21,10 @@ en:
     form:
       submit: Post question
 
+  answers:
+    index:
+      my-answers: My Answers
+
   question-not-owner: You can only edit your own questions
   answer-count-legend: Answer
 

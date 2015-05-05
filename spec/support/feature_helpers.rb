@@ -15,6 +15,19 @@ module Features
 
     end
 
+    def page_have_content_answers_list(args)
+      title = args[:title]
+      answers = args[:answers]
+      
+      expect(page).to have_content(title)
+      answers.each do |answer|
+        expect(page).to have_content(answer.body)
+      end
+
+      expect(page).to have_css('.answer .question-hyperlink', count: answers.count)
+
+    end
+
     def page_have_content_create_answer(question)
       expect(page).to have_content(question.title)
       expect(page).to have_content(question.body)

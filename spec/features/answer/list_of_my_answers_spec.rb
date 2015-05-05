@@ -15,7 +15,11 @@ feature '', %q{
     visit '/'
     click_on 'My Answers'
 
-    page_have_content_answer_list
+    page_have_content_answers_list(
+      title: t('answers.index.my-answers'),
+      answers: user.answers
+    )
+
   end
   
   scenario 'when authenticated user'

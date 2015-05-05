@@ -11,6 +11,6 @@
       br
       h4= answer_count_legend(@question.answers.count)
       hr 
-      = render partial: 'answers/answer', spacer_template: 'questions/devider', collection: @question.answers
+      = render partial: 'questions/answer', spacer_template: 'questions/devider', collection: @question.answers
   .panel-footer
     = link_to 'Create answer', new_question_answer_path(@question), class: 'text-success'
