@@ -14,8 +14,8 @@
 @import "bootstrap";
 //@import "bootstrap/theme";
 
-.question {
-  .question-menubar {
+.question, .answer {
+  .menubar {
     padding-top: 20px;
   }
   .glyphicon {
@@ -25,5 +25,15 @@
 
 .login-profile-navbar {
   font-size: 80%;
+}
+
+li.answer-menubar {
+  margin-top: -10px;
+}
+
+.answer{
+  .nav-pills.menubar { 
+    display:inline;
+  }
 }
 

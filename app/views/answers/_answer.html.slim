@@ -5,6 +5,9 @@
   .body
     p= answer.body 
 
-  .user.pull-right.text-muted
-    = user_name(answer.user)
+  .pull-right
+    ul.nav.nav-pills
+      li.user.text-muted
+          = user_name(answer.user)
+      li.answer-menubar = render partial: 'menubar', locals: {answer: answer}
 
