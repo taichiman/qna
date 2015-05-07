@@ -24,11 +24,17 @@ en:
   answers:
     index:
       my-answers: My Answers
+    edit:
+      title: Edit answer
     destroy:
       deleted: Answer succesfully deleted
       only-owner-can-delete: You can only delete your own answer
 
+    form:
+      submit: Update answer
+
   question-not-owner: You can only edit your own questions
+  not-owner-of-answer: You can only handle your own answer
   answer-count-legend: Answer
 
   links: 

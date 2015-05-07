@@ -3,6 +3,14 @@ require 'rails_helper'
 describe AnswersController do
   let(:question) { create :question }
   
+  shared_examples 'only owner handling answer' do |message|
+    let(:answer){ create :answer }
+
+    it { should redirect_to my_answers_path }
+    it { should set_flash[:alert].to(t(message[:message])) }
+
+  end
+
   describe 'GET #new' do
     context 'when authenticated user' do
       sign_in_user
@@ -28,6 +36,40 @@ describe AnswersController do
       check_set_alert_flash_and_redirect_to?
    end
 
+  end
+  
+  describe 'GET #edit' do
+    context 'when authenticated' do
+      sign_in_user
+      let(:answer){ create(:answer, user: user) }
+
+      before do
+        get :edit, question_id: answer.question, id: answer
+      end
+
+      context 'owner' do
+        it 'should assign @answer' do
+          expect(assigns(:answer)).to eq(answer)
+        end
+        it { should render_template 'edit' }
+      end
+
+      context 'not owner' do
+        it_behaves_like 'only owner handling answer', message: 'not-owner-of-answer'
+      end
+    end
+    
+    context 'when unauthenticated' do        
+      let(:answer){ create :answer }
+
+      before do
+        sign_out :user
+        get :edit, question_id: answer.question, id: answer
+      end
+
+      it { should redirect_to(new_user_session_path) }
+      
+    end
   end
 
   describe 'POST #create' do

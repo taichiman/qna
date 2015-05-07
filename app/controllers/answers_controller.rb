@@ -1,8 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :set_question, only: [:new, :show, :create]
-  before_action :set_answer, only: [:show, :destroy]
-  before_action :only_owner, only: [:destroy]
+  before_action :set_answer, only: [:edit, :show, :destroy]
+  before_action :only_owner, only: [:edit, :destroy]
 
   def index
     @answers = Answer.my(current_user)
@@ -11,6 +11,8 @@ class AnswersController < ApplicationController
   def new 
     @answer = Answer.new
   end
+
+  def edit; end
 
   def show; end
 
@@ -49,7 +51,7 @@ class AnswersController < ApplicationController
       message = 
         case action_name.to_sym
         when :edit, :update
-          #'question-not-owner'
+          'not-owner-of-answer'
         else
           '.only-owner-can-delete'
         end
