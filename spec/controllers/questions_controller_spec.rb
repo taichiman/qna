@@ -93,7 +93,10 @@ describe QuestionsController do
     context 'user owns the edited question' do
       it { should use_before_action(:authenticate_user!) }
       it { should use_before_action(:set_question) }
-      it { expect(assigns(:question)).to eq(question) }
+      it 'assigns @question' do
+        expect(assigns(:question)).to eq(question)
+      end
+
       it { should render_template('edit') }
 
     end
@@ -120,10 +123,14 @@ describe QuestionsController do
       end
 
       context 'with valid attributes' do
-        it { expect(assigns(:question)).to eq(question) }
+        it 'assigns @question' do
+          expect(assigns(:question)).to eq(question)
+        end
         it { should use_before_action(:authenticate_user!) }
         it { should use_before_action(:set_question) }
-        it { should redirect_to(question) }
+        it 'redirects to question show' do
+          should redirect_to(question)
+        end
         it { should set_flash[:notice].to t('questions.update.succesfully') }
 
         it 'changes title of the question' do
