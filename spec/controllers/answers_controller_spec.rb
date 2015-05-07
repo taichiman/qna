@@ -140,5 +140,58 @@ describe AnswersController do
 
   end
 
+  describe 'DELETE#destroy' do
+    context 'authenticated user' do
+      sign_in_user(:user)
+
+      def delete_request(answer)
+        request.env['HTTP_REFERER'] = my_answers_path
+        delete :destroy, question_id: answer.question, id: answer
+      end
+
+      context 'when owner' do
+        let(:answer){ create :answer, user: user }
+        before do |e| 
+          delete_request(answer) unless e.metadata[:skip_request]
+        end
+
+        it 'should delete', skip_request: true do  
+          expect{ delete_request(answer) }.to change{ 
+            Answer.exists?(answer.id) 
+          }.from(true).to(false) 
+          
+        end
+
+        it { should redirect_to(my_answers_path) }
+        it { should set_flash[:notice].to(t('answers.destroy.deleted')) }
+
+      end
+
+      context 'when not owner' do
+        it 'when not owner of answer should not delete' do
+          answer = create :answer
+
+          expect{ delete_request(answer) }.not_to change{ 
+            Answer.exists?(answer.id) 
+          }
+
+        end
+
+      end
+    end
+    
+    context 'no authenticated user' do
+      let(:answer){ create :answer }
+      before do
+        sign_out :user
+        delete :destroy, id: question, question_id: answer.question
+      end    
+      
+      it { should redirect_to(new_user_session_path) }
+      it { should set_flash[:alert].to(t('.devise.failure.unauthenticated')) }
+     
+    end
+  end
+
 end
 

@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   before_action :set_question, only: [:new, :show, :create]
+  before_action :set_answer, only: [:show, :destroy]
+  before_action :only_owner, only: [:destroy]
 
   def index
     @answers = Answer.my(current_user)
@@ -10,9 +12,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new
   end
 
-  def show
-    @answer = Answer.find(params[:id])
-  end
+  def show; end
 
   def create
     attrs = answer_params.merge( user: current_user )
@@ -25,6 +25,11 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy
+    @answer.delete 
+    redirect_to :back, notice: t('.deleted')
+  end
+
   private
 
   def answer_params
@@ -34,4 +39,27 @@ class AnswersController < ApplicationController
   def set_question
     @question = Question.find(params[:question_id])
   end
+  
+  def set_answer
+    @answer = Answer.find(params[:id])
+  end
+
+  def only_owner
+    unless @answer.user == current_user
+      message = 
+        case action_name.to_sym
+        when :edit, :update
+          #'question-not-owner'
+        else
+          '.only-owner-can-delete'
+        end
+
+      redirect_to my_answers_path, alert: t(message)
+
+      return
+
+    end
+  end
+
 end
+

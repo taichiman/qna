@@ -12,7 +12,7 @@ en:
       succesfully: Succesfully updated
       unsuccesfully: Unsuccesfully updated
     destroy:
-      deleted: Succesfully deleted
+      deleted: Question succesfully deleted
       not-deleted: Question with answer(s) can't be deleted
       only-owner-can-delete: You can only delete your own question
 
@@ -24,6 +24,9 @@ en:
   answers:
     index:
       my-answers: My Answers
+    destroy:
+      deleted: Answer succesfully deleted
+      only-owner-can-delete: You can only delete your own answer
 
   question-not-owner: You can only edit your own questions
   answer-count-legend: Answer
