@@ -11,6 +11,35 @@ describe AnswersController do
 
   end
 
+  shared_examples 'redirected to devise SignIn page' do
+    it { should redirect_to(new_user_session_path) }
+    it { should set_flash[:alert].to(t('.devise.failure.unauthenticated')) }
+  end
+
+  describe "GET #show" do
+    let(:question) { create :question_with_answers }
+    let(:answer) { question.answers[1] }
+
+    before do
+      get(:show,
+        question_id: question,
+        id: answer
+      )
+    end
+
+    it "assigns @question" do
+      expect(assigns(:question)).to be_eql(question)
+    end
+
+    it "assigns @answer" do
+      expect(assigns(:answer)).to be_eql(answer)
+    end
+
+    it "renders template :show" do
+      expect(response).to render_template(:show)
+    end
+  end
+
   describe 'GET #new' do
     context 'when authenticated user' do
       sign_in_user
@@ -67,8 +96,8 @@ describe AnswersController do
         get :edit, question_id: answer.question, id: answer
       end
 
-      it { should redirect_to(new_user_session_path) }
-      
+      it_behaves_like 'redirected to devise SignIn page'
+
     end
   end
 
@@ -128,58 +157,80 @@ describe AnswersController do
 
   end
 
-  describe "GET #show" do
-    let(:question) { create :question_with_answers }
-    let(:answer) { question.answers[1] }
+  describe 'PATCH#update' do
+    def patch_request
+      patch :update, 
+        question_id: answer.question, 
+        id: answer, 
+        answer: { body: body_attribute.upcase }
 
-    before do
-      get(:show,
-        question_id: question,
-        id: answer
-      )
     end
 
-    it "assigns @question" do
-      expect(assigns(:question)).to be_eql(question)
+    def body
+      answer.reload.body
+    end
+    
+    let(:answer){ create(:answer, user: user) }
+    let(:body_attribute){ answer.body }
+
+    describe 'user authenticated' do
+      sign_in_user
+
+      before do |example|
+        unless example.metadata[:skip_request]
+          patch_request
+        end
+      end
+
+      context 'owner' do
+
+        context 'updates with valid data' do
+          it 'assigns @answer' do
+            expect(assigns(:answer)).to eq(answer)
+          end
+          
+          it { should redirect_to(question_path(answer.question)) }
+
+          it 'should be able', skip_request: true do
+            expect{ patch_request }.to change{ body }.from(body).to(body.upcase)
+          end
+
+        end
+
+        context 'updates with invalid data' do
+          let(:body_attribute){ '' }
+
+          it { should render_template(:edit) }
+          it 'should not be able', skip_request: true do
+            expect{ patch_request }.to_not change{ body }
+          end
+
+        end
+      end
+
+      context 'not owner' do
+        let(:answer){ create(:answer) }
+        let(:body_attribute){ answer.body }
+
+        it 'should not update', skip_request: true do
+          expect{ patch_request }.to_not change{ body }
+        end
+
+        it_behaves_like 'only owner handling answer', message: 'not-owner-of-answer'
+
+      end
     end
 
-    it "assigns @answer" do
-      expect(assigns(:answer)).to be_eql(answer)
-    end
-
-    it "renders template :show" do
-      expect(response).to render_template(:show)
-    end
-  end
-
-  describe 'GET#my-answers' do
-
-    context 'when authenticated' do
-      sign_in_user(:user_with_questions, with_test_answers: true)
+    describe 'user unauthenticated' do
+      let(:answer){ create :answer }
 
       before do
-        create :user_with_questions, with_test_answers: true #some alien answers for mass        
-        get :index
+        patch_request
       end
+      it_behaves_like 'redirected to devise SignIn page'
 
-      context 'when I have answers' do
-        it 'assigns @answers with all my answers' do
-          expect(assigns(:answers)).to match_array(Answer.my(user))
-        end
-
-        it { should render_template('index') }
-
-      end
-    end
-
-    context 'when unauthenticated' do
-        it 'redirects to devise LogIn' do
-          get :index
-          expect(response).to redirect_to(new_user_session_path)
-        
-        end
-    end
-
+    end 
+    
   end
 
   describe 'DELETE#destroy' do
@@ -229,9 +280,37 @@ describe AnswersController do
         delete :destroy, id: question, question_id: answer.question
       end    
       
-      it { should redirect_to(new_user_session_path) }
-      it { should set_flash[:alert].to(t('.devise.failure.unauthenticated')) }
+      it_behaves_like 'redirected to devise SignIn page'
      
+    end
+  end
+
+  describe 'GET#my-answers' do
+
+    context 'when authenticated' do
+      sign_in_user(:user_with_questions, with_test_answers: true)
+
+      before do
+        create :user_with_questions, with_test_answers: true #some alien answers for mass        
+        get :index
+      end
+
+      context 'when I have answers' do
+        it 'assigns @answers with all my answers' do
+          expect(assigns(:answers)).to match_array(Answer.my(user))
+        end
+
+        it { should render_template('index') }
+
+      end
+    end
+
+    context 'when unauthenticated' do
+      before do
+        get :index
+      end
+      it_behaves_like 'redirected to devise SignIn page'
+
     end
   end
 

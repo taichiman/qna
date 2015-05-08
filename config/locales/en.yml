@@ -26,6 +26,8 @@ en:
       my-answers: My Answers
     edit:
       title: Edit answer
+    update:
+      updated: Answer succesfully updated
     destroy:
       deleted: Answer succesfully deleted
       only-owner-can-delete: You can only delete your own answer
