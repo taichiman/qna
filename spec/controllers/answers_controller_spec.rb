@@ -238,7 +238,6 @@ describe AnswersController do
       sign_in_user(:user)
 
       def delete_request(answer)
-        request.env['HTTP_REFERER'] = my_answers_path
         delete :destroy, question_id: answer.question, id: answer
       end
 
@@ -255,7 +254,7 @@ describe AnswersController do
           
         end
 
-        it { should redirect_to(my_answers_path) }
+        it { should redirect_to(question_path(answer.question)) }
         it { should set_flash[:notice].to(t('answers.destroy.deleted')) }
 
       end

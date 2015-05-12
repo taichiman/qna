@@ -30,7 +30,7 @@ feature 'User can delete owned him answer', %q{
         delete_answer_link.click
 
         expect(page).to have_content(t('answers.destroy.deleted'))
-        expect(current_path).to eq(my_answers_path)
+        expect(current_path).to eq(question_path(answer.question))
         expect(page).not_to have_content(answer_body)
       end
     end

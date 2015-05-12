@@ -32,7 +32,7 @@ class AnswersController < ApplicationController
 
   def update
     if @answer.update_attributes(answer_params)
-      redirect_to question_path(@answer.question), notice: '.update.updated' 
+      redirect_to question_path(@answer.question), notice: t('.updated')
     else
       render :edit
     end
@@ -40,8 +40,9 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.delete 
-    redirect_to :back, notice: t('.deleted')
+    @answer.delete
+
+    redirect_to question_path(@answer.question), notice: t('.deleted')
 
   end
 
@@ -63,7 +64,7 @@ class AnswersController < ApplicationController
   end
 
   def only_owner
-    unless @answer.user == current_user
+    unless @answer.user_id == current_user.id
       message = 
         case action_name.to_sym
         when :edit, :update

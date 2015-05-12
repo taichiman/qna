@@ -27,6 +27,7 @@ feature 'User can edit his answer', %q{
       click_on t('.answers.form.submit')
       expect(current_path).to eq(question_path(answer.question))
       expect(page).to have_content(upcased_body)
+      expect(page).to have_content(t('.answers.update.updated'))
 
     end
 

@@ -70,7 +70,7 @@ class QuestionsController < ApplicationController
   end
 
   def only_owner
-    unless @question.user == current_user
+    unless @question.user_id == current_user.id
       message = 
         case action_name.to_sym
         when :edit, :update
