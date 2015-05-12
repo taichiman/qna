@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    title QnA
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+  body
+    nav.navbar.navbar-default
+      .container-fluid
+        ul.nav.navbar-nav
+          li
+            a.navbar-brand href='/' title='QnA homepage' QnA
+
+          li = link_to 'All Questions', questions_path
+          - if user_signed_in? 
+            li = link_to "#{t('links.my-questions')}#{my_questions_count(current_user)}", my_questions_path
+            li = link_to "#{t('links.my-answers')}#{my_answers_count(current_user)}", my_answers_path
+
+          li = link_to 'Ask Question', new_question_path
+          
+        ul.nav.navbar-nav.navbar-right.login-profile-navbar
+          li = render 'devise/menu/registration_items'
+          li = render 'devise/menu/login_items'
+
+    - flash.each do |name,msg|
+      = content_tag :div, msg, class: name
+
+    .container#main-container
+      .row
+        #content
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title
+                = yield :section_title
+            .panel-body
+              = yield

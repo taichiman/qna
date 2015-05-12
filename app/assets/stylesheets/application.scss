@@ -7,9 +7,33 @@
  *
  * You're free to add application-wide styles to this file and they'll appear at the bottom of the
  * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- *= require_tree .
- *= require_self
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new file per style scope.
  */
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+//@import "bootstrap/theme";
+
+.question, .answer {
+  .menubar {
+    padding-top: 20px;
+  }
+  .glyphicon {
+    font-size: 70%;  
+  }
+}
+
+.login-profile-navbar {
+  font-size: 80%;
+}
+
+li.answer-menubar {
+  margin-top: -10px;
+}
+
+.answer{
+  .nav-pills.menubar { 
+    display:inline;
+  }
+}
+
