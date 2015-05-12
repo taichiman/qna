@@ -10,11 +10,10 @@ feature 'User can view question with its answers', %q{
     question = create :question_with_answers
     visit question_path(question)
 
-    expect(page).to have_css('#question_title', count: 1, text: question.title) 
-    expect(page).to have_css('#question_body', count: 1, text: question.body) 
+    expect(page).to have_content(question.title, count: 1) 
+    expect(page).to have_content(question.body, count: 1) 
 
     expect(page).to have_content(answer_count_legend(question.answers.count)) 
-    expect(page).to have_css('.answer', count: question.answers.count)
     question.answers.each do |answer|
       expect(page).to have_content(answer.body)
     end
@@ -24,7 +23,6 @@ feature 'User can view question with its answers', %q{
     question = create :question
     visit question_path(question)
     
-    expect(page).not_to have_css('.answer')
     expect(page).to have_content(answer_count_legend(question.answers.count)) 
   end
 end

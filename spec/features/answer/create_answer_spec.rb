@@ -18,7 +18,7 @@ feature 'User can create answers', %q{
       click_on question.title
 
       expect(page).to have_content(question.body)
-      expect(page).to have_selector('a.question-hyperlink', text: question.title, count: 1)
+      expect(page).to have_content(question.title, count: 1)
     end
 
   end
