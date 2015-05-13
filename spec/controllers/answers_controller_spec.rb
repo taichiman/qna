@@ -40,33 +40,6 @@ describe AnswersController do
     end
   end
 
-  describe 'GET #new' do
-    context 'when authenticated user' do
-      sign_in_user
-      before{ get(:new, question_id: question.id) }
-
-      it 'assigns the question to @question' do
-        expect(assigns(:question)).to eql(question)
-      end
-
-      it 'assigns a new record to @answer' do
-        expect(assigns(:answer)).to be_a_new(Answer)
-      end
-
-      it 'renders new view' do
-        expect(response).to render_template(:new)
-      end
-
-    end
-
-    context 'when unauthenticated user' do
-      before{ get :new, question_id: question.id }
-
-      check_set_alert_flash_and_redirect_to?
-   end
-
-  end
-  
   describe 'GET #edit' do
     context 'when authenticated' do
       sign_in_user
@@ -142,7 +115,8 @@ describe AnswersController do
           }.not_to change(Answer, :count)
         end
 
-        it { should render_template(:new) }
+        it { should render_template('questions/show') }
+
       end
 
     end

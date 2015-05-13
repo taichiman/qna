@@ -63,6 +63,10 @@ describe QuestionsController do
       expect(assigns(:question)).to be_eql(question)
     end
 
+    it "assigns @answer" do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
     it "render template :show" do
       expect(response).to render_template(:show)
     end

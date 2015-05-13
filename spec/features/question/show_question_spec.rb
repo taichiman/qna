@@ -17,6 +17,10 @@ feature 'User can view question with its answers', %q{
     question.answers.each do |answer|
       expect(page).to have_content(answer.body)
     end
+
+    expect(page).to have_content(t('.questions.show.answer_title'))
+    expect(page).to have_button(t('.questions.show.submit_answer'))
+
   end
 
   scenario 'An user views question with 0 answers' do

@@ -9,11 +9,6 @@ class AnswersController < ApplicationController
 
   end
 
-  def new 
-    @answer = Answer.new
-
-  end
-
   def edit; end
 
   def show; end
@@ -23,9 +18,9 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(attrs)
 
     if @answer.save
-      redirect_to question_path(@question)
+      redirect_to question_path(@question), notice: t('.success_create_answer')
     else
-      render :new
+      render 'questions/show'
     end
 
   end
