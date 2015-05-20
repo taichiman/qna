@@ -19,10 +19,12 @@
       br
       h4= answer_count_legend(@question.answers.count)
       hr 
+    
+    #answers
       = render partial: 'questions/answer', collection: @question.answers
 
   .panel-footer
-    = form_for [@question, @answer] do |f|
+    = form_for [@question, @answer], remote: true do |f|
       .form-group
         = f.label :body, t('.answer_title')
         = f.text_area :body, class: 'form-control'

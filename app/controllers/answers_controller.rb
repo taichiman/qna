@@ -17,9 +17,7 @@ class AnswersController < ApplicationController
     attrs = answer_params.merge( user: current_user )
     @answer = @question.answers.build(attrs)
 
-    if @answer.save
-      redirect_to question_path(@question), notice: t('.success_create_answer')
-    else
+    unless @answer.save
       render 'questions/show'
     end
 
