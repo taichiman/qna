@@ -23,10 +23,11 @@ feature 'User can create answers', %q{
       end
         
       scenario 'success with valid parameters' do
+
         submit_body(answer[:body])
+
         expect(page).to have_content(answer[:body])
         expect(find_field('answer_body').value).to eq('')
-
         expect(current_path).to eq(question_path(question)) 
         
         #TODO expect(page).to have_content(t('.answers.create.success_create_answer'))
