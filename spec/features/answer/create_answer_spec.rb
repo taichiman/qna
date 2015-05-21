@@ -1,70 +1,60 @@
 require 'rails_helper'
 
 feature 'User can create answers', %q{
-  In order to be able to answer
+  In order to be able to exchange of knowledge
   As an User
-  I want to be able to fill and submit its form
+  I want to be able to answer
 } do
-
-  given(:question){ Question.first }
-
-  background :all do
-    create_pair :question_with_answers
+  
+  def submit_body(text)
+    find('#new_answer').
+      fill_in 'answer_body', with: text
+    click_on t('.questions.show.submit_answer')
   end
 
-  feature 'when any user' do
-    scenario 'An user select the question from question list' do
-      visit '/'
-      click_on question.title
+  given(:question){ create :question }
+  given(:answer){ attributes_for :answer }
 
-      expect(page).to have_content(question.body)
-      expect(page).to have_content(question.title, count: 1)
-    end
-
-  end
-
-  feature 'when authenticated user' do
-    feature 'An user creates an answer' do
+  feature 'when authenticated user', js: true do
+    feature 'creates an answer' do
       background do
         fill_form_and_sign_in 
         visit question_path(question)
-        click_on 'Create answer'
       end
         
       scenario 'success with valid parameters' do
-        page_have_content_create_answer(question)
+        submit_body(answer[:body])
+        expect(page).to have_content(answer[:body])
+        expect(find_field('answer_body').value).to eq('')
+
+        expect(current_path).to eq(question_path(question)) 
         
-        fill_in 'Your Answer', with: attributes_for(:answer)[:body]
-        
-        expect{ click_on 'Post Your Answer' }.to change(Answer, :count)
-        
-        expect(current_path).to eq(question_path(question))
+        #TODO expect(page).to have_content(t('.answers.create.success_create_answer'))
+
       end
 
-      scenario 'error with invalid parameters' do
-        page_have_content_create_answer(question)
-        
-        fill_in 'Your Answer', with: nil
-        
-        expect{ click_on 'Post Your Answer' }.not_to change(Answer, :count)
+      #TODO
+      #scenario 'error with invalid parameters' do
+        #submit_body('') 
 
-        expect(page).to have_content('Body can\'t be blank')
-        expect(current_path).to eq(question_answers_path(question))
-      end
+        #expect(page).to have_content('Body can\'t be blank')
+        #expect(current_path).to eq(question_answers_path(question))
+
+      #end
     end
 
   end
+  
+  #TODO
+  #feature 'when unauthenticated user' do
+    #scenario 'should not create answer' do
+      #visit question_path(question)
+      #submit_body(answer[:body])
 
-  feature 'when unauthenticated user' do
-    scenario 'tries create answer' do
-      visit question_path(question)
-      click_on 'Create answer'
+      #check_devise_sign_in_notification?
 
-      check_devise_sign_in_notification?
-
-    end
-
-  end
+    #end
+  #end
 
 end
 

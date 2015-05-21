@@ -13,7 +13,9 @@ class QuestionsController < ApplicationController
 
   end
 
-  def show; end
+  def show
+    @answer = Answer.new
+  end
 
   def new
     @question = Question.new

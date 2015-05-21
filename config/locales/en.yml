@@ -6,6 +6,9 @@ en:
       all-questions: All Questions
     my_index:
       my-questions: List of my questions
+    show:
+      answer_title: Your answer
+      submit_answer: Create answer
     edit:
       title: Edit question
     update:
@@ -26,6 +29,8 @@ en:
       my-answers: My Answers
     edit:
       title: Edit answer
+    create:
+      success_create_answer: Answer succesfully created
     update:
       updated: Answer succesfully updated
     destroy:

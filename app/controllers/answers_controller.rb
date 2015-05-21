@@ -9,11 +9,6 @@ class AnswersController < ApplicationController
 
   end
 
-  def new 
-    @answer = Answer.new
-
-  end
-
   def edit; end
 
   def show; end
@@ -22,10 +17,8 @@ class AnswersController < ApplicationController
     attrs = answer_params.merge( user: current_user )
     @answer = @question.answers.build(attrs)
 
-    if @answer.save
-      redirect_to question_path(@question)
-    else
-      render :new
+    unless @answer.save
+      render 'questions/show'
     end
 
   end

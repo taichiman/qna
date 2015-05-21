@@ -1,7 +1,15 @@
+- if @answer.errors.any?
+  #error_explanation
+    h4 #{pluralize(@answer.errors.count, "error")} prohibited this answer from being saved:
+    ul
+      - @answer.errors.full_messages.each do |msg|
+        li = msg
+
 .panel.panel-default
   .panel-heading
     .panel-title#question_title
       h4.text-primary = link_to @question.title, question_path(@question), class: 'question-hyperlink'
+
   .panel-body#question_body
     | #{@question.body}
     .user.text-muted.pull-right
@@ -11,6 +19,15 @@
       br
       h4= answer_count_legend(@question.answers.count)
       hr 
+    
+    #answers
       = render partial: 'questions/answer', collection: @question.answers
+
   .panel-footer
-    = link_to 'Create answer', new_question_answer_path(@question), class: 'text-success'
+    = form_for [@question, @answer], remote: true do |f|
+      .form-group
+        = f.label :body, t('.answer_title')
+        = f.text_area :body, class: 'form-control'
+
+      = submit_tag t('.submit_answer')
+
