@@ -1,14 +1,13 @@
 .answer.clearfix
-  h4.text-primary
-    = link_to answer.question.title, question_path(answer.question), class: 'question-hyperlink'
-
   .body
     p= answer.body 
 
   .pull-right
     ul.nav.nav-pills
       li.user.text-muted
-          = user_name(answer.user)
-      li.answer-menubar = render partial: 'menubar', locals: {answer: answer}
+        = user_name(answer.user)
+
+      - if answer_owner?(answer)
+        li.answer-menubar = render partial: 'answers/menubar', locals: {answer: answer}
       
   hr

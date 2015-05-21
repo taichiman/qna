@@ -17,9 +17,7 @@ class AnswersController < ApplicationController
     attrs = answer_params.merge( user: current_user )
     @answer = @question.answers.build(attrs)
 
-    unless @answer.save
-      render 'questions/show'
-    end
+    render 'questions/show' unless @answer.save
 
   end
 
