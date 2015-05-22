@@ -6,7 +6,6 @@ class AnswersController < ApplicationController
 
   def index
     @answers = Answer.my(current_user)
-
   end
 
   def edit; end
@@ -15,9 +14,7 @@ class AnswersController < ApplicationController
 
   def create
     attrs = answer_params.merge( user: current_user )
-    @answer = @question.answers.build(attrs)
-
-    render 'questions/show' unless @answer.save
+    @answer = @question.answers.create(attrs)
 
   end
 

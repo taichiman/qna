@@ -23,7 +23,6 @@ feature 'User can create answers', %q{
       end
         
       scenario 'success with valid parameters' do
-
         submit_body(answer[:body])
 
         expect(page).to have_content(answer[:body])
@@ -34,14 +33,13 @@ feature 'User can create answers', %q{
 
       end
 
-      #TODO
-      #scenario 'error with invalid parameters' do
-        #submit_body('') 
+      scenario 'then error with invalid parameters' do
+        submit_body('') 
 
-        #expect(page).to have_content('Body can\'t be blank')
-        #expect(current_path).to eq(question_answers_path(question))
+        expect(page).to have_content('Body can\'t be blank')
+        expect(current_path).to eq(question_path(question))
 
-      #end
+      end
     end
 
   end

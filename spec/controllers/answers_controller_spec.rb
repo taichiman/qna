@@ -115,7 +115,7 @@ describe AnswersController do
           }.not_to change(Answer, :count)
         end
 
-        it { should render_template('questions/show') }
+        it { should render_template('create') }
 
       end
     end
