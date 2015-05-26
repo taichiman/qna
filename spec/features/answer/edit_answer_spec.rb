@@ -20,23 +20,26 @@ feature 'User can edit his answer', %q{
       "form#edit_answer_#{answer.id}"
     end
 
+    def submit_form content
+      expect(page).to have_selector(edit_link)
+      expect(page).to have_selector(form_id, visible: false)
+      
+      find(edit_link).click
+
+      within form_id do
+        fill_in 'answer[body]', with: content
+        click_on t('.answers.form.submit')      
+      end
+
+    end
+
     background do
       fill_form_and_sign_in(user)
       visit question_path(question)
     end
 
     scenario 'when owner' do
-      expect{ find(edit_link) }.to_not raise_error
-      expect(page).to have_selector(form_id, visible: false)
-
-      find(edit_link).click
-
-      within form_id do
-        fill_in 'answer[body]', with: upcased_body
-        click_on 'Update answer'
-      
-        expect(page).to_not have_selector('textarea')
-      end
+      submit_form(upcased_body)
         
       expect(page).to have_selector(form_id, visible: false)
       expect(page).to_not have_content(answer.body)
@@ -48,11 +51,11 @@ feature 'User can edit his answer', %q{
     end
 
     scenario 'edits when invalid data' do
-      fill_in 'Body', with: ''
-      click_on t('.answers.form.submit')
-      expect(current_path).to eq(question_answer_path(answer.question, answer))
-      expect(page).to have_content('prohibited this answer from being saved:')
+      submit_form ''
 
+      expect(current_path).to eq(question_path(question))
+      expect(page).to have_selector(form_id, visible: true)
+      expect(page).to have_content("Body #{t('errors.messages.blank')}")
     end
 
   end
