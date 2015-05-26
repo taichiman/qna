@@ -1,5 +1,5 @@
 ul.nav.nav-pills.menubar
-  li = link_to edit_question_answer_path(answer.question, answer), class: 'edit-answer' do
+  li = link_to edit_question_answer_path(answer.question, answer), class: 'edit-answer-link', data: {answer_id: answer.id} do
          span.glyphicon.glyphicon-pencil
   li = link_to question_answer_path(answer.question, answer), method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete-answer' do
          span.glyphicon.glyphicon-scissors

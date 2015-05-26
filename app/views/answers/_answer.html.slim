@@ -1,4 +1,4 @@
-.answer.clearfix
+.answer.clearfix id="answer_#{answer.id}"
   .body
     p= answer.body 
 
@@ -9,5 +9,13 @@
 
       - if answer_owner?(answer)
         li.answer-menubar = render partial: 'answers/menubar', locals: {answer: answer}
-      
+
+  /#TODO letters to locale
+  = form_for [@question, answer], remote: true do |f|
+    .form-group
+      = f.label :body, t('.Answer')
+      = f.text_area :body, class: 'form-control'
+
+    = f.submit 'Update answer', class: 'btn btn-primary'
+
   hr

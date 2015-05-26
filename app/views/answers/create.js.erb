@@ -4,6 +4,6 @@
   <% end %>
 <% else %>
   $('#answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
+  $('form#new_answer #answer_body').val('');
 <% end %>
 

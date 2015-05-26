@@ -26,7 +26,9 @@ feature 'User can create answers', %q{
         submit_body(answer[:body])
 
         expect(page).to have_content(answer[:body])
-        expect(find_field('answer_body').value).to eq('')
+        within '#new_answer' do
+          expect(find_field('answer_body').value).to eq('')
+        end
         expect(current_path).to eq(question_path(question)) 
         
         #TODO expect(page).to have_content(t('.answers.create.success_create_answer'))

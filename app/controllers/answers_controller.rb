@@ -19,11 +19,8 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update_attributes(answer_params)
-      redirect_to question_path(@answer.question), notice: t('.updated')
-    else
-      render :edit
-    end
+    @answer.update_attributes(answer_params)
+    @question=@answer.question
 
   end
 

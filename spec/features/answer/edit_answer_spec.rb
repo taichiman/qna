@@ -2,11 +2,12 @@ require 'rails_helper'
 
 feature 'User can edit his answer', %q{
   In order to be able to improove content quality
-  I as autenticated user
-  Can edit my answers
-} do
-  given(:answer){ user.answers.first }
-  given(:user){ create :user_with_questions, with_test_answers: true }
+  As author of an answer
+  I'd like be able to edit my answers
+}, js: true do
+  given(:user){ create :user }
+  given(:answer){ create :answer, user: user }
+  given(:question){ answer.question }
 
   feature 'User edits an answer when he is owner' do
     given(:upcased_body){ find('#answer_body').value.upcase }
@@ -17,15 +18,22 @@ feature 'User can edit his answer', %q{
 
     background do
       fill_form_and_sign_in(user)
-      visit '/'
-      click_on t('links.my-answers')
-      edit_link.click
+      visit question_path(question)
     end
 
     scenario 'when owner' do
-      fill_in 'Body', with: upcased_body
-      click_on t('.answers.form.submit')
-      expect(current_path).to eq(question_path(answer.question))
+      expect{ edit_link }.to_not raise_error
+      
+      within '#answers' do
+        fill_in 'Answer', with: upcased_body
+        click_on 'Update answer'
+      
+        expect(page).to_not have_selector('textarea')
+      end
+        
+      expect(page).to_not have_content(answer.body)
+
+      expect(current_path).to eq(question_path(question))
       expect(page).to have_content(upcased_body)
       expect(page).to have_content(t('.answers.update.updated'))
 
@@ -55,6 +63,16 @@ feature 'User can edit his answer', %q{
       expect(page).to have_content(t('not-owner-of-answer'))
 
     end 
+  end
+
+  scenario 'when unauthenticated' do
+    visit question_path(question)
+    
+    #TODO ref to edit_link method
+    expect(
+      page.has_link?('', href: "#{edit_question_answer_path(question, answer)}")
+    ).to eq false
+
   end
 
 end

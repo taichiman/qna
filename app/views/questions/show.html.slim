@@ -21,7 +21,7 @@
       hr 
     
     #answers
-      = render partial: 'answers/answer', collection: @question.answers
+      = render @question.answers
 
   .panel-footer
     = form_for [@question, @answer], remote: true do |f|

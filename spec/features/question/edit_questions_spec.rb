@@ -2,8 +2,8 @@ require 'rails_helper'
 
 feature 'User can edit question', %q{
   In order to be able to improve quality of my content
-  As authenticated user
-  I want to be able to edit my question
+  As an author of answer
+  I'd like to be able to edit my question
 } do
   given(:user){ create :user_with_questions }
   given(:question){ user.questions.first }

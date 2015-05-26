@@ -14,6 +14,7 @@ describe AnswersController do
   shared_examples 'redirected to devise SignIn page' do
     it { should redirect_to(new_user_session_path) }
     it { should set_flash[:alert].to(t('.devise.failure.unauthenticated')) }
+
   end
 
   describe "GET #show" do
@@ -132,7 +133,7 @@ describe AnswersController do
 
   describe 'PATCH#update' do
     def patch_request
-      patch :update, 
+      xhr :post, :update, 
         question_id: answer.question, 
         id: answer, 
         answer: { body: body_attribute.upcase }
@@ -162,7 +163,11 @@ describe AnswersController do
             expect(assigns(:answer)).to eq(answer)
           end
           
-          it { should redirect_to(question_path(answer.question)) }
+          it 'assigns @question' do
+            expect(assigns(:question)).to eq(answer.question)
+          end
+          
+          it { should render_template('update') }
 
           it 'should be able', skip_request: true do
             expect{ patch_request }.to change{ body }.from(body).to(body.upcase)
@@ -173,7 +178,7 @@ describe AnswersController do
         context 'updates with invalid data' do
           let(:body_attribute){ '' }
 
-          it { should render_template(:edit) }
+          it { should render_template('update') }
           it 'should not be able', skip_request: true do
             expect{ patch_request }.to_not change{ body }
           end
@@ -188,7 +193,7 @@ describe AnswersController do
         it 'should not update', skip_request: true do
           expect{ patch_request }.to_not change{ body }
         end
-
+        
         it_behaves_like 'only owner handling answer', message: 'not-owner-of-answer'
 
       end
@@ -200,8 +205,12 @@ describe AnswersController do
       before do
         patch_request
       end
-      it_behaves_like 'redirected to devise SignIn page'
 
+      it 'autentitication error' do
+        expect(response.body).to eq 'You need to sign in or sign up before continuing.'
+        expect(response.code).to eq '401'
+
+      end
     end 
     
   end
