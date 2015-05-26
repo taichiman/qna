@@ -10,10 +10,14 @@ feature 'User can edit his answer', %q{
   given(:question){ answer.question }
 
   feature 'User edits an answer when he is owner' do
-    given(:upcased_body){ find('#answer_body').value.upcase }
+    given(:upcased_body){ answer.body.upcase }
 
     def edit_link
-      find("a.edit-answer[href='#{edit_question_answer_path(answer.question, answer)}']")
+      "a.edit-answer-link[href='#{edit_question_answer_path(answer.question, answer)}']"
+    end
+
+    def form_id
+      "form#edit_answer_#{answer.id}"
     end
 
     background do
@@ -22,19 +26,23 @@ feature 'User can edit his answer', %q{
     end
 
     scenario 'when owner' do
-      expect{ edit_link }.to_not raise_error
-      
-      within '#answers' do
-        fill_in 'Answer', with: upcased_body
+      expect{ find(edit_link) }.to_not raise_error
+      expect(page).to have_selector(form_id, visible: false)
+
+      find(edit_link).click
+
+      within form_id do
+        fill_in 'answer[body]', with: upcased_body
         click_on 'Update answer'
       
         expect(page).to_not have_selector('textarea')
       end
         
+      expect(page).to have_selector(form_id, visible: false)
       expect(page).to_not have_content(answer.body)
+      expect(page).to have_content(upcased_body)
 
       expect(current_path).to eq(question_path(question))
-      expect(page).to have_content(upcased_body)
       expect(page).to have_content(t('.answers.update.updated'))
 
     end

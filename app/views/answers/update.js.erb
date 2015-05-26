@@ -2,9 +2,13 @@
   <% @answer.errors.full_messages.each do |message| %>
     $('textarea#answer_body').html('<div><%= j message %></div>');
   <% end %>
+
 <% else %>
   new_body = $('<%= j render @answer %>').find('.body')
-  $('<%= "#answer_#{@answer.id} .body" %>').replaceWith( new_body );
-  $('<%= "#edit_answer_#{@answer.id}" %>').hide()
+  <% answer_id = "#answer_#{@answer.id}" %>
+  $('<%= "#{answer_id} .body" %>').replaceWith( new_body );
+  $('<%= "#edit_answer_#{@answer.id}" %>').hide();
+  $('<%= answer_id  %>').prepend('<div class ="alert alert-success" role="alert"><%= j t('.updated') %></div>');
+
 <% end %>
 

@@ -13,7 +13,7 @@
   /#TODO letters to locale
   = form_for [@question, answer], remote: true do |f|
     .form-group
-      = f.label :body, t('.Answer')
+      = f.label :body, 'Answer'
       = f.text_area :body, class: 'form-control'
 
     = f.submit 'Update answer', class: 'btn btn-primary'
