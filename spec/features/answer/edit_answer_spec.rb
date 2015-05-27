@@ -86,5 +86,9 @@ feature 'User can edit his answer', %q{
     expect(page).to_not have_selector(edit_link, visible: :all)
     
   end
+
+  scenario 'when click edit after create an answer'
+  # need using js event delegation to new created element
+  
 end
 
