@@ -9,28 +9,24 @@ feature 'User can edit his answer', %q{
   given(:answer){ create :answer, user: user }
   given(:question){ answer.question }
 
-  def edit_link
-    "a.edit-answer-link"
-  end
-
   feature 'User edits an answer when he is owner' do
     given(:upcased_body){ answer.body.upcase }
 
-    def form_id
-      "form#edit_answer_#{answer.id}"
-    end
-
     def submit_form content
-      expect(page).to have_selector(edit_link)
+      expect(page).to have_selector(answer_edit_link)
       expect(page).to have_selector(form_id, visible: false)
       
-      find(edit_link).click
+      find(answer_edit_link).click
 
       within form_id do
         fill_in 'answer[body]', with: content
         click_on t('.answers.form.submit')      
       end
 
+    end
+
+    def form_id
+      "form#edit_answer_#{answer.id}"
     end
 
     background do
@@ -69,7 +65,7 @@ feature 'User can edit his answer', %q{
     
     scenario 'should not see edit answer link' do
       visit question_path(question) 
-      expect(page).to_not have_selector(edit_link, visible: :all)
+      expect(page).to_not have_selector(answer_edit_link, visible: :all)
 
     end
 
@@ -83,11 +79,11 @@ feature 'User can edit his answer', %q{
 
   scenario 'when unauthenticated should not edit' do
     visit question_path(question)
-    expect(page).to_not have_selector(edit_link, visible: :all)
+    expect(page).to_not have_selector(answer_edit_link, visible: :all)
     
   end
 
-  scenario 'when click edit after create an answer'
+  scenario 'when click edit at once after create an answer'
   # need using js event delegation to new created element
   
 end

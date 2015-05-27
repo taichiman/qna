@@ -34,6 +34,12 @@ module Features
       expect(page).to have_field('Your Answer') 
     end
 
+    # edit answer helper
+    def answer_edit_link
+      "a.edit-answer-link"
+    end
+    #---
+
   end
 
   module AuthentificationHelpers

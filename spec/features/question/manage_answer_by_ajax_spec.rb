@@ -17,11 +17,8 @@ feature 'User can edit and delete his answer from question', %q{
     scenario 'when he is owner' do
       answer = create :answer, question: question
       sign_in(answer.user)
-
-      expect(
-        page.has_link?('', href: "#{edit_question_answer_path(question, answer)}")
-      ).to eq true
-
+      
+      expect(page).to have_selector("#answer_#{answer.id} #{answer_edit_link}")
       expect{
         page.find("a.delete-answer[href='#{question_answer_path(question, answer)}']")
       }.not_to raise_error
