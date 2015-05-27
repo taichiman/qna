@@ -10,7 +10,7 @@ feature 'User can edit his answer', %q{
   given(:question){ answer.question }
 
   def edit_link
-    "a.edit-answer-link[href='#{edit_question_answer_path(answer.question, answer)}']"
+    "a.edit-answer-link"
   end
 
   feature 'User edits an answer when he is owner' do
@@ -50,7 +50,7 @@ feature 'User can edit his answer', %q{
 
     end
 
-    scenario 'edits when invalid data' do
+    scenario 'notification when invalid data' do
       submit_form ''
 
       expect(current_path).to eq(question_path(question))
@@ -73,24 +73,18 @@ feature 'User can edit his answer', %q{
 
     end
 
-    scenario 'should redirect to my-answer path if set edit url in browser' do
-      visit edit_question_answer_path(answer.question, answer)
-
-      expect(current_path).to eq(my_answers_path)
-      expect(page).to have_content(t('not-owner-of-answer'))
+    scenario 'should raise exception if set edit url in browser', js: false do
+      expect{ 
+        visit "/questions/#{answer.question.id}/answers/#{answer.id}/edit" 
+      }.to raise_error(ActionController::RoutingError)
 
     end 
   end
 
-  scenario 'when unauthenticated' do
+  scenario 'when unauthenticated should not edit' do
     visit question_path(question)
+    expect(page).to_not have_selector(edit_link, visible: :all)
     
-    #TODO ref to edit_link method
-    expect(
-      page.has_link?('', href: "#{edit_question_answer_path(question, answer)}")
-    ).to eq false
-
   end
-
 end
 
