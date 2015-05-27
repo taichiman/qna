@@ -1,16 +1,12 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
-  before_action :set_question, only: [:new, :show, :create]
-  before_action :set_answer, only: [:edit, :show, :update, :destroy]
-  before_action :only_owner, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_question, only: [:new, :create]
+  before_action :set_answer, only: [:update, :destroy]
+  before_action :only_owner, only: [:update, :destroy]
 
   def index
     @answers = Answer.my(current_user)
   end
-
-  def edit; end
-
-  def show; end
 
   def create
     attrs = answer_params.merge( user: current_user )
@@ -52,7 +48,7 @@ class AnswersController < ApplicationController
     unless @answer.user_id == current_user.id
       message = 
         case action_name.to_sym
-        when :edit, :update
+        when :update
           'not-owner-of-answer'
         else
           '.only-owner-can-delete'

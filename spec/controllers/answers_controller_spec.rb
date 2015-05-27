@@ -18,61 +18,23 @@ describe AnswersController do
   end
 
   describe "GET #show" do
-    let(:question) { create :question_with_answers }
-    let(:answer) { question.answers[1] }
+    let(:answer){ create :answer }
 
-    before do
-      get(:show,
-        question_id: question,
-        id: answer
-      )
+    it "user can not see answer by html request" do
+      expect(get: "/questions/#{answer.question.id}/answers/#{answer.id}" ).to_not be_routable
+
     end
 
-    it "assigns @question" do
-      expect(assigns(:question)).to be_eql(question)
-    end
-
-    it "assigns @answer" do
-      expect(assigns(:answer)).to be_eql(answer)
-    end
-
-    it "renders template :show" do
-      expect(response).to render_template(:show)
-    end
   end
 
   describe 'GET #edit' do
-    context 'when authenticated' do
-      sign_in_user
-      let(:answer){ create(:answer, user: user) }
-
-      before do
-        get :edit, question_id: answer.question, id: answer
-      end
-
-      context 'owner' do
-        it 'should assign @answer' do
-          expect(assigns(:answer)).to eq(answer)
-        end
-        it { should render_template 'edit' }
-      end
-
-      context 'not owner' do
-        it_behaves_like 'only owner handling answer', message: 'not-owner-of-answer'
-      end
-    end
-    
-    context 'when unauthenticated' do        
       let(:answer){ create :answer }
 
-      before do
-        sign_out :user
-        get :edit, question_id: answer.question, id: answer
+      it "authenticated user can not edit answer by html request" do
+        expect(get: "/questions/#{answer.question.id}/answers/#{answer.id}/edit" ).to_not be_routable
+
       end
 
-      it_behaves_like 'redirected to devise SignIn page'
-
-    end
   end
 
   describe 'POST #create' do

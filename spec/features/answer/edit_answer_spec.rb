@@ -9,12 +9,12 @@ feature 'User can edit his answer', %q{
   given(:answer){ create :answer, user: user }
   given(:question){ answer.question }
 
+  def edit_link
+    "a.edit-answer-link[href='#{edit_question_answer_path(answer.question, answer)}']"
+  end
+
   feature 'User edits an answer when he is owner' do
     given(:upcased_body){ answer.body.upcase }
-
-    def edit_link
-      "a.edit-answer-link[href='#{edit_question_answer_path(answer.question, answer)}']"
-    end
 
     def form_id
       "form#edit_answer_#{answer.id}"
@@ -60,14 +60,20 @@ feature 'User can edit his answer', %q{
 
   end
   
-  feature 'when not owner' do
+  feature 'when authenticated, but not owner' do
     given(:another_user){ create :user }
 
     background do
       fill_form_and_sign_in(another_user)
     end
     
-    scenario 'should not edit' do
+    scenario 'should not see edit answer link' do
+      visit question_path(question) 
+      expect(page).to_not have_selector(edit_link, visible: :all)
+
+    end
+
+    scenario 'should redirect to my-answer path if set edit url in browser' do
       visit edit_question_answer_path(answer.question, answer)
 
       expect(current_path).to eq(my_answers_path)
