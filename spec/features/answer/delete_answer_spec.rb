@@ -39,9 +39,9 @@ feature 'User can delete owned him answer', %q{
   feature 'delete answer from my answers page'
 
   scenario 'can not delete when unauthenticated user' do 
-    visit my_answers_path
-    expect(current_path).to eq(new_user_session_path)
-    expect(page).to have_content(t('.devise.failure.unauthenticated'))
+    visit question_path question
+    
+    expect(page).not_to have_selector(delete_answer_link)
 
   end
 end
