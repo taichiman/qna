@@ -4,11 +4,7 @@ class QuestionsController < ApplicationController
   before_action :only_owner, only: [:edit, :update, :destroy] 
 
   def index
-    if params[:scope] == 'my' then
-      @questions = Question.my(current_user)
-    else
-      @questions = Question.all
-    end
+    @questions = Question.send *(params[:scope] == 'my' ? [:my, current_user] : :all)
 
   end
 
