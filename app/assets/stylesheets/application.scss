@@ -15,11 +15,23 @@
 //@import "bootstrap/theme";
 
 .question, .answer {
-  .menubar {
-    padding-top: 20px;
-  }
   .glyphicon {
     font-size: 70%;  
+  }
+}
+
+.question {
+  .menubar {
+    height: 20px;
+    li {
+      margin-top:-10px;
+    }
+  }
+}
+
+.answer {
+  .nav {
+    margin-top: -20px;
   }
 }
 

@@ -6,7 +6,6 @@ class QuestionsController < ApplicationController
   def index
     if params[:scope] == 'my' then
       @questions = Question.my(current_user)
-      render 'my_index'
     else
       @questions = Question.all
     end

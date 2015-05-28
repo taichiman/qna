@@ -4,8 +4,7 @@ en:
       title: New Question
     index:
       all-questions: All Questions
-    my_index:
-      my-questions: List of my questions
+      my-questions: My questions
     show:
       answer_title: Your answer
       submit_answer: Create answer
