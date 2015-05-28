@@ -24,8 +24,6 @@ class AnswersController < ApplicationController
   def destroy
     @answer.delete
 
-    redirect_to question_path(@answer.question), notice: t('.deleted')
-
   end
 
   private

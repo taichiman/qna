@@ -1,0 +1,3 @@
+answer_form = $('<%= "#answer_#{@answer.id}" %>')
+answer_form.before('<%= j notify('success', t('.deleted')) %>')
+answer_form.remove()

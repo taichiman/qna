@@ -2,41 +2,42 @@ require 'rails_helper'
 
 feature 'User can delete owned him answer', %q{
   In order to be able to improve content quality
-  As an user
-  I should to be able to delete my answer
+  As an Author
+  I should to be able to delete my answer by ajax
 } do
-  
+  given(:answer){ create :answer }
+  given(:question){ answer.question }
+  given(:user){ answer.user }
+   
   def delete_answer_link
-    find("a.delete-answer[href='#{question_answer_path(answer.question, answer)}']")
+    "a.delete-answer-link[href='#{question_answer_path(answer.question, answer)}']"
   end
 
   def answer_body
     answer.body.truncate(10, omission: '')
   end
 
-  feature 'delete answer from my answers page' do
-    background do
+  
+  feature 'author deletes answer from question page', js: true do
+    scenario 'should delete owned answer' do
       fill_form_and_sign_in(user)
-      visit '/'
-      click_on t('links.my-answers')
-    end
+      visit question_path(question)
 
-    describe 'when authenticated user' do
-      given(:user){ create :user_with_questions, with_test_answers: true }
-      given(:answer){ user.answers.first }
+      expect(page).to have_selector(delete_answer_link)
       
-      scenario 'should delete answer' do
-        expect(page).to have_content(answer_body)
-        delete_answer_link.click
+      find(delete_answer_link).click
 
-        expect(page).to have_content(t('answers.destroy.deleted'))
-        expect(current_path).to eq(question_path(answer.question))
-        expect(page).not_to have_content(answer_body)
-      end
+      expect(page).to have_content(t('answers.destroy.deleted'))
+      expect(page).not_to have_content(answer_body)
     end
+    
+    
+    scenario 'when request with curl'
 
   end
-    
+  
+  feature 'delete answer from my answers page'
+
   scenario 'can not delete when unauthenticated user' do 
     visit my_answers_path
     expect(current_path).to eq(new_user_session_path)

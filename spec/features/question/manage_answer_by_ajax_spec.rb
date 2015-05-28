@@ -20,7 +20,7 @@ feature 'User can edit and delete his answer from question', %q{
       
       expect(page).to have_selector("#answer_#{answer.id} #{answer_edit_link}")
       expect{
-        page.find("a.delete-answer[href='#{question_answer_path(question, answer)}']")
+        page.find("a.delete-answer-link[href='#{question_answer_path(question, answer)}']")
       }.not_to raise_error
 
     end
@@ -31,7 +31,7 @@ feature 'User can edit and delete his answer from question', %q{
 
       expect(page).to_not have_css('a.edit-answer')
       expect{
-        page.find("a.delete-answer[href='#{question_answer_path(question, answer)}']")
+        page.find("a.delete-answer-link[href='#{question_answer_path(question, answer)}']")
       }.to raise_error
 
     end
@@ -44,7 +44,7 @@ feature 'User can edit and delete his answer from question', %q{
 
       expect(page).to_not have_css('a.edit-answer')
       expect{
-        page.find("a.delete-answer[href='#{question_answer_path(question, answer)}']")
+        page.find("a.delete-answer-link[href='#{question_answer_path(question, answer)}']")
       }.to raise_error
     end
   end

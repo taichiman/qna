@@ -178,12 +178,12 @@ describe AnswersController do
   end
 
   describe 'DELETE#destroy' do
+    def delete_request(answer)
+      xhr :post, :destroy, question_id: answer.question, id: answer
+    end
+
     context 'authenticated user' do
       sign_in_user(:user)
-
-      def delete_request(answer)
-        delete :destroy, question_id: answer.question, id: answer
-      end
 
       context 'when owner' do
         let(:answer){ create :answer, user: user }
@@ -198,13 +198,12 @@ describe AnswersController do
           
         end
 
-        it { should redirect_to(question_path(answer.question)) }
-        it { should set_flash[:notice].to(t('answers.destroy.deleted')) }
+        it { should render_template 'destroy' }
 
       end
 
       context 'when not owner' do
-        it 'when not owner of answer should not delete' do
+        it 'should not delete' do
           answer = create :answer
 
           expect{ delete_request(answer) }.not_to change{ 
@@ -217,15 +216,19 @@ describe AnswersController do
     end
     
     context 'no authenticated user' do
-      let(:answer){ create :answer }
       before do
         sign_out :user
-        delete :destroy, id: question, question_id: answer.question
-      end    
-      
-      it_behaves_like 'redirected to devise SignIn page'
-     
+      end
+      it 'should not delete answer' do
+        answer = create :answer
+
+        expect{ delete_request(answer) }.not_to change{ 
+          Answer.exists?(answer.id)
+        }
+    
+      end
     end
+
   end
 
   describe 'GET#my-answers' do
