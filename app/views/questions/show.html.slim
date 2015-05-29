@@ -5,25 +5,17 @@
       - @answer.errors.full_messages.each do |msg|
         li = msg
 
-.panel.panel-default
-  .panel-heading
-    .panel-title#question_title
-      h4.text-primary = link_to @question.title, question_path(@question), class: 'question-hyperlink'
+article.question id="question_#{@question.id}"
+  header= render @question
 
-  .panel-body#question_body
-    | #{@question.body}
-    .user.text-muted.pull-right
-      = user_name(@question.user)
+  .answer_label
+    h4= answer_count_legend(@question.answers.count)
+    hr 
+  
+  #answers
+    = render @answers
 
-    .answer_label
-      br
-      h4= answer_count_legend(@question.answers.count)
-      hr 
-    
-    #answers
-      = render @answers
-
-  .panel-footer
+  footer.bg-warning
     = form_for [@question, @answer], remote: true do |f|
       .form-group
         = f.label :body, t('.answer_title')

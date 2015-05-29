@@ -3,22 +3,17 @@ require 'rails_helper'
 feature 'User can edit question', %q{
   In order to be able to improve quality of my content
   As an author of answer
-  I'd like to be able to edit my question
+  I'd like to be able to edit my question with ajax
 } do
-  given(:user){ create :user_with_questions }
   given(:question){ user.questions.first }
-  given(:not_my_question){ create :question }
 
   feature 'when authenticated user' do
     given!(:title){ question.title }
     given!(:body){ question.body }
 
     background do
-      create_pair :user_with_questions
-
-      fill_form_and_sign_in(user)
-      visit '/'
-      click_on t('links.my-questions')      
+      fill_form_and_sign_in(question.user)
+      visit question_path(question)
       first("a.edit-question[href='#{edit_question_path(question)}']").click
 
       fill_in 'Title', with: find('#question_title').value.upcase
