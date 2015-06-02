@@ -1,4 +1,16 @@
 <% id = @question.id %>
-$('<%= "article#question_#{id} header" %>').prepend('<%= j notify('success', t('.succesfully')) %>');
-$('<%= "#question_#{id} header div.question" %>').replaceWith('<%= j render @question %>');
+<% notice = "article#question_#{id} header" %>
+$('<%= "#{notice} .alert" %>').remove();
+
+<%- if @question.errors.any? %>
+  $('<%= notice %>').prepend('<%= j notify('danger', t('.unsuccesfully')) %>');
+  <%- @question.errors.full_messages.each do |error| %>
+    $('<%= "#{notice} .alert" %>').append('<%= j "<br><div>*&#32;#{error}</div>".html_safe %>');    
+  <% end %>
+
+<%- else %>
+  $('<%= notice %>').prepend('<%= j notify('success', t('.succesfully')) %>');
+  $('<%= "#question_#{id} header div.question" %>').replaceWith('<%= j render @question %>');
+
+<%- end %>
 

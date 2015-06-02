@@ -40,12 +40,10 @@ feature 'User can edit question', %q{
 
     scenario 'edits question with invalid data' do      
       fill_in 'Title', with: ''
-      click_on t('questions.form.submit')
+      click_on t('questions.question.update')
 
       expect(current_path).to eq(question_path(question))
       expect(page).to have_content t('questions.update.unsuccesfully')
-
-      expect(page).to have_content('1 error prohibited this question from being saved:')
       expect(page).to have_content('Title can\'t be blank')
 
     end
