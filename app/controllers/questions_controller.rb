@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:show, :edit, :update, :destroy]
-  before_action :only_owner, only: [:edit, :update, :destroy] 
+  before_action :set_question, only: [:show, :update, :destroy]
+  before_action :only_owner, only: [:update, :destroy] 
 
   def index
     @questions = Question.send *(params[:scope] == 'my' ? [:my, current_user] : :all)
@@ -17,8 +17,6 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit; end
-
   def create
     @question = current_user.questions.build(question_params)
 
@@ -31,12 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question, notice: t('.succesfully')
-    else
-      flash[:alert] = t('.unsuccesfully')
-      render :edit
-    end
+    @question.update(question_params)
 
   end
 
@@ -70,7 +63,7 @@ class QuestionsController < ApplicationController
     unless @question.user_id == current_user.id
       message = 
         case action_name.to_sym
-        when :edit, :update
+        when :update
           'question-not-owner'
         else
           '.only-owner-can-delete'

@@ -7,9 +7,5 @@ module AnswersHelper
     end
   end
 
-  def notify type, message
-    "<div class='alert alert-#{type}' role='alert'>#{message}</div>".html_safe
-
-  end
 end
 

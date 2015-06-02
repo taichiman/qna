@@ -1,0 +1,4 @@
+<% id = @question.id %>
+$('<%= "article#question_#{id} header" %>').prepend('<%= j notify('success', t('.succesfully')) %>');
+$('<%= "#question_#{id} header div.question" %>').replaceWith('<%= j render @question %>');
+

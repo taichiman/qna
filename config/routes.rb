@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :questions do
+  resources :questions, except: [:edit] do
     resources :answers, except: [:show, :edit]
   end
   

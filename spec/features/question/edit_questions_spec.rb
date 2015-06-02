@@ -5,28 +5,36 @@ feature 'User can edit question', %q{
   As an author of answer
   I'd like to be able to edit my question with ajax
 } do
-  given(:question){ user.questions.first }
+  given(:question){ create :question }
 
-  feature 'when authenticated user' do
+  feature 'when authenticated user', js: true do
     given!(:title){ question.title }
     given!(:body){ question.body }
+
+    def form
+      "form#edit_question_#{question.id}"
+    end
 
     background do
       fill_form_and_sign_in(question.user)
       visit question_path(question)
-      first("a.edit-question[href='#{edit_question_path(question)}']").click
+      
+      expect(page).to_not have_selector(form)
+      find("a.edit-question-link").click
+      expect(page).to     have_selector(form)
 
+      expect(current_path).to eq(question_path(question)) 
       fill_in 'Title', with: find('#question_title').value.upcase
       fill_in 'Body', with: find('#question_body').value.upcase
     end
 
     scenario 'edits question with valid data' do     
-      click_on t('questions.form.submit')
+      click_on t('questions.question.update')
 
-      expect(current_path).to eq(question_path(question))
       expect(page).to have_content t('questions.update.succesfully')
       expect(page).to have_content title.upcase
       expect(page).to have_content body.upcase
+      expect(page).to have_selector(form, visible: false )
 
     end
 
