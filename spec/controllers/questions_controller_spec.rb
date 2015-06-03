@@ -5,8 +5,7 @@ describe QuestionsController do
   shared_examples 'only owner handling question' do |message|
     let(:question){ create :question }
 
-    it { should redirect_to my_questions_path }
-    it { should set_flash[:alert].to(t(message[:message])) }
+    it { expect(response.body).to eq t('question-not-owner') }
 
   end
   

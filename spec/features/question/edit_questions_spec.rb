@@ -10,6 +10,7 @@ feature 'User can edit question', %q{
   feature 'when authenticated user', js: true do
     given!(:title){ question.title }
     given!(:body){ question.body }
+    given(:not_my_question){ create :question }
 
     def form
       "form#edit_question_#{question.id}"
@@ -49,18 +50,23 @@ feature 'User can edit question', %q{
     end
 
     scenario 'tries to edit when not question owner' do
-      visit edit_question_path(not_my_question)
+      visit question_path(not_my_question)
+      expect(page).not_to have_selector("a.edit-question-link")
 
-      expect(current_path).to eq(my_questions_path)
-      expect(page).to have_content t('question-not-owner')
-      
+    end
+
+    scenario 'edits from my_question_path' do
+      visit my_questions_path
+
+      expect(page).not_to have_selector("a.edit-question-link")
+
     end
   end
 
   feature 'when unauthenticated user' do
     scenario 'tries to edit question' do  
-      visit edit_question_path(question)
-      expect(current_path).to eq(new_user_session_path)
+      visit question_path(question)
+      expect(page).not_to have_selector("a.edit-question-link")
 
     end
   end

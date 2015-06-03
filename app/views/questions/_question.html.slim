@@ -1,4 +1,4 @@
-.question.clearfix
+.question-content.clearfix
   .title
     h4.text-primary = link_to question.title, question_path(question), class: 'question-hyperlink'
   .body
@@ -12,12 +12,13 @@
           li== "Answers <span class=\"label label-default\" >#{question.answers.count}</span>" 
           li= user_name(question.user)
 
-      li
-        ul.nav.navbar-nav.menubar
-          li = content_tag :a, class: 'edit-question-link', data: {question_id: "#{question.id}"} do
-                 span.glyphicon.glyphicon-pencil
-          li = link_to question_path(question), method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete-question' do
-                 span.glyphicon.glyphicon-scissors
+      - if question_owner?(question) && (current_page?( question_path(question )) || (request.xhr? && (action_name=='update')) )
+        li
+          ul.nav.navbar-nav.menubar
+            li = content_tag :a, class: 'edit-question-link', data: {question_id: "#{question.id}"} do
+                   span.glyphicon.glyphicon-pencil
+            li = link_to question_path(question), method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete-question' do
+                   span.glyphicon.glyphicon-scissors
 
   = form_for question, remote: true do |f|
     .form-group

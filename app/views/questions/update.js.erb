@@ -10,7 +10,7 @@ $('<%= "#{notice} .alert" %>').remove();
 
 <%- else %>
   $('<%= notice %>').prepend('<%= j notify('success', t('.succesfully')) %>');
-  $('<%= "#question_#{id} header div.question" %>').replaceWith('<%= j render @question %>');
+  $('<%= "#question_#{id} header .question-content" %>').replaceWith('<%= j render @question %>');
 
 <%- end %>
 

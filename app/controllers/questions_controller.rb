@@ -61,15 +61,11 @@ class QuestionsController < ApplicationController
 
   def only_owner
     unless @question.user_id == current_user.id
-      message = 
-        case action_name.to_sym
-        when :update
-          'question-not-owner'
-        else
-          '.only-owner-can-delete'
-        end
-
-      redirect_to my_questions_path, alert: t(message)
+      if action_name.to_sym == :update
+        render text: t('question-not-owner')
+      else
+        '.only-owner-can-delete'
+      end
 
       return
 

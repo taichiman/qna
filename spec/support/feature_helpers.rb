@@ -11,7 +11,7 @@ module Features
         expect(page).to have_content(question.body)
       end
 
-      expect(page).to have_css('.question .question-hyperlink', count: questions.count)
+      expect(page).to have_css('.question-content .question-hyperlink', count: questions.count)
 
     end
 
