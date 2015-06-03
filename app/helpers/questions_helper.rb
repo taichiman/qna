@@ -10,6 +10,15 @@ module QuestionsHelper
   def my_answers_count(user)
     user.answers.count > 0 ? " (#{user.answers.count})" : ''
   end
+  
+  def question_owner? question
+    if current_user.nil? then
+      false
+    else
+      question.user_id == current_user.id
+    end
+
+  end
 
 end
 

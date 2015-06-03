@@ -47,6 +47,39 @@ describe QuestionsHelper do
       end
 
     end
+
+  end
+
+  describe 'check question owning' do
+    let(:question){ create :question }
+    context 'for logined user' do
+      before{ allow_any_instance_of(subject).to receive(:current_user){ question.user } } 
+
+      it 'true when owner' do
+        expect(question_owner?(question)).to be_truthy
+      end
+
+      it 'false when not owner' do
+        expect(question_owner?(create :question)).to be_falsy
+      end
+      
+    end
+    
+    context 'for unauthenticated user' do
+      before{ allow_any_instance_of(subject).to receive(:current_user){ nil } } 
+    
+      it 'false when owner' do
+        expect(question_owner?(question)).to be_falsy
+
+      end 
+
+      it 'false when not owner' do
+        expect(question_owner?(question)).to be_falsy
+   
+      end
+
+    end
+
   end
 
 end
