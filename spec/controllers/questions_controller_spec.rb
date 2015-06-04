@@ -5,7 +5,7 @@ describe QuestionsController do
   shared_examples 'only owner handling question' do |message|
     let(:question){ create :question }
 
-    it { expect(response.body).to eq t('question-not-owner') }
+    it { expect(response.body).to eq(t(message[:message])) }
 
   end
   
@@ -163,12 +163,8 @@ describe QuestionsController do
 
     before do |example|
       unless example.metadata[:skip_request]
-        delete :destroy, id: question
+        xhr :delete, :destroy, id: question
       end
-    end
-
-    shared_examples 'redirect to my_questions path' do
-      it { should redirect_to(my_questions_path) }
     end
 
     describe 'should has before filters' do
@@ -184,28 +180,20 @@ describe QuestionsController do
 
       end
 
-      it 'decreases number of questions', skip_request: true do
-        expect{ delete :destroy,
-                  id: question 
-        }.to change(Question, :count).by(-1) 
-
-      end
-
-      it 'removes question from Question', skip_request: true do
-        delete :destroy, id: question 
+      it 'removes the question from Question model', skip_request: true do
+        xhr :delete, :destroy, id: question 
         expect{Question.find(question.id)}.to raise_error(ActiveRecord::RecordNotFound)
 
       end
 
-      it_behaves_like 'redirect to my_questions path'
+      it { should render_template :destroy }
 
-      it { should set_flash[:notice].to t('questions.destroy.deleted')}
     end
 
     context 'when it has an answers' do
 
       it 'catches DeleteRestrictionError answer association exception', skip_request: true do
-        expect{ delete :destroy, id: question }.not_to raise_error
+        expect{ xhr :delete, :destroy, id: question }.not_to raise_error
 
       end
 
@@ -214,9 +202,7 @@ describe QuestionsController do
 
       end
 
-      it_behaves_like 'redirect to my_questions path'
-
-      it { should set_flash[:alert].to t('questions.destroy.not-deleted')}
+      it { should render_template :destroy }
 
     end
         
@@ -225,10 +211,14 @@ describe QuestionsController do
     describe 'when unauthenticated', skip_request: true do
       before do 
         sign_out user
-        delete :destroy, id: question
+        xhr :delete, :destroy, id: question
       end
 
-      it { should redirect_to new_user_session_path }
+      it { should respond_with 401 }
+
+      it 'include devise failure message in response' do
+        expect(response.body).to eq t('.devise.failure.unauthenticated')
+      end
       
     end
 

@@ -40,11 +40,10 @@ class QuestionsController < ApplicationController
     @question.destroy
 
   rescue ActiveRecord::DeleteRestrictionError
-    message = { alert: t('.not-deleted') }  
+    @message = { type: :danger, text: t('.not-deleted') }  
   else
-    message = { notice: t('.deleted') }    
-  ensure
-    redirect_to my_questions_path, message
+    @message = { type: :success, text: t('.deleted') }
+
   end
   
   private
@@ -61,13 +60,12 @@ class QuestionsController < ApplicationController
 
   def only_owner
     unless @question.user_id == current_user.id
-      if action_name.to_sym == :update
+      case action_name.to_sym
+      when :update
         render text: t('question-not-owner')
-      else
-        '.only-owner-can-delete'
+      when :destroy 
+        render text: t('.only-owner-can-delete')
       end
-
-      return
 
     end
   end
