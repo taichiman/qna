@@ -1,5 +1,5 @@
 $ ->
-  $('article.question')
+  $('.questions-list')
   .on( 'click', 'a.edit-question-link', 
   (e) ->
     e.preventDefault()

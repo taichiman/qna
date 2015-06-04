@@ -1,4 +1,4 @@
-.question-content.clearfix
+.question-content.clearfix id="question_#{question.id}"
   .title
     h4.text-primary = link_to question.title, question_path(question), class: 'question-hyperlink'
   .body
@@ -13,7 +13,7 @@
           li class=(question_owner?(question) ? 'bg-primary' : '')
             = user_name(question.user)
 
-      - if question_owner?(question) && (current_page?( question_path(question )) || (request.xhr? && (action_name=='update')) )
+      - if question_owner?(question) && (current_page?(my_questions_path) || (request.xhr? && (action_name=='update')) )
         li
           ul.nav.navbar-nav.menubar
             li = content_tag :a, class: 'edit-question-link', data: {question_id: "#{question.id}"} do
