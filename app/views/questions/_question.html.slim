@@ -10,7 +10,8 @@
        .user.text-muted
         ul.list-inline
           li== "Answers <span class=\"label label-default\" >#{question.answers.count}</span>" 
-          li= user_name(question.user)
+          li class=(question_owner?(question) ? 'bg-primary' : '')
+            = user_name(question.user)
 
       - if question_owner?(question) && (current_page?( question_path(question )) || (request.xhr? && (action_name=='update')) )
         li
