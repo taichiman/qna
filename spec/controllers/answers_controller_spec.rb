@@ -260,5 +260,15 @@ describe AnswersController do
     end
   end
 
+  describe 'set best answer' do
+    answers_count = 5
+    let(:question){ create :question_with_answers, answers_count: answers_count }
+    let(:answer){ question.answers[ rand(answers_count) ] }
+
+    it { should route(:post, "/best-answer/#{answer.id}").to('answers#best_answer', id: answer) }
+
+    it 'ony question owner can set best answer'
+  end
+
 end
 

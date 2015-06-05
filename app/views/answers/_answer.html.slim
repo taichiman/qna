@@ -5,6 +5,9 @@
 
   .pull-right
     ul.nav.nav-pills
+      li
+        = link_to 'Best', best_answer_path, method: :post, remote: true
+
       li.user.text-muted
         = user_name(answer.user)
 
