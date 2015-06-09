@@ -262,10 +262,22 @@ describe AnswersController do
 
   describe 'set best answer' do
     answers_count = 5
-    let(:question){ create :question_with_answers, answers_count: answers_count }
+    sign_in_user
+    let(:question){ create :question_with_answers, answers_count: answers_count, user: user }
     let(:answer){ question.answers[ rand(answers_count) ] }
 
     it { should route(:post, "/best-answer/#{answer.id}").to('answers#best_answer', id: answer) }
+    
+    context 'sets best answer' do
+      it 'no answer before selected' do
+        expect{xhr :post, :best_answer, id: answer }
+        .to change{Answer.find(answer.id).best}.from(false).to(true)
+
+      end
+
+      it 'another answer was before selected'
+
+    end
 
     it 'ony question owner can set best answer'
   end

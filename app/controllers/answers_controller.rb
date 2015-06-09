@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: [:new, :create]
-  before_action :set_answer, only: [:update, :destroy]
+  before_action :set_answer, only: [:update, :destroy, :best_answer]
   before_action :only_owner, only: [:update, :destroy]
 
   def index
@@ -23,6 +23,11 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.delete
+
+  end
+
+  def best_answer
+    @answer.update(best: true)
 
   end
 
