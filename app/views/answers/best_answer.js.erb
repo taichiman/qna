@@ -1,6 +1,6 @@
+$('a.best-answer-link:first').attr({id:''});
+
 best_answer = $('<%= "#answer_#{@answer.id}" %>').detach().prependTo('#answers');
 
-link = best_answer.find('a.best-answer-link');
-
-link.attr({id:'best-answer-tag'});
+best_answer.find('a.best-answer-link').attr({id:'best-answer-tag'});
 

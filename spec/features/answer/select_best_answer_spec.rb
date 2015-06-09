@@ -15,6 +15,7 @@ feature 'Best answer selecting', %q{
       Capybara.default_wait_time = 5
       fill_form_and_sign_in user
       visit question_path(question)
+
     end
     
     scenario 'answer was in middle position', js: true do
@@ -37,13 +38,21 @@ feature 'Best answer selecting', %q{
 
     end
 
-    scenario 'answer was in last position'
-    scenario 'answer was in the first position'
+    scenario 'only the one answer may be selected as the best', js: true do  
+      answer = question.answers[2]
+      find("#answer_#{answer.id}").click_on 'Best'
+
+      expect(page.first('.answer').has_css?('#best-answer-tag')).to be_truthy
+
+      answer = question.answers[3]
+      find("#answer_#{answer.id}").click_on 'Best'
+
+      expect(page).to have_selector('#best-answer-tag', count: 1) 
+
+    end
 
   end
-  feature 'only the one answer may be selected as the best '
   feature 'only owner can select best answer'
-  feature 'can select an another answer as the best' do
 
   end
 
