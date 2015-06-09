@@ -37,6 +37,16 @@
   .nav {
     margin-top: -20px;
   }
+  .nav-pills.menubar { 
+    display:inline;
+  }
+  .best-answer-link {
+    margin-top: -9px;
+  }  
+  #best-answer-tag {
+    color: $gray-light;
+    background-color: $brand-success;
+  }
 }
 
 .login-profile-navbar {
@@ -45,12 +55,6 @@
 
 li.answer-menubar {
   margin-top: -10px;
-}
-
-.answer{
-  .nav-pills.menubar { 
-    display:inline;
-  }
 }
 
 .edit_answer {

@@ -4,9 +4,9 @@
     .small.text-muted = "answered #{time_ago_in_words(answer.created_at)} ago"
 
   .pull-right
-    ul.nav.nav-pills
+    ul.nav.nav-pills 
       li
-        = link_to 'Best', best_answer_path(answer.id), method: :post, remote: true
+        = link_to 'Best', best_answer_path(answer.id), method: :post, remote: true, class: 'best-answer-link'
 
       li.user.text-muted
         = user_name(answer.user)

@@ -12,20 +12,27 @@ feature 'Best answer selecting', %q{
     Capybara.javascript_driver = :selenium
 
     background do
-      #Capybara.default_wait_time = 5
+      Capybara.default_wait_time = 5
       fill_form_and_sign_in user
       visit question_path(question)
     end
     
-    scenario 'answer was in random position', js: true do
-      answer = question.answers[ rand(1..question.answers.count) ]
+    scenario 'answer was in middle position', js: true do
+      answer = question.answers[2]
       find("#answer_#{answer.id}").click_on 'Best'
 
       within('#answers') do
         expect(page.first(".answer")[:id]).to eq("answer_#{answer.id}")
-        #'best answer has green check' 
-        #expect(page).to have_selector 'count as initial answer count' 
-        #expect(page).to have_selector 'for each answer'
+        expect(page.all(".answer").count).to eq(question.answers.count)
+        expect(page.all('.answer')
+          .map{|e| e[:id]}
+          .map{|s| s[/\d+/].to_i}).to contain_exactly(*question.answers.map(&:id)
+        )
+
+        expect(page.first('.answer').has_css?('#best-answer-tag')).to be_truthy
+        
+        #commented, because preventDefault had not worked
+        #expect(page.first('.answer a#best-answer-tag')).to be_disabled
       end
 
     end
@@ -34,10 +41,14 @@ feature 'Best answer selecting', %q{
     scenario 'answer was in the first position'
 
   end
-
+  feature 'only the one answer may be selected as the best '
+  feature 'only owner can select best answer'
   feature 'can select an another answer as the best' do
 
   end
+
+
+  feature 'best answer in first position when question showing'
 
 end
 
