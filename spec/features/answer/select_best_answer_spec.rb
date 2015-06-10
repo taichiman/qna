@@ -8,11 +8,19 @@ feature 'Best answer selecting', %q{
   given(:question){ create :question_with_answers, answers_count: 5 }
   given(:user){ question.user }
 
-  feature 'can select a best answer' do
+  before(:all) do
     Capybara.javascript_driver = :selenium
+    Capybara.default_wait_time = 5
+  end
+
+  after(:all) do
+    Capybara.javascript_driver = :webkit
+    Capybara.default_wait_time = 2
+  end
+
+  feature 'can select a best answer' do
 
     background do
-      Capybara.default_wait_time = 5
       fill_form_and_sign_in user
       visit question_path(question)
 
@@ -54,7 +62,6 @@ feature 'Best answer selecting', %q{
   end
   feature 'only owner can select best answer'
 
-  end
 
 
   feature 'best answer in first position when question showing'
