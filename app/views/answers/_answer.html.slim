@@ -5,8 +5,8 @@
 
   .pull-right
     ul.nav.nav-pills 
-      li
-        = link_to 'Best', best_answer_path(answer.id), method: :post, remote: true, class: 'best-answer-link'
+      - if question_owner?(answer.question)
+        li= link_to 'Best', best_answer_path(answer.id), method: :post, remote: true, class: 'best-answer-link'
 
       li.user.text-muted
         = user_name(answer.user)

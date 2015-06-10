@@ -309,6 +309,12 @@ describe AnswersController do
         expect(Question.find(question.id).answers.where(best: true).count).to eq(1)
 
       end
+
+      it 'if clicked the best answer again then should only deselect it' do
+        xhr :post, :best_answer, id: first_answer_id
+        expect(Question.find(question.id).answers.where(best: true).count).to eq(0)
+        
+      end
     end
 
     it 'only question owner can set best answer'

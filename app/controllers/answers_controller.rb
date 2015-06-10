@@ -27,10 +27,14 @@ class AnswersController < ApplicationController
   end
 
   def best_answer
-    old_best_answer = @answer.question.answers.where(best: true).take
-    old_best_answer.try(:toggle!, :best)
+    #TODO ref
+    @new_best = @answer
+    @old_best = get_old_best_answer
 
-    @answer.update(best: true)
+    if @old_best != @new_best
+      @old_best.try(:update, {best: false})
+    end
+    @new_best.toggle!(:best)
 
   end
 
@@ -66,6 +70,11 @@ class AnswersController < ApplicationController
       return
 
     end
+  end
+
+  def get_old_best_answer
+    @answer.question.answers.where(best: true).take
+  
   end
 
 end

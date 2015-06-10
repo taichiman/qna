@@ -7,6 +7,7 @@ feature 'Best answer selecting', %q{
 } do
   given(:question){ create :question_with_answers, answers_count: 5 }
   given(:user){ question.user }
+  given(:answer){ question.answers[2] }
 
   before(:all) do
     Capybara.javascript_driver = :selenium
@@ -18,18 +19,16 @@ feature 'Best answer selecting', %q{
     Capybara.default_wait_time = 2
   end
 
-  feature 'can select a best answer' do
+  feature 'can select a best answer', js: true do
 
     background do
       fill_form_and_sign_in user
       visit question_path(question)
 
+      find("#answer_#{answer.id}").click_on 'Best'
     end
     
-    scenario 'answer was in middle position', js: true do
-      answer = question.answers[2]
-      find("#answer_#{answer.id}").click_on 'Best'
-
+    scenario 'answer was in middle position' do
       within('#answers') do
         expect(page.first(".answer")[:id]).to eq("answer_#{answer.id}")
         expect(page.all(".answer").count).to eq(question.answers.count)
@@ -46,10 +45,7 @@ feature 'Best answer selecting', %q{
 
     end
 
-    scenario 'only the one answer may be selected as the best', js: true do  
-      answer = question.answers[2]
-      find("#answer_#{answer.id}").click_on 'Best'
-
+    scenario 'if there was the best answer, then it must be deselected and a new answer will be selected' do  
       expect(page.first('.answer').has_css?('#best-answer-tag')).to be_truthy
 
       answer = question.answers[3]
@@ -59,13 +55,23 @@ feature 'Best answer selecting', %q{
 
     end
 
+    scenario 'clicking on the best answer triggers this one back to usual' do
+      expect(page.first('.answer').has_css?('#best-answer-tag')).to be_truthy
+      find("#answer_#{answer.id}").click_on 'Best'
+      
+      expect(page).to_not have_css('#best-answer-tag')
+
+    end
   end
-  feature 'click on the best answer triggers this one back to usual'
-  feature 'only owner can select best answer'
 
+  scenario 'only question owner can select best answer' do
+    fill_form_and_sign_in (create :user)
+    visit question_path(question)
+    expect(page).not_to have_css('.best-answer-link')
 
+  end
 
-  feature 'best answer in first position when question showing'
+  scenario 'best answer in first position when question showing'
 
 end
 
