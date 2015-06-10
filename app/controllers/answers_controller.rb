@@ -27,6 +27,9 @@ class AnswersController < ApplicationController
   end
 
   def best_answer
+    old_best_answer = @answer.question.answers.where(best: true).take
+    old_best_answer.try(:toggle!, :best)
+
     @answer.update(best: true)
 
   end

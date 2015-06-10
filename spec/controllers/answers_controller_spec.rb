@@ -264,22 +264,54 @@ describe AnswersController do
     answers_count = 5
     sign_in_user
     let(:question){ create :question_with_answers, answers_count: answers_count, user: user }
-    let(:answer){ question.answers[ rand(answers_count) ] }
+    let(:first_answer){ question.answers[2] }
+    let(:second_answer){ question.answers[3] }
 
-    it { should route(:post, "/best-answer/#{answer.id}").to('answers#best_answer', id: answer) }
-    
-    context 'sets best answer' do
-      it 'no answer before selected' do
-        expect{xhr :post, :best_answer, id: answer }
-        .to change{Answer.find(answer.id).best}.from(false).to(true)
-
-      end
-
-      it 'another answer was before selected'
+    def first_answer_id
+      first_answer.id
 
     end
 
-    it 'ony question owner can set best answer'
+    def second_answer_id
+      second_answer.id
+    
+    end
+
+    it { should route(:post, "/best-answer/#{first_answer_id}").to('answers#best_answer', id: first_answer_id) }
+    
+    context 'when no answer was selected before' do        
+        it 'should selects answer' do
+          expect{xhr :post, :best_answer, id: first_answer_id }
+          .to change{Answer.find(first_answer_id).best}.from(false).to(true)
+
+        end
+    end
+
+    context 'when another answer was selected' do
+      before do
+        xhr :post, :best_answer, id: first_answer_id
+      end
+
+      it 'should deselect old answer'  do
+        expect{ xhr :post, :best_answer, id: second_answer_id }
+        .to change{Answer.find(first_answer_id).best}.from(true).to(false)
+
+      end
+
+      it 'select new answer' do
+        expect{ xhr :post, :best_answer, id: second_answer_id }
+        .to change{Answer.find(second_answer_id).best}.from(false).to(true)
+        
+      end
+
+      it 'after selecting should only one answer be selected in question' do
+        xhr :post, :best_answer, id: second_answer_id
+        expect(Question.find(question.id).answers.where(best: true).count).to eq(1)
+
+      end
+    end
+
+    it 'only question owner can set best answer'
   end
 
 end

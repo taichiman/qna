@@ -60,6 +60,7 @@ feature 'Best answer selecting', %q{
     end
 
   end
+  feature 'click on the best answer triggers this one back to usual'
   feature 'only owner can select best answer'
 
 
