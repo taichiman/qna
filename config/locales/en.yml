@@ -36,6 +36,8 @@ en:
     destroy:
       deleted: Answer succesfully deleted
       only-owner-can-delete: You can only delete your own answer
+    best_answer: 
+      only-question-owner-can-select-best-answer: Only question owner can select best answer
 
     form:
       submit: Update answer

@@ -6,12 +6,17 @@ describe AnswersController do
   shared_examples 'only owner handling answer' do |message|
     let(:answer){ create :answer }
 
-    it { should redirect_to my_answers_path }
-    it { should set_flash[:alert].to(t(message[:message])) }
+    it { expect(response.body).to eq(t(message[:message])) }
 
   end
 
-  shared_examples 'redirected to devise SignIn page' do
+  shared_examples 'by ajax request: redirected to devise SignIn page' do
+    it { should respond_with 401 }
+    it { expect(response.body).to match(t('.devise.failure.unauthenticated')) }
+
+  end
+
+  shared_examples 'by html request: redirected to devise SignIn page' do
     it { should redirect_to(new_user_session_path) }
     it { should set_flash[:alert].to(t('.devise.failure.unauthenticated')) }
 
@@ -167,14 +172,10 @@ describe AnswersController do
       before do
         patch_request
       end
+      
+      it_behaves_like 'by ajax request: redirected to devise SignIn page'
 
-      it 'autentitication error' do
-        expect(response.body).to eq 'You need to sign in or sign up before continuing.'
-        expect(response.code).to eq '401'
-
-      end
     end 
-    
   end
 
   describe 'DELETE#destroy' do
@@ -255,12 +256,12 @@ describe AnswersController do
       before do
         get :index
       end
-      it_behaves_like 'redirected to devise SignIn page'
+      it_behaves_like 'by html request: redirected to devise SignIn page'
 
     end
   end
 
-  describe 'set best answer' do
+  describe 'set best answer #best_answer' do
     answers_count = 5
     sign_in_user
     let(:question){ create :question_with_answers, answers_count: answers_count, user: user }
@@ -278,10 +279,18 @@ describe AnswersController do
     end
 
     it { should route(:post, "/best-answer/#{first_answer_id}").to('answers#best_answer', id: first_answer_id) }
-    
+
+    it 'only question owner can set best answer' do
+      not_my_question = create :question_with_answers
+      xhr :post, :best_answer, id: not_my_question.answers.first
+
+      expect(response.body).to include(t('answers.best_answer.only-question-owner-can-select-best-answer'))
+      
+    end
+
     context 'when no answer was selected before' do        
         it 'should selects answer' do
-          expect{xhr :post, :best_answer, id: first_answer_id }
+          expect{ xhr :post, :best_answer, id: first_answer_id }
           .to change{Answer.find(first_answer_id).best}.from(false).to(true)
 
         end
@@ -317,8 +326,15 @@ describe AnswersController do
       end
     end
 
-    it 'only question owner can set best answer'
-  end
+    context 'when user unauthenticated' do
+      before do
+        sign_out :user
+        xhr :post, :best_answer, id: first_answer_id
+      end
 
+      it_behaves_like 'by ajax request: redirected to devise SignIn page'
+    end
+
+  end
 end
 

@@ -28,6 +28,12 @@ class AnswersController < ApplicationController
 
   def best_answer
     #TODO ref
+    if @answer.question.user_id != current_user.id then 
+      render text: t('.only-question-owner-can-select-best-answer')
+      return
+
+    end
+
     @new_best = @answer
     @old_best = get_old_best_answer
 
@@ -61,13 +67,11 @@ class AnswersController < ApplicationController
         case action_name.to_sym
         when :update
           'not-owner-of-answer'
-        else
+        when :destroy
           '.only-owner-can-delete'
         end
 
-      redirect_to my_answers_path, alert: t(message)
-
-      return
+      render text: t(message)
 
     end
   end
