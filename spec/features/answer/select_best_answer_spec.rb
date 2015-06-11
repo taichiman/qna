@@ -71,7 +71,15 @@ feature 'Best answer selecting', %q{
 
   end
 
-  scenario 'best answer in first position when question showing'
+  scenario 'best answer in first position when question showing' do
+    fill_form_and_sign_in user
+    Answer.find(answer.id).update(best: true)
 
+    visit question_path(question)
+
+    expect(page).to have_css("#answers .answer:first-child #best-answer-tag")
+    expect(page).to have_css("#answers .answer:first-child#answer_#{answer.id}")
+    
+  end
 end
 
