@@ -14,6 +14,7 @@ class Answer < ActiveRecord::Base
       old_best.try(:update, {best: false})
     end
     new_best.toggle!(:best)
+    old_best
   end
 
   private

@@ -1,8 +1,8 @@
-<% if @new_best == @old_best %>
+<% if @answer == @old_best_answer %>
   $('#best-answer-tag').removeAttr("id");
 <% else %>
-  $('a.best-answer-link:first').attr({id:''});
-  best_answer = $('<%= "#answer_#{@new_best.id}" %>').detach().prependTo('#answers');
+  $('a.best-answer-link:first').removeAttr("id");
+  best_answer = $('<%= "#answer_#{@answer.id}" %>').detach().prependTo('#answers');
   best_answer.find('a.best-answer-link').attr({id:'best-answer-tag'});
 <% end %>
 

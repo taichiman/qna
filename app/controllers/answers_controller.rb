@@ -30,10 +30,9 @@ class AnswersController < ApplicationController
     if @answer.question.user_id != current_user.id
       render text: t('.only-question-owner-can-select-best-answer')
       return
-
     end
 
-    @answer.select_as_best
+    @old_best_answer = @answer.select_as_best
 
   end
 
