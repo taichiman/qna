@@ -27,20 +27,13 @@ class AnswersController < ApplicationController
   end
 
   def best_answer
-    #TODO ref
-    if @answer.question.user_id != current_user.id then 
+    if @answer.question.user_id != current_user.id
       render text: t('.only-question-owner-can-select-best-answer')
       return
 
     end
 
-    @new_best = @answer
-    @old_best = get_old_best_answer
-
-    if @old_best != @new_best
-      @old_best.try(:update, {best: false})
-    end
-    @new_best.toggle!(:best)
+    @answer.select_as_best
 
   end
 
@@ -74,11 +67,6 @@ class AnswersController < ApplicationController
       render text: t(message)
 
     end
-  end
-
-  def get_old_best_answer
-    @answer.question.answers.where(best: true).take
-  
   end
 
 end

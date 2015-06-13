@@ -12,7 +12,7 @@ module QuestionsHelper
   end
   
   def question_owner? question
-    if current_user.nil? then
+    if current_user.nil?
       false
     else
       question.user_id == current_user.id
