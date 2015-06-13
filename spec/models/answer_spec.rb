@@ -5,11 +5,22 @@ RSpec.describe Answer do
   it { should belong_to :question }
   it { should belong_to :user }
 
-  describe 'has scope my-answers' do
+  describe 'has scope - My answers' do
     let(:user){ create :user_with_questions, with_test_answers: true }
     it 'with only my answers' do
       create :user_with_questions, with_test_answers: true
       expect(Answer.my(user)).to match_array(user.answers)
+
+    end
+  end
+
+  describe 'has scope - Best Answer' do
+    let(:question){ create :question_with_answers, answers_count: 3 }
+    
+    it 'return answer' do
+      question.answers.first.select_as_best
+
+      expect(Answer.best_answer(question)).to match_array(question.answers.first)
 
     end
   end
