@@ -10,9 +10,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-
-    raw_answers = @question.answers.order(created_at: :desc)
-    @answers = raw_answers.group_by{ |a| a.best }.values_at(true, false).flatten.compact
+    @answers = Answer.best_in_first(@question)
 
   end
 

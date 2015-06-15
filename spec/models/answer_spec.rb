@@ -25,6 +25,22 @@ RSpec.describe Answer do
     end
   end
 
+  describe 'scope for showing a question answers' do
+    let(:question){ create :question_with_answers, answers_count: 3 }
+    
+    it 'shows all answers for this question' do
+      question.answers.last.select_as_best
+
+      expect(Answer.best_in_first(question)).to match_array(question.answers)
+    end
+
+    it 'with best in first position' do
+      question.answers.last.select_as_best
+
+      expect(Answer.best_in_first(question).first).to eq question.answers.last
+    end
+  end
+
   describe 'select best answer' do
     let(:question){ create :question_with_answers, answers_count: 4 }
 
