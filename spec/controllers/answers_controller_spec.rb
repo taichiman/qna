@@ -268,17 +268,7 @@ describe AnswersController do
     let(:first_answer){ question.answers[2] }
     let(:second_answer){ question.answers[3] }
 
-    def first_answer_id
-      first_answer.id
-
-    end
-
-    def second_answer_id
-      second_answer.id
-    
-    end
-
-    it { should route(:post, "/best-answer/#{first_answer_id}").to('answers#best_answer', id: first_answer_id) }
+    it { should route(:post, "/best-answer/#{first_answer.id}").to('answers#best_answer', id: first_answer.id) }
 
     it 'only question owner can set best answer' do
       not_my_question = create :question_with_answers
@@ -290,37 +280,37 @@ describe AnswersController do
 
     context 'when no answer was selected before' do        
         it 'should selects answer' do
-          expect{ xhr :post, :best_answer, id: first_answer_id }
-          .to change{Answer.find(first_answer_id).best}.from(false).to(true)
+          expect{ xhr :post, :best_answer, id: first_answer.id }
+          .to change{Answer.find(first_answer.id).best}.from(false).to(true)
 
         end
     end
 
     context 'when another answer was selected' do
       before do
-        xhr :post, :best_answer, id: first_answer_id
+        xhr :post, :best_answer, id: first_answer.id
       end
 
       it 'should deselect old answer'  do
-        expect{ xhr :post, :best_answer, id: second_answer_id }
-        .to change{Answer.find(first_answer_id).best}.from(true).to(false)
+        expect{ xhr :post, :best_answer, id: second_answer.id }
+        .to change{Answer.find(first_answer.id).best}.from(true).to(false)
 
       end
 
       it 'select new answer' do
-        expect{ xhr :post, :best_answer, id: second_answer_id }
-        .to change{Answer.find(second_answer_id).best}.from(false).to(true)
+        expect{ xhr :post, :best_answer, id: second_answer.id }
+        .to change{Answer.find(second_answer.id).best}.from(false).to(true)
         
       end
 
       it 'after selecting should only one answer be selected in question' do
-        xhr :post, :best_answer, id: second_answer_id
+        xhr :post, :best_answer, id: second_answer.id
         expect(Question.find(question.id).answers.where(best: true).count).to eq(1)
 
       end
 
       it 'if clicked the best answer again then should only deselect it' do
-        xhr :post, :best_answer, id: first_answer_id
+        xhr :post, :best_answer, id: first_answer.id
         expect(Question.find(question.id).answers.where(best: true).count).to eq(0)
         
       end
@@ -329,7 +319,7 @@ describe AnswersController do
     context 'when user unauthenticated' do
       before do
         sign_out :user
-        xhr :post, :best_answer, id: first_answer_id
+        xhr :post, :best_answer, id: first_answer.id
       end
 
       it_behaves_like 'by ajax request: redirected to devise SignIn page'
