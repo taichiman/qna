@@ -9,14 +9,8 @@ feature 'Best answer selecting', %q{
   given(:user){ question.user }
   given(:answer){ question.answers[2] }
 
-  before(:all) do
-    Capybara.javascript_driver = :selenium
-    Capybara.default_wait_time = 5
-  end
-
-  after(:all) do
-    Capybara.javascript_driver = :webkit
-    Capybara.default_wait_time = 2
+  def truncated_body
+    answer.body.truncate_words(10, omission: '')
   end
 
   feature 'can select a best answer', js: true do
@@ -30,7 +24,7 @@ feature 'Best answer selecting', %q{
     
     scenario 'answer was in middle position' do
       within('#answers') do
-        expect(page.first(".answer")[:id]).to eq("answer_#{answer.id}")
+        expect(page).to have_css(".answer:first-child", text: truncated_body)
         expect(page.all(".answer").count).to eq(question.answers.count)
         expect(page.all('.answer')
           .map{|e| e[:id]}
@@ -46,7 +40,7 @@ feature 'Best answer selecting', %q{
     end
 
     scenario 'if there was the best answer, then it must be deselected and a new answer will be selected' do  
-      expect(page.first('.answer').has_css?('#best-answer-tag')).to be_truthy
+      expect(page.find('.answer', text: truncated_body).has_css?('#best-answer-tag')).to be_truthy
 
       answer = question.answers[3]
       find("#answer_#{answer.id}").click_on 'Best'
@@ -56,7 +50,7 @@ feature 'Best answer selecting', %q{
     end
 
     scenario 'clicking on the best answer triggers this one back to usual' do
-      expect(page.first('.answer').has_css?('#best-answer-tag')).to be_truthy
+      expect(page.find('.answer', text: truncated_body).has_css?('#best-answer-tag')).to be_truthy
       find("#answer_#{answer.id}").click_on 'Best'
       
       expect(page).to_not have_css('#best-answer-tag')
