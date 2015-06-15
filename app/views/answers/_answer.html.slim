@@ -11,7 +11,7 @@
       li.user.text-muted
         = user_name(answer.user)
 
-      - if answer_owner?(answer)
+      - if answer.owner? current_user
         li.answer-menubar = render partial: 'answers/menubar', locals: {answer: answer}
 
   /#TODO letters to locale
