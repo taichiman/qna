@@ -10,10 +10,10 @@
        .user.text-muted
         ul.list-inline
           li== "Answers <span class=\"label label-default\" >#{question.answers.count}</span>" 
-          li class=(question_owner?(question) ? 'bg-primary' : '')
+          li class=(question.owner?(current_user) ? 'bg-primary' : '')
             = user_name(question.user)
 
-      - if question_owner?(question) && (current_page?(my_questions_path) || (request.xhr? && (action_name=='update')) )
+      - if question.owner?(current_user) && (current_page?(my_questions_path) || (request.xhr? && (action_name=='update')) )
         li
           ul.nav.navbar-nav.menubar
             li = content_tag :a, class: 'edit-question-link', data: {question_id: "#{question.id}"} do

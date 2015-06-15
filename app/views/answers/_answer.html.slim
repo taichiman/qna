@@ -5,7 +5,7 @@
 
   .pull-right
     ul.nav.nav-pills 
-      - if question_owner?(answer.question)
+      - if answer.question.owner? current_user
         li= link_to 'Best', best_answer_path(answer.id), method: :post, remote: true, class: 'best-answer-link', id: "#{'best-answer-tag' if answer.best}"
 
       li.user.text-muted

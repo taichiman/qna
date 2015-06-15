@@ -7,5 +7,14 @@ class Question < ActiveRecord::Base
  
   scope :my, -> (user) { where( user: user) }
 
+  def owner? user
+    if user.nil?
+      false
+    else
+      self.user_id == user.id
+    end
+
+  end
+
 end
 
