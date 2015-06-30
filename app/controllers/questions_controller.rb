@@ -4,7 +4,7 @@ class QuestionsController < ApplicationController
   before_action :only_owner, only: [:update, :destroy] 
 
   def index
-    @questions = Question.send *(params[:scope] == 'my' ? [:my, current_user] : :all)
+    @questions = Question.all
 
   end
 
@@ -44,6 +44,12 @@ class QuestionsController < ApplicationController
     @message = { type: :danger, text: t('.not-deleted') }  
   else
     @message = { type: :success, text: t('.deleted') }
+
+  end
+
+  def my
+    @questions = Question.my(current_user)
+    render 'index'
 
   end
   

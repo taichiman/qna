@@ -1,6 +1,6 @@
 - content_for :section_title
 
-  h4 = current_page?(scope: 'my') ? t('.my-questions') :t('.all-questions')
+  h4 = current_page?(action: 'my') ? t('.my-questions') :t('.all-questions')
 .questions-list
   = render @questions
 

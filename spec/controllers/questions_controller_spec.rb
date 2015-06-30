@@ -75,7 +75,7 @@ describe QuestionsController do
     before { create_pair :user_with_questions }
 
     sign_in_user :user_with_questions
-    before{ get :index, scope: 'my' }
+    before{ get :my }
 
     it 'assigns @questions with only my questions' do
       expect(assigns(:questions)).to match_array(user.questions)
