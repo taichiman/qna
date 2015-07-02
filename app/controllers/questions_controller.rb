@@ -10,7 +10,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-    @answers = Answer.best_in_first(@question)
+    @answers = @question.answers_best_in_first
 
   end
 
