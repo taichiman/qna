@@ -15,14 +15,5 @@ class Question < ActiveRecord::Base
     answers.order(best: :desc, created_at: :asc)
   end
 
-  def owner? user
-    if user.nil?
-      false
-    else
-      self.user_id == user.id
-    end
-
-  end
-
 end
 

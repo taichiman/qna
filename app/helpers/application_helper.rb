@@ -8,5 +8,10 @@ module ApplicationHelper
     "<div class='alert alert-#{type}' role='alert'>#{message}</div>".html_safe
 
   end
+
+  def owner? obj
+    !current_user.nil? && current_user.owner_of?(obj)
+  end
+
 end
 

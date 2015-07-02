@@ -5,13 +5,13 @@
 
   .pull-right
     ul.nav.nav-pills 
-      - if answer.question.owner? current_user
+      - if owner?(answer.question)
         li= link_to 'Best', best_answer_path(answer.id), method: :post, remote: true, class: 'best-answer-link', id: "#{'best-answer-tag' if answer.best}"
 
       li.user.text-muted
         = user_name(answer.user)
 
-      - if answer.owner? current_user
+      - if owner?(answer)
         li.answer-menubar = render partial: 'answers/menubar', locals: {answer: answer}
 
   /#TODO letters to locale

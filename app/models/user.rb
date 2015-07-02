@@ -6,5 +6,10 @@ class User < ActiveRecord::Base
 
   has_many :questions, dependent: :restrict_with_exception
   has_many :answers, dependent: :delete_all
+
+  def owner_of? object
+    self.id == object.user_id
+  end
+
 end
 
