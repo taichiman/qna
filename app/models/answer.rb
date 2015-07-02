@@ -10,9 +10,8 @@ class Answer < ActiveRecord::Base
     new_best = self
     old_best = self.question.best_answer.take
   
-    if old_best != new_best
-      old_best.try(:update, {best: false})
-    end
+    old_best.try(:update, {best: false}) if old_best != new_best
+
     new_best.toggle!(:best)
     old_best
 
