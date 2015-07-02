@@ -10,7 +10,6 @@ class AnswersController < ApplicationController
 
   def create
     attrs = answer_params.merge( user: current_user )
-    #TODO delete @question for @answer.question
     @answer = @question.answers.create(attrs)
 
   end
