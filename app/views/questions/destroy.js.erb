@@ -1,0 +1,9 @@
+<% question_id =  "#question_#{@question.id}" %>
+$('.questions-list .alert').remove();
+
+$('<%= question_id %>').before('<%= j notify(@message[:type], @message[:text]) %> ');
+
+<% if @message[:type] == :success %>
+$('<%= question_id %>').remove();
+<% end %>
+

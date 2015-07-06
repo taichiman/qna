@@ -1,41 +1,37 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
-  before_action :set_question, only: [:new, :show, :create]
-  before_action :set_answer, only: [:edit, :show, :update, :destroy]
-  before_action :only_owner, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_question, only: [:new, :create]
+  before_action :set_answer, only: [:update, :destroy, :best_answer]
+  before_action :only_owner, only: [:update, :destroy]
 
   def index
     @answers = Answer.my(current_user)
-
   end
-
-  def edit; end
-
-  def show; end
 
   def create
     attrs = answer_params.merge( user: current_user )
-    @answer = @question.answers.build(attrs)
-
-    unless @answer.save
-      render 'questions/show'
-    end
+    @answer = @question.answers.create(attrs)
 
   end
 
   def update
-    if @answer.update_attributes(answer_params)
-      redirect_to question_path(@answer.question), notice: t('.updated')
-    else
-      render :edit
-    end
+    @answer.update_attributes(answer_params)
+    @question=@answer.question
 
   end
 
   def destroy
     @answer.delete
 
-    redirect_to question_path(@answer.question), notice: t('.deleted')
+  end
+
+  def best_answer
+    if @answer.question.user_id != current_user.id
+      render text: t('.only-question-owner-can-select-best-answer')
+      return
+    end
+
+    @old_best_answer = @answer.select_as_best
 
   end
 
@@ -60,15 +56,13 @@ class AnswersController < ApplicationController
     unless @answer.user_id == current_user.id
       message = 
         case action_name.to_sym
-        when :edit, :update
+        when :update
           'not-owner-of-answer'
-        else
+        when :destroy
           '.only-owner-can-delete'
         end
 
-      redirect_to my_answers_path, alert: t(message)
-
-      return
+      render text: t(message)
 
     end
   end

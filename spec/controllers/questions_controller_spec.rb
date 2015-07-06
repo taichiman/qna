@@ -5,8 +5,7 @@ describe QuestionsController do
   shared_examples 'only owner handling question' do |message|
     let(:question){ create :question }
 
-    it { should redirect_to my_questions_path }
-    it { should set_flash[:alert].to(t(message[:message])) }
+    it { expect(response.body).to eq(t(message[:message])) }
 
   end
   
@@ -76,36 +75,23 @@ describe QuestionsController do
     before { create_pair :user_with_questions }
 
     sign_in_user :user_with_questions
-    before{ get :index, scope: 'my' }
+    before{ get :my }
 
     it 'assigns @questions with only my questions' do
       expect(assigns(:questions)).to match_array(user.questions)
     end
 
-    it { should render_template(:my_index) }
+    it { should render_template(:index) }
 
   end
 
   describe 'GET #edit' do
-    sign_in_user(:user_with_questions)
-    let(:question){ user.questions.first }
+    let(:question){ create :question }
     
-    before do
-      get :edit, id: question
-    end
-    
-    context 'user owns the edited question' do
-      it { should use_before_action(:authenticate_user!) }
-      it { should use_before_action(:set_question) }
-      it 'assigns @question' do
-        expect(assigns(:question)).to eq(question)
-      end
-
-      it { should render_template('edit') }
+    it "authenticated user can not edit question by html request" do
+      expect(get: "/questions/#{question.id}/edit" ).to_not be_routable
 
     end
-
-    it_behaves_like 'only owner handling question', message: 'question-not-owner'
 
   end
 
@@ -118,7 +104,7 @@ describe QuestionsController do
 
     describe 'updates question' do      
       before do
-        patch :update, 
+        xhr :patch, :update, 
           id: question, 
           question: {
             title: title.upcase,
@@ -132,10 +118,7 @@ describe QuestionsController do
         end
         it { should use_before_action(:authenticate_user!) }
         it { should use_before_action(:set_question) }
-        it 'redirects to question show' do
-          should redirect_to(question)
-        end
-        it { should set_flash[:notice].to t('questions.update.succesfully') }
+        it { should render_template('update') }
 
         it 'changes title of the question' do
           expect(Question.find(question.id).title).to eq(question.title.upcase)
@@ -148,11 +131,10 @@ describe QuestionsController do
       context 'with invalid attributes' do
         let(:title) { '' }
         
-        it { should render_template 'edit' }
-        it { should set_flash[:alert].to t('questions.update.unsuccesfully') }
+        it { should render_template 'update' }
 
         it 'not changes number of all questions' do
-          expect{ patch :update, 
+          expect{ xhr :patch, :update, 
                     id: question, 
                     question: {
                     title: title,
@@ -181,12 +163,8 @@ describe QuestionsController do
 
     before do |example|
       unless example.metadata[:skip_request]
-        delete :destroy, id: question
+        xhr :delete, :destroy, id: question
       end
-    end
-
-    shared_examples 'redirect to my_questions path' do
-      it { should redirect_to(my_questions_path) }
     end
 
     describe 'should has before filters' do
@@ -202,28 +180,20 @@ describe QuestionsController do
 
       end
 
-      it 'decreases number of questions', skip_request: true do
-        expect{ delete :destroy,
-                  id: question 
-        }.to change(Question, :count).by(-1) 
-
-      end
-
-      it 'removes question from Question', skip_request: true do
-        delete :destroy, id: question 
+      it 'removes the question from Question model', skip_request: true do
+        xhr :delete, :destroy, id: question 
         expect{Question.find(question.id)}.to raise_error(ActiveRecord::RecordNotFound)
 
       end
 
-      it_behaves_like 'redirect to my_questions path'
+      it { should render_template :destroy }
 
-      it { should set_flash[:notice].to t('questions.destroy.deleted')}
     end
 
     context 'when it has an answers' do
 
       it 'catches DeleteRestrictionError answer association exception', skip_request: true do
-        expect{ delete :destroy, id: question }.not_to raise_error
+        expect{ xhr :delete, :destroy, id: question }.not_to raise_error
 
       end
 
@@ -232,9 +202,7 @@ describe QuestionsController do
 
       end
 
-      it_behaves_like 'redirect to my_questions path'
-
-      it { should set_flash[:alert].to t('questions.destroy.not-deleted')}
+      it { should render_template :destroy }
 
     end
         
@@ -243,10 +211,14 @@ describe QuestionsController do
     describe 'when unauthenticated', skip_request: true do
       before do 
         sign_out user
-        delete :destroy, id: question
+        xhr :delete, :destroy, id: question
       end
 
-      it { should redirect_to new_user_session_path }
+      it { should respond_with 401 }
+
+      it 'include devise failure message in response' do
+        expect(response.body).to eq t('.devise.failure.unauthenticated')
+      end
       
     end
 

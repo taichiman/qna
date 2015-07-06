@@ -11,7 +11,9 @@ feature 'User can view question with its answers', %q{
     visit question_path(question)
 
     expect(page).to have_content(question.title, count: 1) 
-    expect(page).to have_content(question.body, count: 1) 
+    within('.question-content .body') do 
+      expect(page).to have_content(question.body)
+    end
 
     expect(page).to have_content(answer_count_legend(question.answers.count)) 
     question.answers.each do |answer|

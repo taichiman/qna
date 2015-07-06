@@ -6,5 +6,16 @@ class Answer < ActiveRecord::Base
 
   scope :my, ->(user) { Answer.where(user: user) }
 
+  def select_as_best
+    new_best = self
+    old_best = self.question.best_answer.take
+  
+    old_best.try(:update, {best: false}) if old_best != new_best
+
+    new_best.toggle!(:best)
+    old_best
+
+  end
+
 end
 

@@ -1,14 +1,17 @@
 Rails.application.routes.draw do
-  root 'welcome#index'
+  root 'questions#index'
 
   devise_for :users
 
-  resources :questions do
-    resources :answers
+  resources :questions, except: [:edit] do
+    resources :answers, except: [:show, :edit]
+
+    get '/my', to: 'questions#my', on: :collection
   end
   
-  get '/my-questions', to: 'questions#index', scope: 'my', as: 'my_questions'
-  get '/my-answers', to: 'answers#index', as: 'my_answers'
+  get 'answers/my', to: 'answers#index', as: 'my_answers'
+
+  post '/best-answer/:id', to: 'answers#best_answer', as: 'best_answer'
 
 end
 

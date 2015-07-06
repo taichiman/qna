@@ -1,14 +1,25 @@
-.answer.clearfix
-  h4.text-primary
-    = link_to answer.question.title, question_path(answer.question), class: 'question-hyperlink'
-
+.answer.clearfix id="answer_#{answer.id}"
   .body
     p= answer.body 
+    .small.text-muted = "answered #{time_ago_in_words(answer.created_at)} ago"
 
   .pull-right
-    ul.nav.nav-pills
+    ul.nav.nav-pills 
+      - if owner?(answer.question)
+        li= link_to 'Best', best_answer_path(answer.id), method: :post, remote: true, class: 'best-answer-link', id: "#{'best-answer-tag' if answer.best}"
+
       li.user.text-muted
-          = user_name(answer.user)
-      li.answer-menubar = render partial: 'menubar', locals: {answer: answer}
-      
+        = user_name(answer.user)
+
+      - if owner?(answer)
+        li.answer-menubar = render partial: 'answers/menubar', locals: {answer: answer}
+
+  /#TODO letters to locale
+  = form_for [answer.question, answer], remote: true do |f|
+    .form-group
+      = f.label :body, 'Answer'
+      = f.text_area :body, class: 'form-control'
+
+    = f.submit 'Update answer', class: 'btn btn-primary'
+
   hr

@@ -4,8 +4,7 @@ en:
       title: New Question
     index:
       all-questions: All Questions
-    my_index:
-      my-questions: List of my questions
+      my-questions: My questions
     show:
       answer_title: Your answer
       submit_answer: Create answer
@@ -21,6 +20,7 @@ en:
 
     question:
       edit: Edit
+      update: Update question
     form:
       submit: Post question
 
@@ -36,11 +36,13 @@ en:
     destroy:
       deleted: Answer succesfully deleted
       only-owner-can-delete: You can only delete your own answer
+    best_answer: 
+      only-question-owner-can-select-best-answer: Only question owner can select best answer
 
     form:
       submit: Update answer
 
-  question-not-owner: You can only edit your own questions
+  question-not-owner: You can only handle your own question
   not-owner-of-answer: You can only handle your own answer
   answer-count-legend: Answer
 

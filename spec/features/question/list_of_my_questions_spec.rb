@@ -18,7 +18,7 @@ feature 'User can see lists of his questions', %q{
     click_on t('links.my-questions')
     
     page_have_content_question_list(
-      title: t('questions.my_index.my-questions'),
+      title: t('questions.index.my-questions'),
       questions: user.questions
     )
   end

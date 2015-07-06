@@ -1,0 +1,16 @@
+<% id = @question.id %>
+<% notice = ".question-content#question_#{id}" %>
+$('<%= "#{notice} .alert" %>').remove();
+
+<%- if @question.errors.any? %>
+  $('<%= notice %>').prepend('<%= j notify('danger', t('.unsuccesfully')) %>');
+  <%- @question.errors.full_messages.each do |error| %>
+    $('<%= "#{notice} .alert" %>').append('<%= j "<br><div>*&#32;#{error}</div>".html_safe %>');    
+  <% end %>
+
+<%- else %>
+  $('<%= ".question-content#question_#{id}" %>').replaceWith('<%= j render @question %>');
+  $('<%= notice %>').prepend('<%= j notify('success', t('.succesfully')) %>');
+
+<%- end %>
+

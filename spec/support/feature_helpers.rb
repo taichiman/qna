@@ -11,7 +11,7 @@ module Features
         expect(page).to have_content(question.body)
       end
 
-      expect(page).to have_css('.question .question-hyperlink', count: questions.count)
+      expect(page).to have_css('.question-content .question-hyperlink', count: questions.count)
 
     end
 
@@ -24,7 +24,7 @@ module Features
         expect(page).to have_content(answer.body)
       end
 
-      expect(page).to have_css('.answer .question-hyperlink', count: answers.count)
+      expect(page).to have_css('.question-hyperlink', count: answers.count)
 
     end
 
@@ -33,6 +33,12 @@ module Features
       expect(page).to have_content(question.body)
       expect(page).to have_field('Your Answer') 
     end
+
+    # edit answer helper
+    def answer_edit_link
+      "a.edit-answer-link"
+    end
+    #---
 
   end
 

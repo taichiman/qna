@@ -1,28 +1,22 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:show, :edit, :update, :destroy]
-  before_action :only_owner, only: [:edit, :update, :destroy] 
+  before_action :set_question, only: [:show, :update, :destroy]
+  before_action :only_owner, only: [:update, :destroy] 
 
   def index
-    if params[:scope] == 'my' then
-      @questions = Question.my(current_user)
-      render 'my_index'
-    else
-      @questions = Question.all
-    end
+    @questions = Question.all
 
   end
 
   def show
     @answer = Answer.new
+    @answers = @question.answers_best_in_first
+
   end
 
   def new
     @question = Question.new
-
   end
-
-  def edit; end
 
   def create
     @question = current_user.questions.build(question_params)
@@ -36,12 +30,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question, notice: t('.succesfully')
-    else
-      flash[:alert] = t('.unsuccesfully')
-      render :edit
-    end
+    @question.update(question_params)
 
   end
 
@@ -52,11 +41,16 @@ class QuestionsController < ApplicationController
     @question.destroy
 
   rescue ActiveRecord::DeleteRestrictionError
-    message = { alert: t('.not-deleted') }  
+    @message = { type: :danger, text: t('.not-deleted') }  
   else
-    message = { notice: t('.deleted') }    
-  ensure
-    redirect_to my_questions_path, message
+    @message = { type: :success, text: t('.deleted') }
+
+  end
+
+  def my
+    @questions = Question.my(current_user)
+    render 'index'
+
   end
   
   private
@@ -73,17 +67,12 @@ class QuestionsController < ApplicationController
 
   def only_owner
     unless @question.user_id == current_user.id
-      message = 
-        case action_name.to_sym
-        when :edit, :update
-          'question-not-owner'
-        else
-          '.only-owner-can-delete'
-        end
-
-      redirect_to my_questions_path, alert: t(message)
-
-      return
+      case action_name.to_sym
+      when :update
+        render text: t('question-not-owner')
+      when :destroy 
+        render text: t('.only-owner-can-delete')
+      end
 
     end
   end

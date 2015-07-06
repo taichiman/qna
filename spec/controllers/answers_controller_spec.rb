@@ -6,72 +6,40 @@ describe AnswersController do
   shared_examples 'only owner handling answer' do |message|
     let(:answer){ create :answer }
 
-    it { should redirect_to my_answers_path }
-    it { should set_flash[:alert].to(t(message[:message])) }
+    it { expect(response.body).to eq(t(message[:message])) }
 
   end
 
-  shared_examples 'redirected to devise SignIn page' do
+  shared_examples 'by ajax request: redirected to devise SignIn page' do
+    it { should respond_with 401 }
+    it { expect(response.body).to match(t('.devise.failure.unauthenticated')) }
+
+  end
+
+  shared_examples 'by html request: redirected to devise SignIn page' do
     it { should redirect_to(new_user_session_path) }
     it { should set_flash[:alert].to(t('.devise.failure.unauthenticated')) }
+
   end
 
   describe "GET #show" do
-    let(:question) { create :question_with_answers }
-    let(:answer) { question.answers[1] }
+    let(:answer){ create :answer }
 
-    before do
-      get(:show,
-        question_id: question,
-        id: answer
-      )
+    it "user can not see answer by html request" do
+      expect(get: "/questions/#{answer.question.id}/answers/#{answer.id}" ).to_not be_routable
+
     end
 
-    it "assigns @question" do
-      expect(assigns(:question)).to be_eql(question)
-    end
-
-    it "assigns @answer" do
-      expect(assigns(:answer)).to be_eql(answer)
-    end
-
-    it "renders template :show" do
-      expect(response).to render_template(:show)
-    end
   end
 
   describe 'GET #edit' do
-    context 'when authenticated' do
-      sign_in_user
-      let(:answer){ create(:answer, user: user) }
-
-      before do
-        get :edit, question_id: answer.question, id: answer
-      end
-
-      context 'owner' do
-        it 'should assign @answer' do
-          expect(assigns(:answer)).to eq(answer)
-        end
-        it { should render_template 'edit' }
-      end
-
-      context 'not owner' do
-        it_behaves_like 'only owner handling answer', message: 'not-owner-of-answer'
-      end
-    end
-    
-    context 'when unauthenticated' do        
       let(:answer){ create :answer }
 
-      before do
-        sign_out :user
-        get :edit, question_id: answer.question, id: answer
+      it "authenticated user can not edit answer by html request" do
+        expect(get: "/questions/#{answer.question.id}/answers/#{answer.id}/edit" ).to_not be_routable
+
       end
 
-      it_behaves_like 'redirected to devise SignIn page'
-
-    end
   end
 
   describe 'POST #create' do
@@ -115,7 +83,7 @@ describe AnswersController do
           }.not_to change(Answer, :count)
         end
 
-        it { should render_template('questions/show') }
+        it { should render_template('create') }
 
       end
     end
@@ -132,7 +100,7 @@ describe AnswersController do
 
   describe 'PATCH#update' do
     def patch_request
-      patch :update, 
+      xhr :post, :update, 
         question_id: answer.question, 
         id: answer, 
         answer: { body: body_attribute.upcase }
@@ -162,7 +130,11 @@ describe AnswersController do
             expect(assigns(:answer)).to eq(answer)
           end
           
-          it { should redirect_to(question_path(answer.question)) }
+          it 'assigns @question' do
+            expect(assigns(:question)).to eq(answer.question)
+          end
+          
+          it { should render_template('update') }
 
           it 'should be able', skip_request: true do
             expect{ patch_request }.to change{ body }.from(body).to(body.upcase)
@@ -173,7 +145,7 @@ describe AnswersController do
         context 'updates with invalid data' do
           let(:body_attribute){ '' }
 
-          it { should render_template(:edit) }
+          it { should render_template('update') }
           it 'should not be able', skip_request: true do
             expect{ patch_request }.to_not change{ body }
           end
@@ -188,7 +160,7 @@ describe AnswersController do
         it 'should not update', skip_request: true do
           expect{ patch_request }.to_not change{ body }
         end
-
+        
         it_behaves_like 'only owner handling answer', message: 'not-owner-of-answer'
 
       end
@@ -200,19 +172,19 @@ describe AnswersController do
       before do
         patch_request
       end
-      it_behaves_like 'redirected to devise SignIn page'
+      
+      it_behaves_like 'by ajax request: redirected to devise SignIn page'
 
     end 
-    
   end
 
   describe 'DELETE#destroy' do
+    def delete_request(answer)
+      xhr :post, :destroy, question_id: answer.question, id: answer
+    end
+
     context 'authenticated user' do
       sign_in_user(:user)
-
-      def delete_request(answer)
-        delete :destroy, question_id: answer.question, id: answer
-      end
 
       context 'when owner' do
         let(:answer){ create :answer, user: user }
@@ -227,13 +199,12 @@ describe AnswersController do
           
         end
 
-        it { should redirect_to(question_path(answer.question)) }
-        it { should set_flash[:notice].to(t('answers.destroy.deleted')) }
+        it { should render_template 'destroy' }
 
       end
 
       context 'when not owner' do
-        it 'when not owner of answer should not delete' do
+        it 'should not delete' do
           answer = create :answer
 
           expect{ delete_request(answer) }.not_to change{ 
@@ -246,15 +217,19 @@ describe AnswersController do
     end
     
     context 'no authenticated user' do
-      let(:answer){ create :answer }
       before do
         sign_out :user
-        delete :destroy, id: question, question_id: answer.question
-      end    
-      
-      it_behaves_like 'redirected to devise SignIn page'
-     
+      end
+      it 'should not delete answer' do
+        answer = create :answer
+
+        expect{ delete_request(answer) }.not_to change{ 
+          Answer.exists?(answer.id)
+        }
+    
+      end
     end
+
   end
 
   describe 'GET#my-answers' do
@@ -281,10 +256,75 @@ describe AnswersController do
       before do
         get :index
       end
-      it_behaves_like 'redirected to devise SignIn page'
+      it_behaves_like 'by html request: redirected to devise SignIn page'
 
     end
   end
 
+  describe 'set best answer #best_answer' do
+    answers_count = 5
+    sign_in_user
+    let(:question){ create :question_with_answers, answers_count: answers_count, user: user }
+    let(:first_answer){ question.answers[2] }
+    let(:second_answer){ question.answers[3] }
+
+    it { should route(:post, "/best-answer/#{first_answer.id}").to('answers#best_answer', id: first_answer.id) }
+
+    it 'only question owner can set best answer' do
+      not_my_question = create :question_with_answers
+      xhr :post, :best_answer, id: not_my_question.answers.first
+
+      expect(response.body).to include(t('answers.best_answer.only-question-owner-can-select-best-answer'))
+      
+    end
+
+    context 'when no answer was selected before' do        
+        it 'should selects answer' do
+          expect{ xhr :post, :best_answer, id: first_answer.id }
+          .to change{Answer.find(first_answer.id).best}.from(false).to(true)
+
+        end
+    end
+
+    context 'when another answer was selected' do
+      before do
+        xhr :post, :best_answer, id: first_answer.id
+      end
+
+      it 'should deselect old answer'  do
+        expect{ xhr :post, :best_answer, id: second_answer.id }
+        .to change{Answer.find(first_answer.id).best}.from(true).to(false)
+
+      end
+
+      it 'select new answer' do
+        expect{ xhr :post, :best_answer, id: second_answer.id }
+        .to change{Answer.find(second_answer.id).best}.from(false).to(true)
+        
+      end
+
+      it 'after selecting should only one answer be selected in question' do
+        xhr :post, :best_answer, id: second_answer.id
+        expect(Question.find(question.id).answers.where(best: true).count).to eq(1)
+
+      end
+
+      it 'if clicked the best answer again then should only deselect it' do
+        xhr :post, :best_answer, id: first_answer.id
+        expect(Question.find(question.id).answers.where(best: true).count).to eq(0)
+        
+      end
+    end
+
+    context 'when user unauthenticated' do
+      before do
+        sign_out :user
+        xhr :post, :best_answer, id: first_answer.id
+      end
+
+      it_behaves_like 'by ajax request: redirected to devise SignIn page'
+    end
+
+  end
 end
 

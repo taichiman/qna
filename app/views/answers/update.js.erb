@@ -1,0 +1,16 @@
+<% answer_id = "#answer_#{@answer.id}" %>
+$("<%= answer_id %> > .alert").remove();
+
+<% if @answer.errors.present? %>
+  <% @answer.errors.full_messages.each do |message| %>
+    $('<%= answer_id %>').prepend('<%= j notify('danger', message) %>');
+  <% end %>
+
+<% else %>
+  new_body = $('<%= j render @answer %>').find('.body')
+  $('<%= "#{answer_id} .body" %>').replaceWith( new_body );
+  $('<%= "#edit_answer_#{@answer.id}" %>').hide();
+  $('<%= answer_id %>').prepend('<%= j notify('success', t('.updated')) %>');
+
+<% end %>
+

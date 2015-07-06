@@ -47,6 +47,7 @@ describe QuestionsHelper do
       end
 
     end
+
   end
 
 end

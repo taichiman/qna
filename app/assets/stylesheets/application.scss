@@ -15,11 +15,37 @@
 //@import "bootstrap/theme";
 
 .question, .answer {
-  .menubar {
-    padding-top: 20px;
-  }
   .glyphicon {
     font-size: 70%;  
+  }
+}
+
+.question-content {
+  .menubar {
+    height: 20px;
+    li {
+      margin-top:-10px;
+    }
+  }
+  form.edit_question{
+    margin-top: 4em;
+    display: none;
+  }
+}
+
+.answer {
+  .nav {
+    margin-top: -20px;
+  }
+  .nav-pills.menubar { 
+    display:inline;
+  }
+  .best-answer-link {
+    margin-top: -9px;
+  }  
+  #best-answer-tag {
+    color: $gray-light;
+    background-color: $brand-success;
   }
 }
 
@@ -31,9 +57,7 @@ li.answer-menubar {
   margin-top: -10px;
 }
 
-.answer{
-  .nav-pills.menubar { 
-    display:inline;
-  }
+.edit_answer {
+  display: none;
 }
 

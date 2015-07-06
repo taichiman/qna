@@ -5,5 +5,38 @@ RSpec.describe User do
   it { should validate_presence_of :password }
   it { should have_many(:questions).dependent(:restrict_with_exception) }
   it { should have_many(:answers).dependent(:delete_all) }
+
+  describe 'check owning' do
+    let(:not_owner_user){ create :user }
+
+    context 'for question' do
+      let(:question){ create :question }
+      let(:user){ question.user }
+
+      it 'true when owner' do
+        expect(user.owner_of?(question)).to be_truthy
+      end
+
+      it 'false when not owner' do
+        expect(not_owner_user.owner_of?(question)).to be_falsy
+      end
+    
+    end
+
+    context 'for answer' do
+      let(:answer){ create :answer }
+      let(:user){ answer.user }
+
+      it 'true when owner' do
+        expect(user.owner_of?(answer)).to be_truthy
+      end
+
+      it 'false when not owner' do
+        expect(not_owner_user.owner_of?(answer)).to be_falsy
+      end
+    
+    end
+
+  end
 end
 

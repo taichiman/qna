@@ -7,5 +7,13 @@ class Question < ActiveRecord::Base
  
   scope :my, -> (user) { where( user: user) }
 
+  def best_answer
+    answers.where(best: true)
+  end
+  
+  def answers_best_in_first
+    answers.order(best: :desc, created_at: :asc)
+  end
+
 end
 
