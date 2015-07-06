@@ -17,13 +17,6 @@ RSpec.describe Answer do
   describe 'select best answer' do
     let(:question){ create :question_with_answers, answers_count: 4 }
 
-    describe 'selecting instance method' do
-      let(:answer){ create :answer }
-
-      it { expect(answer.respond_to?(:select_as_best)).to eq true }
-
-    end
-
     context 'when no answer was selected before' do
       let(:answer){ question.answers.second }
       
