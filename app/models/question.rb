@@ -1,11 +1,13 @@
 class Question < ActiveRecord::Base
+  belongs_to :user
+
   has_many :answers, dependent: :restrict_with_exception
   has_many :attachments
+ 
+  accepts_nested_attributes_for :attachments
 
   validates :title, :body, presence: true
 
-  belongs_to :user
- 
   scope :my, -> (user) { where( user: user) }
 
   def best_answer
