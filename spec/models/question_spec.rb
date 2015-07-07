@@ -6,6 +6,8 @@ RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:restrict_with_exception)}
   it { should belong_to(:user) } 
 
+  it { should have_many(:attachments) }
+
   describe 'has scope - Best Answer' do
     let(:question){ create :question_with_answers, answers_count: 3 }
     
