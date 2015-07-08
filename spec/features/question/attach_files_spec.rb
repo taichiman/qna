@@ -24,6 +24,7 @@ feature 'Attach files to question', %q{
 
     expect(page).to have_content('The Question created')
     expect(page).to have_content('spec_helper.rb')
+    expect(page).to have_link('spec_helper.rb'), href: "http://l:3000/uploads/attachment/file/1/spec_helper.rb"
 
   end
 
