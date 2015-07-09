@@ -15,7 +15,7 @@ feature 'Attach files to answer', %q{
     visit question_path(question)
   end
 
-  scenario 'user attachs a file when send answer' do
+  scenario 'user attachs a file when send answer', js: true do
     fill_in 'Your answer', with: answer.body
 
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
@@ -23,7 +23,6 @@ feature 'Attach files to answer', %q{
     click_on t('.questions.show.submit_answer')
 
     within '#answers' do
-      expect(page).to have_content('The Answer created')
       expect(page).to have_content('spec_helper.rb')
       expect(page).to have_link('spec_helper.rb'), href: "http://l:3000/uploads/attachment/file/1/spec_helper.rb"
     end

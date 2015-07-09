@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answers = @question.answers_best_in_first
-
+    @answer.attachments.build
   end
 
   def new
