@@ -5,6 +5,9 @@ RSpec.describe Answer do
   it { should belong_to :question }
   it { should belong_to :user }
 
+  it { should have_many :attachments }
+  it { should accept_nested_attributes_for :attachments }
+
   describe 'has scope - My answers' do
     let(:user){ create :user_with_questions, with_test_answers: true }
     it 'with only my answers' do

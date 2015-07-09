@@ -21,5 +21,9 @@ article.question
         = f.label :body, t('.answer_title')
         = f.text_area :body, class: 'form-control'
 
+      = fields_for :attachments do |a|
+        = a.label :file
+        = a.file_field :file
+
       = submit_tag t('.submit_answer')
 
