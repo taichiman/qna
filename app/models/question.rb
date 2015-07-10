@@ -4,7 +4,7 @@ class Question < ActiveRecord::Base
   has_many :answers, dependent: :restrict_with_exception
   has_many :attachments, as: :attachable
  
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments, reject_if: :all_blank
 
   validates :title, :body, presence: true
 
