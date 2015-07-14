@@ -8,7 +8,10 @@
     p Attachments:
     ul
       - question.attachments.each do |a|
-        li= link_to a.file.identifier, a.file_url
+        li id = "attachment_id_#{ a.id }"
+          = link_to a.file.identifier, a.file_url
+          span.delete_attachment_link
+            = link_to 'Delete', attachment_path(a.id), method: 'delete', data: {confirm: 'Are You sure?'}, remote: true, class: 'text-muted small'
 
   .pull-right
     ul.list-inline

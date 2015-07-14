@@ -13,5 +13,7 @@ Rails.application.routes.draw do
 
   post '/best-answer/:id', to: 'answers#best_answer', as: 'best_answer'
 
+  resources :attachments, only: [:destroy]
+
 end
 

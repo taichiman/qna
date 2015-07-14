@@ -28,7 +28,6 @@ feature 'Attach files to question', %q{
   end
 
   scenario 'attachs many files at once', js: true do
-
     within '.attachments_form' do
       attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     end
@@ -48,6 +47,27 @@ feature 'Attach files to question', %q{
     
     expect(page).to have_content('rails_helper.rb')
     expect(page).to have_link('rails_helper.rb'), href: "http://l:3000/uploads/attachment/file/1/rails_helper.rb"
+
+  end
+
+end
+
+feature 'Delete attached files', js: true do
+  given(:attachment){ create :attachment_with_question }
+  given(:question){ attachment.attachable }
+  given(:user){ question.user }
+
+  background do
+    fill_form_and_sign_in user
+    visit question_path(question)
+  end
+
+  scenario 'delete files from question' do
+    within '.attachments' do
+      click_on 'Delete'
+    end
+
+    expect(page).to_not have_content(attachment.file.identifier)
 
   end
 
