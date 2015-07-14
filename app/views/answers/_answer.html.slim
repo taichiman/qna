@@ -1,13 +1,10 @@
 .answer.clearfix id="answer_#{answer.id}"
   .body
     p= answer.body
-  .attachments  
-    p Attachments:
-    ul
-      - answer.attachments.each do |a|
-        li= link_to a.file.identifier, a.file_url
 
-    .small.text-muted = "answered #{time_ago_in_words(answer.created_at)} ago"
+  = render partial: 'common/attached_files', locals: {attachable: answer}
+
+  .small.text-muted = "answered #{time_ago_in_words(answer.created_at)} ago"
 
   .pull-right
     ul.nav.nav-pills 

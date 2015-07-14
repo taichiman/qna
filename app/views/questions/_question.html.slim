@@ -3,15 +3,8 @@
     h4.text-primary = link_to question.title, question_path(question), class: 'question-hyperlink'
   .body
     p = question.body
-  .attachments
-    br
-    p Attachments:
-    ul
-      - question.attachments.each do |a|
-        li id = "attachment_id_#{ a.id }"
-          = link_to a.file.identifier, a.file_url
-          span.delete_attachment_link
-            = link_to 'Delete', attachment_path(a.id), method: 'delete', data: {confirm: 'Are You sure?'}, remote: true, class: 'text-muted small'
+
+  = render partial: 'common/attached_files', locals: {attachable: question}
 
   .pull-right
     ul.list-inline
