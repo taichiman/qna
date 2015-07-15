@@ -9,6 +9,7 @@ feature 'Attach files to question', %q{
   given(:user) { create :user }
   given(:question) { create :question }
 
+
   background do
     fill_form_and_sign_in user
     click_on 'Ask Question'
@@ -23,7 +24,8 @@ feature 'Attach files to question', %q{
 
     expect(page).to have_content('The Question created')
     expect(page).to have_content('spec_helper.rb')
-    expect(page).to have_link('spec_helper.rb'), href: "http://l:3000/uploads/attachment/file/1/spec_helper.rb"
+
+    expect(page).to have_css('a[href="/uploads/attachment/file/1/spec_helper.rb"]')
 
   end
 
@@ -43,19 +45,20 @@ feature 'Attach files to question', %q{
     expect(page).to have_content('The Question created')
     
     expect(page).to have_content('spec_helper.rb')
-    expect(page).to have_link('spec_helper.rb'), href: "http://l:3000/uploads/attachment/file/1/spec_helper.rb"
+    expect(page).to have_css('a', text: 'spec_helper.rb')
     
     expect(page).to have_content('rails_helper.rb')
-    expect(page).to have_link('rails_helper.rb'), href: "http://l:3000/uploads/attachment/file/1/rails_helper.rb"
+    expect(page).to have_css('a', text: 'rails_helper.rb')
 
   end
 
 end
 
 feature 'Delete attached files', js: true do
-  given(:attachment){ create :attachment_with_question }
+  given(:attachment){ create :attachment_with_question, add_answer_with_attachment: true }
   given(:question){ attachment.attachable }
   given(:user){ question.user }
+  given(:answer){ question.answers.first }
 
   background do
     fill_form_and_sign_in user
@@ -63,11 +66,20 @@ feature 'Delete attached files', js: true do
   end
 
   scenario 'delete files from question' do
-    within '.attachments' do
+    within '.question-content .attachments' do
       click_on 'Delete'
+
+      expect(page).to_not have_content(question.attachments.first.file.identifier)
     end
 
-    expect(page).to_not have_content(attachment.file.identifier)
+  end
+
+  scenario 'delete files from answer' do
+    within '#answers .attachments' do
+      click_on 'Delete'
+
+      expect(page).to_not have_content(answer.attachments.first.file.identifier)
+    end
 
   end
 
