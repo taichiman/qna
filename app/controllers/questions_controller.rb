@@ -50,6 +50,7 @@ class QuestionsController < ApplicationController
 
   def my
     @questions = Question.my(current_user)
+    @questions.each { |q| q.attachments.build }
     render 'index'
 
   end

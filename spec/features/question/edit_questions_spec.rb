@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User can edit question', %q{
   In order to be able to improve quality of my content
-  As an author of answer
+  As an author of the question
   I'd like to be able to edit my question with ajax
 } do
   given(:question){ create :question }
@@ -19,7 +19,7 @@ feature 'User can edit question', %q{
     background do
       fill_form_and_sign_in(question.user)
       visit my_questions_path
-      
+
       expect(page).to_not have_selector(form)
       find("a.edit-question-link").click
       expect(page).to     have_selector(form)
@@ -44,6 +44,13 @@ feature 'User can edit question', %q{
 
       expect(page).to have_content t('questions.update.unsuccesfully')
       expect(page).to have_content('Title can\'t be blank')
+
+    end
+
+    scenario 'tries to attach file' do
+      attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      click_on t('questions.question.update')
+      expect(page).to have_css("#question_#{question.id} a", text: 'spec_helper.rb')
 
     end
 

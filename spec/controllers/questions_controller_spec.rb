@@ -89,6 +89,12 @@ describe QuestionsController do
       expect(assigns(:questions)).to match_array(user.questions)
     end
 
+    it "builds new attachment for questions" do
+      assigns(:questions).each { |q|
+        expect(q.attachments.first).to be_a(Attachment)
+      }
+    end
+
     it { should render_template(:index) }
 
   end

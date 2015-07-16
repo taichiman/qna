@@ -31,6 +31,8 @@
       = f.label :body, 'Body'
       = f.text_area :body, class: 'form-control', rows: 3
 
+    = render partial: 'attachment_form', locals: { f: f }
+
     = f.submit t('.update'), class: 'btn btn-info'
 
   br

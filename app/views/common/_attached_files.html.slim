@@ -1,9 +1,9 @@
-- if attachable.attachments.any?
+- if attachable.attachments.any?(&:persisted?)
   .attachments
     br
     p Attachments:
     ul
-      - attachable.attachments.each do |a|
+      - attachable.attachments.select(&:persisted?).each do |a|
         li id = "attachment_id_#{ a.id }"
           = link_to a.file.identifier, a.file_url
           span.delete_attachment_link
