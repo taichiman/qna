@@ -59,7 +59,7 @@ describe QuestionsController do
   end
 
   describe "GET #show" do
-    let(:question) { create :question }
+    let(:question) { create :question_with_answers }
     before { get :show, id: question }
 
     it "assigns @question" do
@@ -70,8 +70,14 @@ describe QuestionsController do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it "builds new attachment for answer" do
+    it "builds new attachment for a new answer" do
       expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
+    end
+
+    it "builds new attachment for each answer editing" do
+      assigns(:answers).each do |a|
+        expect(a.attachments.first).to be_a_new(Attachment)
+      end
     end
 
     it "render template :show" do

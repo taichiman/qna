@@ -20,6 +20,7 @@ feature 'User can edit his answer', %q{
 
       within form_id do
         fill_in 'answer[body]', with: content
+        yield if block_given?
         click_on t('.answers.form.submit')      
       end
 
@@ -44,6 +45,14 @@ feature 'User can edit his answer', %q{
       expect(current_path).to eq(question_path(question))
       expect(page).to have_content(t('.answers.update.updated'))
 
+    end
+    
+    scenario 'tries to attach file' do
+      submit_form(upcased_body) do
+        attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      end
+
+      expect(page).to have_css('.attachments a', text: 'spec_helper.rb')
     end
 
     scenario 'notification when invalid data' do

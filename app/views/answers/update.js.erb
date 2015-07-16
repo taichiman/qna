@@ -7,8 +7,18 @@ $("<%= answer_id %> > .alert").remove();
   <% end %>
 
 <% else %>
-  new_body = $('<%= j render @answer %>').find('.body')
+  rendered_answer = '<%= j render @answer %>'
+  new_body = $(rendered_answer).find('.body')
   $('<%= "#{answer_id} .body" %>').replaceWith( new_body );
+
+  new_attachments = $(rendered_answer).find('.attachments');
+  attachments_selector = '<%= "#{answer_id} .attachments" %>'
+  if ($(attachments_selector).length) {
+    $( attachments_selector ).replaceWith( new_attachments )
+  } else {
+    $( '<%= "#{answer_id} .body" %>').append( new_attachments ) 
+  }
+
   $('<%= "#edit_answer_#{@answer.id}" %>').hide();
   $('<%= answer_id %>').prepend('<%= j notify('success', t('.updated')) %>');
 

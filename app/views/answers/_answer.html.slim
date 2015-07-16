@@ -17,11 +17,12 @@
       - if owner?(answer)
         li.answer-menubar = render partial: 'answers/menubar', locals: {answer: answer}
 
-  /#TODO letters to locale
   = form_for [answer.question, answer], remote: true do |f|
     .form-group
       = f.label :body, 'Answer'
       = f.text_area :body, class: 'form-control'
+
+    = render partial: 'common/attachment_form', locals: { f: f }
 
     = f.submit 'Update answer', class: 'btn btn-primary'
 

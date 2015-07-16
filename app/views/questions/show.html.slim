@@ -21,7 +21,7 @@ article.question
         = f.label :body, t('.answer_title')
         = f.text_area :body, class: 'form-control'
       
-      =render partial: 'attachment_form', locals: { f: f }
+      =render partial: 'common/attachment_form', locals: { f: f }
 
       = submit_tag t('.submit_answer')
 

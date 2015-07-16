@@ -1,0 +1,9 @@
+.attachments_form
+  p Attachments:
+  p.form-group
+    = f.fields_for :attachments do |a|
+      - if a.object.new_record?
+        = render partial: 'common/attachment_fields', locals: {a: a}
+    .links
+      = link_to_add_association 'add attachment', f, :attachments, form_name: :a, partial: 'common/attachment_fields'
+
