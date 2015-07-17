@@ -10,15 +10,17 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-    @answers = @question.answers_best_in_first
-    
-    @answers = @question.answers.each { |a| a.attachments.build }
     @answer.attachments.build
+
+    @answers = @question.answers_best_in_first
+    @answers.each{ |answer| answer.attachments.build }
+
   end
 
   def new
     @question = Question.new
     @question.attachments.build
+
   end
 
   def create
