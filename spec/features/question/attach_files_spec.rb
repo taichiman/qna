@@ -60,7 +60,7 @@ feature 'Delete attached files', js: true do
   given(:user){ question.user }
   given(:answer){ question.answers.first }
 
-  background do
+  background do 
     fill_form_and_sign_in user
     visit question_path(question)
   end
@@ -75,10 +75,27 @@ feature 'Delete attached files', js: true do
   end
 
   scenario 'delete files from answer' do
+    click_on 'Log out'
+    fill_form_and_sign_in answer.user
+    visit question_path(question)
+
     within '#answers .attachments' do
       click_on 'Delete'
 
       expect(page).to_not have_content(answer.attachments.first.file.identifier)
+    end
+
+  end
+
+  scenario 'should not delete question attachment when user not attachable owner' do
+    click_on 'Log out'
+    user_not_owner = create :user
+    fill_form_and_sign_in user_not_owner
+    visit question_path(question)
+    
+    within '.question-content .attachments' do
+      expect(page).to have_content(question.attachments.first.file.identifier)
+      expect(page).to_not have_content('Delete')
     end
 
   end

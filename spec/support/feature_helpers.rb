@@ -52,9 +52,9 @@ module Features
 
     def fill_form_and_sign_in(user=nil)
       visit new_user_session_path
-      real_user = user.nil? ? create(:user) : user
+      real_user = user.nil? ? create(:user) : user 
       fill_in 'Email', with: real_user.email
-      fill_in 'Password', with: real_user.password
+      fill_in 'Password', with: '123'
       click_button 'Log in'
     end
 
