@@ -17,19 +17,7 @@ feature 'Attach files to question', %q{
     fill_in 'Body', with: question.body
   end
 
-  scenario 'user attachs a file when ask question' do
-    attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
-
-    click_on t('questions.form.submit')
-
-    expect(page).to have_content('The Question created')
-    expect(page).to have_content('spec_helper.rb')
-
-    expect(page).to have_css('a[href="/uploads/attachment/file/1/spec_helper.rb"]')
-
-  end
-
-  scenario 'attachs many files at once', js: true do
+  scenario 'user can attach many files when ask question', js: true do
     within '.attachments_form' do
       attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     end
@@ -43,7 +31,7 @@ feature 'Attach files to question', %q{
     click_on t('questions.form.submit')
 
     expect(page).to have_content('The Question created')
-    
+
     expect(page).to have_content('spec_helper.rb')
     expect(page).to have_css('a', text: 'spec_helper.rb')
     

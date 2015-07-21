@@ -15,17 +15,25 @@ feature 'Attach files to answer', %q{
     visit question_path(question)
   end
 
-  scenario 'user attachs a file when send answer', js: true do
+  scenario 'user can attach many files when send answer', js: true do
     fill_in 'Your answer', with: answer.body
 
     click_on 'add attachment'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
 
+    click_on 'add attachment'
+    within '.attachments_form .nested-fields:nth-of-type(2)' do
+      attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+    end
+
     click_on t('.questions.show.submit_answer')
 
     within '#answers' do
       expect(page).to have_content('spec_helper.rb')
-      expect(page).to have_link('spec_helper.rb'), href: "http://l:3000/uploads/attachment/file/1/spec_helper.rb"
+      expect(page).to have_css('a', text: 'spec_helper.rb')
+      
+      expect(page).to have_content('rails_helper.rb')
+      expect(page).to have_css('a', text: 'rails_helper.rb')
     end
 
   end
