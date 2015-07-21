@@ -18,8 +18,9 @@ feature 'Attach files to answer', %q{
   scenario 'user can attach many files when send answer', js: true do
     fill_in 'Your answer', with: answer.body
 
-    click_on 'add attachment'
-    attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+    within '.attachments_form' do
+      attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+    end
 
     click_on 'add attachment'
     within '.attachments_form .nested-fields:nth-of-type(2)' do
