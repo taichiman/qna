@@ -49,6 +49,7 @@ feature 'User can edit his answer', %q{
     
     scenario 'tries to attach file' do
       submit_form(upcased_body) do
+        click_on 'add attachment'
         attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
       end
 

@@ -10,10 +10,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-    @answer.attachments.build
-
     @answers = @question.answers_best_in_first
-    @answers.each{ |answer| answer.attachments.build }
 
   end
 
@@ -54,7 +51,6 @@ class QuestionsController < ApplicationController
 
   def my
     @questions = Question.my(current_user)
-    @questions.each { |q| q.attachments.build }
     render 'index'
 
   end

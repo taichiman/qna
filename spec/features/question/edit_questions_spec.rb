@@ -48,6 +48,7 @@ feature 'User can edit question', %q{
     end
 
     scenario 'tries to attach file' do
+      click_on 'add attachment'
       attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
       click_on t('questions.question.update')
       expect(page).to have_css("#question_#{question.id} a", text: 'spec_helper.rb')

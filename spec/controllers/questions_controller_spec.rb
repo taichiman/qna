@@ -70,16 +70,6 @@ describe QuestionsController do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it "builds new attachment for a new answer" do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
-
-    it "builds new attachment for each answer editing" do
-      assigns(:answers).each do |a|
-        expect(a.attachments.first).to be_a_new(Attachment)
-      end
-    end
-
     it "render template :show" do
       expect(response).to render_template(:show)
     end
@@ -93,12 +83,6 @@ describe QuestionsController do
 
     it 'assigns @questions with only my questions' do
       expect(assigns(:questions)).to match_array(user.questions)
-    end
-
-    it "builds new attachment for questions" do
-      assigns(:questions).each { |q|
-        expect(q.attachments.first).to be_a(Attachment)
-      }
     end
 
     it { should render_template(:index) }

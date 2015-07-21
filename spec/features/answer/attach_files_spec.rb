@@ -18,6 +18,7 @@ feature 'Attach files to answer', %q{
   scenario 'user attachs a file when send answer', js: true do
     fill_in 'Your answer', with: answer.body
 
+    click_on 'add attachment'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
 
     click_on t('.questions.show.submit_answer')
