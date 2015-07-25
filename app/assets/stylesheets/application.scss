@@ -33,6 +33,29 @@
   }
 }
 
+.votecell {
+  padding-right: 5px;
+  .vote {
+    min-width: 40px;
+    text-align: center;
+
+    .vote-up-off {
+      cursor: pointer;
+      display: block;
+    }
+    
+    .vote-count-post {
+      margin: 4px 0;
+      display: block;
+    }
+
+    .vote-down-off {
+      cursor: pointer;
+      margin-bottom: 7px;
+    }
+  }
+}
+
 .answer {
   .nav {
     margin-top: -20px;
