@@ -1,4 +1,5 @@
 class AttachmentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_attachment
   before_action :only_owner
 
@@ -15,13 +16,9 @@ class AttachmentsController < ApplicationController
   end
 
   def only_owner
-    owner = if current_user.nil?
-      false
-    else
-      @attachment.attachable.user_id == current_user.id
+    if @attachment.attachable.user_id != current_user.id
+      render(text: "You not #{@attachment.attachable_type} owner")
     end
-    
-    render(text: "You not #{@attachment.attachable_type} owner") unless owner
 
   end
 

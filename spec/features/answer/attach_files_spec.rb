@@ -30,11 +30,9 @@ feature 'Attach files to answer', %q{
     click_on t('.questions.show.submit_answer')
 
     within '#answers' do
-      expect(page).to have_content('spec_helper.rb')
-      expect(page).to have_css('a', text: 'spec_helper.rb')
-      
-      expect(page).to have_content('rails_helper.rb')
-      expect(page).to have_css('a', text: 'rails_helper.rb')
+      expect(page).to have_link('spec_helper.rb')
+      expect(page).to have_link('rails_helper.rb')
+
     end
 
   end
