@@ -6,11 +6,11 @@
       tr
         td.votecell
           .vote
-            = content_tag :a, class: 'vote-up-off', title: t('.vote_up') do
+            = content_tag :a, class: 'vote-up-off', title: t('.vote-up') do
               span.glyphicon.glyphicon-chevron-up
             span.vote-count-post
-              | 100
-            = content_tag :a, class: 'vote-down-off', title: t('.vote_down') do
+              | 0
+            = content_tag :a, class: 'vote-down-off', title: t('.vote-down') do
               span.glyphicon.glyphicon-chevron-down
 
         td.postcell
