@@ -7,7 +7,7 @@ feature 'User can vote for question',%q{
 } do
   given(:question){ create :question }
   
-  scenario 'User can vote question up' do
+  scenario 'User can vote question up', js: true do
     fill_form_and_sign_in
     visit question_path(question)
 
