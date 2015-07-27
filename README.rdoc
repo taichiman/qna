@@ -1,11 +1,9 @@
 == Stackoverflow clone
 
-This project is for educational purposes while I am educating at russian online RoR course by [Thinknetica][1].
+This project is for educational purposes while I am educating at russian online RoR course by http://thinknetica.com.
 
 Use:
 
 BDD, TDD, refactoring
 
 ror4, bootstrap, etc.
-
-[1]: http://thinknetica.com
