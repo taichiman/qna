@@ -8,6 +8,9 @@ RSpec.describe Answer do
   it { should have_many :attachments }
   it { should accept_nested_attributes_for :attachments }
 
+  it { should have_many :votes }
+  it { should have_many(:vote_users).through(:votes).source(:user) }
+
   describe 'has scope - My answers' do
     let(:user){ create :user_with_questions, with_test_answers: true }
     it 'with only my answers' do

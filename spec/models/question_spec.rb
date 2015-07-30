@@ -9,6 +9,9 @@ RSpec.describe Question, type: :model do
   it { should have_many(:attachments) }
   it { should accept_nested_attributes_for :attachments }
 
+  it { should have_many(:votes) }
+  it { should have_many(:vote_users).through(:votes).source(:user) }
+
   describe 'has scope - Best Answer' do
     let(:question){ create :question_with_answers, answers_count: 3 }
     

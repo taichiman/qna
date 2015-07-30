@@ -9,6 +9,9 @@ class Answer < ActiveRecord::Base
 
   scope :my, ->(user) { Answer.where(user: user) }
 
+  has_many :votes, as: :votable
+  has_many :vote_users, through: :votes, source: :user
+
   def select_as_best
     new_best = self
     old_best = self.question.best_answer.take

@@ -10,6 +10,9 @@ class Question < ActiveRecord::Base
 
   scope :my, -> (user) { where( user: user) }
 
+  has_many :votes, as: :votable
+  has_many :vote_users, through: :votes, source: :user
+
   def best_answer
     answers.where(best: true)
   end
