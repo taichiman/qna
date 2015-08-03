@@ -1,8 +1,8 @@
 class VotesController < ApplicationController
-  before_action :set_question
+  before_action :authenticate_user!, :set_question
 
   def vote_up
-    current_user.votes.create votable: @question
+    current_user.votes.create(votable: @question)
     
     render nothing: true
   end
