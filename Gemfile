@@ -27,7 +27,7 @@ gem 'cocoon'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.3.1'
   gem 'factory_girl_rails'
   #gem 'byebug'
   gem 'pry'

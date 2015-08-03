@@ -3,15 +3,14 @@ class Question < ActiveRecord::Base
 
   has_many :answers, dependent: :restrict_with_exception
   has_many :attachments, as: :attachable
- 
+  has_many :votes, as: :votable
+  has_many :vote_users, through: :votes, source: :user
+
   accepts_nested_attributes_for :attachments, reject_if: :all_blank
 
   validates :title, :body, presence: true
 
   scope :my, -> (user) { where( user: user) }
-
-  has_many :votes, as: :votable
-  has_many :vote_users, through: :votes, source: :user
 
   def best_answer
     answers.where(best: true)

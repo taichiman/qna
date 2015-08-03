@@ -1,7 +1,18 @@
 class VotesController < ApplicationController
-  def vote_up
+  before_action :set_question
 
-    render text: ''
-  end 
+  def vote_up
+    current_user.votes.create votable: @question
+    
+    render nothing: true
+  end
+
+  private
+
+  def set_question
+    @question = Question.find(params[:id])
+
+  end
+
 end
 

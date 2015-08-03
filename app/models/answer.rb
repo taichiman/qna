@@ -3,14 +3,14 @@ class Answer < ActiveRecord::Base
   belongs_to :user
 
   has_many :attachments, as: :attachable
+  has_many :votes, as: :votable
+  has_many :vote_users, through: :votes, source: :user
+
   accepts_nested_attributes_for :attachments, reject_if: :all_blank
 
   validates :body, presence: true
 
   scope :my, ->(user) { Answer.where(user: user) }
-
-  has_many :votes, as: :votable
-  has_many :vote_users, through: :votes, source: :user
 
   def select_as_best
     new_best = self
