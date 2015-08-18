@@ -39,9 +39,17 @@
     min-width: 40px;
     text-align: center;
 
-    .vote-up-off {
+    .vote-up{
       cursor: pointer;
       display: block;
+    }
+
+    .vote-up-on {
+      color: red;
+    }
+    
+    .vote-up-off {
+      color: $brand-primary;
     }
     
     .vote-count-post {
@@ -49,10 +57,19 @@
       display: block;
     }
 
-    .vote-down-off {
+    .vote-down{
       cursor: pointer;
       margin-bottom: 7px;
     }
+
+    .vote-down-on {
+      color: red;
+    }
+
+    .vote-down-off{
+      color: $brand-primary;
+    }
+      
   }
 }
 

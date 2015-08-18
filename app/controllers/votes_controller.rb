@@ -4,7 +4,10 @@ class VotesController < ApplicationController
   def vote_up
     current_user.votes.create(votable: @question)
     
-    render nothing: true
+    s = { vote_up: 1 , vote_count: 1 }
+
+    render json: s
+
   end
 
   private

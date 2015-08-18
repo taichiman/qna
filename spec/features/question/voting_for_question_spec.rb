@@ -13,11 +13,15 @@ feature 'User can vote for question',%q{
 
     within '.question-content .vote' do
       expect(page).to have_content(/^0$/)
+      expect(page).to have_css('a.vote-up')
+      expect(page).not_to have_css('a.vote-up-on')
       expect(page).to have_css('a.vote-up-off')
       expect(page).to have_css('a.vote-down-off')
-      find('a.vote-up-off').click
+      find('a.vote-up').click
 
       expect(page).to have_content(/^1$/)
+      expect(page).to have_css('a.vote-up')
+      expect(page).not_to have_css('a.vote-up-off')
       expect(page).to have_css('a.vote-up-on')
       expect(page).to have_css('a.vote-down-off')
 
