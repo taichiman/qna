@@ -5,9 +5,9 @@ feature 'User can vote for question',%q{
   As an User
   I can vote question up and down
 } do
-  given(:vote) { create :vote }
+  given(:question){ create :question}
+  given(:vote) { create :vote, votable: question }
   given(:user) { vote.user }
-  given(:question){ vote.votable }
 
   scenario 'User can vote question up', js: true do
     fill_form_and_sign_in
