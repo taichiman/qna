@@ -39,4 +39,21 @@ RSpec.describe Question, type: :model do
     end
   end
 
+  describe 'return vote result' do
+    it 'should return 2 positive votes' do
+      question = create :question
+
+      1.upto 5 do
+        create :vote, votable: question, vote_type: 'up'
+      end
+
+      1.upto 3 do
+        create :vote, votable: question, vote_type: 'down'
+      end
+      
+      expect(question.result_votes).to eq(2)
+      
+    end
+
+  end
 end

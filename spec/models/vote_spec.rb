@@ -6,6 +6,7 @@ describe Vote do
   
   it { should validate_presence_of(:user) }
   it { should validate_presence_of(:votable) }
+  it { should validate_inclusion_of(:vote_type).in_array(%w(up down)) }
 
   describe 'result votes calculation' do
     it 'can return negative result' do
@@ -19,7 +20,7 @@ describe Vote do
         create :vote, votable: question, vote_type: 'down'
       end
       
-      expect(Vote.vote_result(question)).to eq(-1)
+      expect(Vote.result_votes(question)).to eq(-1)
       
     end
 
@@ -34,7 +35,7 @@ describe Vote do
         create :vote, votable: question, vote_type: 'down'
       end
       
-      expect(Vote.vote_result(question)).to eq(1)
+      expect(Vote.result_votes(question)).to eq(1)
       
     end
 
@@ -49,7 +50,7 @@ describe Vote do
         create :vote, votable: question, vote_type: 'down'
       end
       
-      expect(Vote.vote_result(question)).to eq(0)
+      expect(Vote.result_votes(question)).to eq(0)
       
     end
 
@@ -60,7 +61,7 @@ describe Vote do
         create :vote, votable: question, vote_type: 'up'
       end
 
-      expect(Vote.vote_result(question)).to eq(2)
+      expect(Vote.result_votes(question)).to eq(2)
       
     end
 
@@ -71,7 +72,7 @@ describe Vote do
         create :vote, votable: question, vote_type: 'up'
       end
 
-      expect(Vote.vote_result(question)).to eq(2)
+      expect(Vote.result_votes(question)).to eq(2)
       
     end
 

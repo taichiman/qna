@@ -6,7 +6,7 @@ feature 'User can vote for question',%q{
   I can vote question up and down
 } do
   given(:question){ create :question}
-  given(:vote) { create :vote, votable: question }
+  given(:vote) { create :vote, votable: question, vote_type: 'up' }
   given(:user) { vote.user }
 
   scenario 'User can vote question up', js: true do
@@ -28,6 +28,22 @@ feature 'User can vote for question',%q{
       expect(page).to have_css('a.vote-down-off')
 
     end
+  end
+
+  scenario 'Question shows result votes counter' do 
+    fill_form_and_sign_in
+    
+    question = create :question
+    vote = create :vote, votable: question, vote_type: 'up'
+    create :vote, votable: vote.votable, vote_type: 'up'
+    1.upto(4){ create :vote, votable: vote.votable, vote_type: 'down' }
+    visit question_path(question)
+
+    
+    within '.question-content .vote' do
+      expect(page).to have_content(/^-2$/)
+    end
+
   end
 
   scenario 'User can\'t vote down if hi had voted up before', js: true do

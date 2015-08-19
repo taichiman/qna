@@ -3,8 +3,9 @@ class Vote < ActiveRecord::Base
   belongs_to :user
 
   validates :votable, :user, presence: true
+  validates :vote_type, inclusion: { in: %w(up down) }
 
-  def self.vote_result votable
+  def self.result_votes votable
     Vote.where(votable: votable, vote_type:'up').count - Vote.where( votable: votable, vote_type: 'down').count
 
   end

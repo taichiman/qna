@@ -20,5 +20,10 @@ class Question < ActiveRecord::Base
     answers.order(best: :desc, created_at: :asc)
   end
 
+  def result_votes
+    Vote.result_votes(self)
+    
+  end
+
 end
 
