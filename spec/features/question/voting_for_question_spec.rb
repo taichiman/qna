@@ -46,7 +46,7 @@ feature 'User can vote for question',%q{
 
   end
 
-  scenario 'User can\'t vote down if hi had voted up before', js: true do
+  scenario 'User can\'t vote down the question if hi had voted up it before', js: true do
 
     fill_form_and_sign_in user
     visit question_path(question)

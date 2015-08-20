@@ -15,5 +15,22 @@ class User < ActiveRecord::Base
     self.id == object.user_id
   end
 
+  def voted_down_on? votable
+    voted_on?(votable, 'down')
+
+  end
+
+  def voted_up_on? votable
+    voted_on?(votable, 'up')
+
+  end
+
+  private
+
+  def voted_on? votable, vote_type
+    Vote.where(votable: votable, user: self, vote_type: vote_type).exists?
+
+  end
+
 end
 

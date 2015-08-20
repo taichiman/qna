@@ -10,6 +10,11 @@ class VotesController < ApplicationController
 
   end
 
+  def vote_down
+    
+
+  end
+
   private
 
   def set_question

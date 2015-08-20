@@ -42,5 +42,36 @@ RSpec.describe User do
     end
 
   end
+
+  describe 'check whether the user has voted' do
+    context 'for question' do
+      it 'user voted up' do
+        user = create :user
+        question = create :question
+        create :vote, votable: question, vote_type: 'up', user: user
+
+        expect(user.voted_up_on?(question)).to be_truthy
+
+      end
+
+      it 'user did not up vote' do
+        user = create :user
+        question = create :question
+
+        expect(user.voted_up_on?(question)).to be_falsey
+
+      end
+
+      it 'user voted down' do
+        user = create :user
+        question = create :question
+        create :vote, votable: question, vote_type: 'down', user: user
+
+        expect(user.voted_down_on?(question)).to be_truthy
+
+      end
+
+    end
+  end
 end
 
