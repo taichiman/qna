@@ -62,6 +62,7 @@ feature 'User can vote for question',%q{
       expect(page).to have_css('a.vote-up-on')
       expect(page).not_to have_css('a.vote-up-off')
       expect(page).to have_css('a.vote-down-off')
+      expect(page).to have_content('You should cancel')
 
     end
   end
