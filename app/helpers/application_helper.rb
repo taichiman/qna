@@ -22,5 +22,14 @@ module ApplicationHelper
 
   end
 
+  def down_vote_css votable
+    if current_user.voted_down_on?(votable) 
+      'vote-down-on'
+    else
+      'vote-down-off'
+    end
+
+  end
+
 end
 
