@@ -11,14 +11,14 @@ describe ApplicationHelper do
 
 
   describe 'returns vote state css class for current user' do
+    let(:user) { create :user }
+    let(:question) { create :question }
+
+    before do
+      allow(helper).to receive(:current_user) { user }
+    end
+
     context 'for up-vote button' do
-      let(:user) { create :user }
-      let(:question) { create :question }
-
-      before do
-        allow(helper).to receive(:current_user) { user }
-      end
-
       it 'when there was up vote' do
         vote = create :vote, votable: question, user: user, vote_type: 'up'
         expect(helper.up_vote_css(question)).to eq('vote-up-on')
@@ -33,13 +33,6 @@ describe ApplicationHelper do
     end
 
     context 'for down-vote button' do
-      let(:user) { create :user }
-      let(:question) { create :question }
-
-      before do
-        allow(helper).to receive(:current_user) { user }
-      end
-
       it 'when there was down vote' do
         vote = create :vote, votable: question, user: user, vote_type: 'down'
         expect(helper.down_vote_css(question)).to eq('vote-down-on')
