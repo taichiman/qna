@@ -13,5 +13,14 @@ module ApplicationHelper
     !current_user.nil? && current_user.owner_of?(obj)
   end
 
+  def up_vote_css votable
+    if current_user.voted_up_on?(votable) 
+      'vote-up-on'
+    else
+      'vote-up-off'
+    end
+
+  end
+
 end
 
