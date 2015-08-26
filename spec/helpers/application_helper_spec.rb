@@ -30,6 +30,13 @@ describe ApplicationHelper do
 
       end
 
+      it 'when user not authenticated' do
+        allow(helper).to receive(:current_user) { nil }
+
+        expect{ helper.up_vote_css(question) }.to_not raise_exception
+
+      end
+
     end
 
     context 'for down-vote button' do
@@ -41,6 +48,13 @@ describe ApplicationHelper do
 
       it 'when there was not any vote' do
         expect(helper.down_vote_css(question)).to eq('vote-down-off')
+
+      end
+
+      it 'when user not authenticated' do
+        allow(helper).to receive(:current_user) { nil }
+
+        expect{ helper.down_vote_css(question) }.to_not raise_exception
 
       end
 

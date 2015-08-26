@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def up_vote_css votable
-    if current_user.voted_up_on?(votable) 
+    if current_user.try(:voted_up_on?, votable) 
       'vote-up-on'
     else
       'vote-up-off'
@@ -23,7 +23,7 @@ module ApplicationHelper
   end
 
   def down_vote_css votable
-    if current_user.voted_down_on?(votable) 
+    if current_user.try(:voted_down_on?, votable) 
       'vote-down-on'
     else
       'vote-down-off'
