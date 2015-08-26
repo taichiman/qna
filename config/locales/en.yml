@@ -45,6 +45,9 @@ en:
     form:
       submit: Update answer
 
+  votes:
+     cancel-previous-vote: Before revoting, you should cancel previous vote.
+
   question-not-owner: You can only handle your own question
   not-owner-of-answer: You can only handle your own answer
   answer-count-legend: Answer

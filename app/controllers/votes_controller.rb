@@ -11,7 +11,9 @@ class VotesController < ApplicationController
   end
 
   def vote_down
-    
+    s = { error: t('votes.cancel-previous-vote') }
+
+    render json: s, status: :unprocessable_entity
 
   end
 

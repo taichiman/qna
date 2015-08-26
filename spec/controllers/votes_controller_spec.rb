@@ -22,6 +22,29 @@ describe VotesController do
 
         end
       end
+
+      context 'when user tries to vote down' do
+        context 'if "up" had voted before' do
+          it 'the down vote will not created' do
+            vote = create :vote, votable: question, user: user, vote_type: 'up'
+
+            expect{ xhr :post, :vote_down, id: question.id }
+            .to_not change(Vote,:count)
+
+          end
+
+          it 'renders message to cancel old vote' do
+            vote = create :vote, votable: question, user: user, vote_type: 'up'
+            xhr :post, :vote_down, id: question.id
+
+            expect(JSON.parse(response.body)['error'])
+            .to eq( t('.votes.cancel-previous-vote') )
+            
+          end
+
+        end
+
+      end
     
     end
 

@@ -73,5 +73,21 @@ RSpec.describe User do
 
     end
   end
+
+  describe 'has user any vote for the question' do
+    it 'has up vote' do
+       
+    end
+
+    it 'has down vote' do
+
+    end
+
+    it 'has not any vote' do
+
+    end
+
+  end
+
 end
 

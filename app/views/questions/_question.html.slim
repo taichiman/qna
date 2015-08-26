@@ -10,7 +10,7 @@
               span.glyphicon.glyphicon-chevron-up
             span.vote-count-post
               = question.result_votes
-            = content_tag :a, class: "vote-down #{down_vote_css(question)}", title: t('.vote-down') do
+            = content_tag :a, href: vote_down_question_path(question), class: "vote-down #{down_vote_css(question)}", title: t('.vote-down'), data:{ method: :post, remote:true } do
               span.glyphicon.glyphicon-chevron-down
 
         td.postcell
