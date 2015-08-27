@@ -6,8 +6,6 @@ feature 'User can vote for question',%q{
   I can vote question up and down
 } do
   given(:question){ create :question}
-  given(:vote) { create :vote, votable: question, vote_type: 'up' }
-  given(:user) { vote.user }
 
   scenario 'User can vote question up', js: true do
     fill_form_and_sign_in
@@ -33,12 +31,10 @@ feature 'User can vote for question',%q{
   scenario 'Question shows result votes counter' do 
     fill_form_and_sign_in
     
-    question = create :question
-    vote = create :vote, votable: question, vote_type: 'up'
-    create :vote, votable: vote.votable, vote_type: 'up'
-    1.upto(4){ create :vote, votable: vote.votable, vote_type: 'down' }
-    visit question_path(question)
+    1.upto(2){ create :vote, votable: question, vote_type: 'up' }
+    1.upto(4){ create :vote, votable: question, vote_type: 'down' }
 
+    visit question_path(question)
     
     within '.question-content .vote' do
       expect(page).to have_content(/^-2$/)
@@ -46,27 +42,59 @@ feature 'User can vote for question',%q{
 
   end
 
-  scenario 'User can\'t vote down the question if hi had voted up it before', js: true do
+  describe 'user should cancel old vote if want revote', js: true do
+    scenario 'user gets error message to cancel up' do
+      vote = create :vote, votable: question, vote_type: 'up'
+      fill_form_and_sign_in vote.user
+      visit question_path(question)
 
-    fill_form_and_sign_in user
-    visit question_path(question)
+      within '.question-content .vote' do
+        expect(page).to have_content(/^1$/)
+        expect(page).to have_css('a.vote-up-on')
+        expect(page).not_to have_css('a.vote-up-off')
+        expect(page).to have_css('a.vote-down-off')
 
-    within '.question-content .vote' do
-      expect(page).to have_content(/^1$/)
-      expect(page).to have_css('a.vote-up-on')
-      expect(page).not_to have_css('a.vote-up-off')
-      expect(page).to have_css('a.vote-down-off')
+        find('a.vote-down').click
 
-      find('a.vote-down').click
+        expect(page).to have_content(/^1$/)
+        expect(page).to have_css('a.vote-up-on')
+        expect(page).not_to have_css('a.vote-up-off')
+        expect(page).to have_css('a.vote-down-off')
 
-      expect(page).to have_content(/^1$/)
-      expect(page).to have_css('a.vote-up-on')
-      expect(page).not_to have_css('a.vote-up-off')
-      expect(page).to have_css('a.vote-down-off')
+      end
+    
+      expect(page).to have_content(t('.votes.cancel-previous-vote'))
+
+    end
+    
+    scenario 'user gets error message to cancel down' do
+      vote = create :vote, votable: question, vote_type: 'down'
+      fill_form_and_sign_in vote.user
+      visit question_path(question)
+
+      within '.question-content .vote' do
+        expect(page).to have_content(/^-1$/)
+        expect(page).to have_css('a.vote-down-on')
+        expect(page).not_to have_css('a.vote-down-off')
+        expect(page).to have_css('a.vote-up-off')
+        expect(page).not_to have_css('a.vote-up-on')
+
+        find('a.vote-up').click
+
+        expect(page).to have_content(/^-1$/)
+        expect(page).to have_css('a.vote-up-off')
+        expect(page).not_to have_css('a.vote-down-off')
+        expect(page).to have_css('a.vote-down-on')
+
+      end
+    
+      expect(page).to have_content(t('.votes.cancel-previous-vote'))
 
     end
 
-    expect(page).to have_content(t('.votes.cancel-previous-vote'))
+  end
+
+  scenario 'user can cancel previous vote' do
 
   end
 
