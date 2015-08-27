@@ -23,7 +23,21 @@ describe VotesController do
         end
       end
 
-      context 'when user tries to vote down' do
+      context 'when user tries to vote "up"' do
+        context 'if "down" had voted before' do
+          it 'the up vote will not created' do
+            vote = create :vote, votable: question, user: user, vote_type: 'down'
+
+            expect{ xhr :post, :vote_up, id: question.id }
+            .to_not change(Vote,:count)
+
+          end
+
+        end
+
+      end
+
+      context 'when user tries to vote "down"' do
         context 'if "up" had voted before' do
           it 'the down vote will not created' do
             vote = create :vote, votable: question, user: user, vote_type: 'up'

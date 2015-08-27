@@ -77,5 +77,37 @@ describe Vote do
     end
 
   end
+
+  describe '::vote_state return state of vote for a votable entity' do
+    context 'for question' do
+      let(:question) { create :question }
+      let(:user) { create :user }
+
+      before do
+        allow(Vote).to receive(:current_user) { user }
+      end
+
+      it 'when votable was up voted returns :up_vote' do
+        vote = create :vote, votable: question, user: user, vote_type: 'up'
+        expect(Vote.vote_state(question)).to eq(:up_vote)
+
+      end
+
+      it 'when votable was down voted returns :down_vote' do
+        vote = create :vote, votable: question, user: user, vote_type: 'down'
+        expect(Vote.vote_state(question)).to eq(:down_vote)
+
+      end
+
+      it 'when votable was not voted returns :no_vote' do
+        expect(Vote.vote_state(question)).to eq(:no_vote)
+
+      end
+
+
+    end
+
+  end
+
 end
 

@@ -12,6 +12,10 @@ class Question < ActiveRecord::Base
 
   scope :my, -> (user) { where( user: user) }
 
+  def vote_state
+    Vote.vote_state(self)
+  end
+
   def best_answer
     answers.where(best: true)
   end
