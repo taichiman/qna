@@ -10,7 +10,8 @@ describe VotesController do
       describe 'can create vote-up entity' do
         it 'change Vote count' do
           expect{ xhr :post, :vote_up, id: question.id }
-          .to change(Vote,:count)     .from(0).to(1)
+          .to change(Vote,:count)
+          .from(0).to(1)
    
         end
 

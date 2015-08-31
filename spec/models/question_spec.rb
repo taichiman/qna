@@ -57,15 +57,5 @@ RSpec.describe Question, type: :model do
 
   end
 
-  describe '#vote_state return state of vote for question' do
-    let(:question) { create :question }
-    let(:user) { create :user }
-
-    it 'returns :up_vote if the question was up voted' do
-      vote = create :vote, votable: question, user: user, vote_type: 'up'
-      expect(question.vote_state).to eq(:up_vote)
-
-    end
-    
-  end
 end
+

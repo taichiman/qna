@@ -10,9 +10,9 @@ class Vote < ActiveRecord::Base
 
   end
 
-  def self.vote_state votable
-    return :up_vote if current_user.voted_up_on? votable
-    return :down_vote if current_user.voted_down_on? votable
+  def self.vote_state user, votable
+    return :up_vote if user.voted_up_on? votable
+    return :down_vote if user.voted_down_on? votable
     :no_vote
 
   end

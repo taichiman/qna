@@ -42,10 +42,17 @@ feature 'User can vote for question',%q{
 
   end
 
-  describe 'user should cancel old vote if want revote', js: true do
-    scenario 'user gets error message to cancel up' do
-      vote = create :vote, votable: question, vote_type: 'up'
-      fill_form_and_sign_in vote.user
+  describe 'user should cancel old vote if wants to revote', js: true do
+    given(:user) { create :user }
+
+    background do
+      fill_form_and_sign_in user
+      allow(Vote).to receive(:current_user) { user }
+
+    end
+
+    scenario 'user gets error message to cancel "up"' do
+      vote = create :vote, votable: question, vote_type: 'up', user: user
       visit question_path(question)
 
       within '.question-content .vote' do
@@ -67,9 +74,8 @@ feature 'User can vote for question',%q{
 
     end
     
-    scenario 'user gets error message to cancel down' do
-      vote = create :vote, votable: question, vote_type: 'down'
-      fill_form_and_sign_in vote.user
+    scenario 'user gets error message to cancel "down"' do
+      vote = create :vote, votable: question, vote_type: 'down', user: user
       visit question_path(question)
 
       within '.question-content .vote' do

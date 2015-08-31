@@ -25,6 +25,11 @@ class User < ActiveRecord::Base
 
   end
 
+  def vote_state_for votable
+    Vote.vote_state self, votable
+
+  end
+
   private
 
   def voted_on? votable, vote_type

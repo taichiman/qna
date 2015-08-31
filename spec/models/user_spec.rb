@@ -74,16 +74,29 @@ RSpec.describe User do
     end
   end
 
-  describe 'has user any vote for the question' do
-    it 'has up vote' do
-       
+  describe 'the user vote state for the votable' do
+    let(:user) { create :user }
+    let(:question) { create :question }
+
+    context 'when votable has up vote' do
+      it 'return :up_vote' do
+        create :vote, user: user, votable: question, vote_type: 'up'
+        expect(user.vote_state_for(question)).to eq(:up_vote)
+      end
     end
 
-    it 'has down vote' do
+    context 'has down vote' do
+      it 'return :down_vote' do
+        create :vote, user: user, votable: question, vote_type: 'down'
+        expect(user.vote_state_for(question)).to eq(:down_vote)
+      end
 
     end
 
-    it 'has not any vote' do
+    context 'has not any vote' do
+      it 'return :no_vote' do
+        expect(user.vote_state_for(question)).to eq(:no_vote)
+      end
 
     end
 
