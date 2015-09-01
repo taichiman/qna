@@ -9,7 +9,7 @@ class VotesController < ApplicationController
       s = { vote_up: 1 , vote_count: 1 }
 
     when :down_vote
-      s = { error: t('votes.cancel-previous-vote') }
+      s = { error: t('votes.cancel-previous-vote-suggestion') }
       status = :unprocessable_entity
       
     end
@@ -25,7 +25,7 @@ class VotesController < ApplicationController
       s = { vote_down: 1 , vote_count: -1 }
 
     when :up_vote
-      s = { error: t('votes.cancel-previous-vote') }
+      s = { error: t('votes.cancel-previous-vote-suggestion') }
       status = :unprocessable_entity
       
     end

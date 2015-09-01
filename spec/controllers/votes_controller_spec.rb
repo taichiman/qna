@@ -53,7 +53,7 @@ describe VotesController do
             xhr :post, :vote_down, id: question.id
 
             expect(JSON.parse(response.body)['error'])
-            .to eq( t('.votes.cancel-previous-vote') )
+            .to eq( t('.votes.cancel-previous-vote-suggestion') )
             
           end
 

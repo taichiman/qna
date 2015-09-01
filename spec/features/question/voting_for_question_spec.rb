@@ -106,7 +106,7 @@ feature 'User can vote for question',%q{
 
         end
       
-        expect(page).to have_content(t('.votes.cancel-previous-vote'))
+        expect(page).to have_content(t('.votes.cancel-previous-vote-suggestion'))
 
       end
       
@@ -130,7 +130,7 @@ feature 'User can vote for question',%q{
 
         end
       
-        expect(page).to have_content(t('.votes.cancel-previous-vote'))
+        expect(page).to have_content(t('.votes.cancel-previous-vote-suggestion'))
 
       end
 
