@@ -43,9 +43,11 @@ feature 'User can vote for question',%q{
         expect(page).to have_css('a.vote-down')
         expect(page).to have_css('a.vote-down-off')
         expect(page).not_to have_css('a.vote-down-on')
+
         find('a.vote-down').click
 
         expect(page).to have_content(/^-1$/)
+
         expect(page).to have_css('a.vote-down')
         expect(page).to have_css('a.vote-down-on')
         expect(page).not_to have_css('a.vote-down-off')
