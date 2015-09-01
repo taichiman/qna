@@ -30,9 +30,17 @@ $ ->
      show_error(xhr) 
 
 $ ->
-  $('a.vote-down').bind 'ajax:error', (e, xhr, status, error) ->
-    response = $.parseJSON(xhr.responseText)
-    error_div = $.parseHTML '<div class = "alert vote-alert alert-danger"></div>'
-    $(error_div).text(response.error)
-    $(this).parents('table').before(error_div)
+  $('a.vote-down').bind 'ajax:success', (e, data, status, xhr) ->
+    answer = $.parseJSON(xhr.responseText)
+    $(this).siblings('.vote-count-post').text(answer.vote_count)
+    $(this).removeClass('vote-down-off').addClass('vote-down-on')
+  .bind 'ajax:error', (e, xhr, status, error) ->
+     show_error(xhr) 
+
+
+#  .bind 'ajax:error', (e, xhr, status, error) ->
+#    response = $.parseJSON(xhr.responseText)
+#    error_div = $.parseHTML '<div class = "alert vote-alert alert-danger"></div>'
+#    $(error_div).text(response.error)
+#    $(this).parents('table').before(error_div)
 

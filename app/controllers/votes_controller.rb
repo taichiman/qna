@@ -22,7 +22,7 @@ class VotesController < ApplicationController
     case @state
     when :no_vote
       current_user.votes.create!(votable: @votable, vote_type: 'down')
-      s = { vote_down: 1 , vote_count: 1 }
+      s = { vote_down: 1 , vote_count: -1 }
 
     when :up_vote
       s = { error: t('votes.cancel-previous-vote') }
