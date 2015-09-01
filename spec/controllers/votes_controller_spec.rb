@@ -7,7 +7,7 @@ describe VotesController do
     context 'when user authenticated' do
       sign_in_user
 
-      describe 'can create vote-up entity' do
+      context 'can create vote-up entity' do
         it 'change Vote count' do
           expect{ xhr :post, :vote_up, id: question.id }
           .to change(Vote,:count)
@@ -19,7 +19,7 @@ describe VotesController do
           xhr :post, :vote_up, id: question.id
 
           expect(question.votes.first)
-          .to have_attributes(votable_id: question.id, votable_type:'Question', user_id: user.id)
+          .to have_attributes(votable_id: question.id, votable_type:'Question', user_id: user.id, vote_type: 'up')
 
         end
       end
@@ -75,5 +75,31 @@ describe VotesController do
     end
 
   end
+
+  describe 'POST#vote-down' do
+    let(:question){ create :question }
+
+    context 'when user authenticated' do
+      sign_in_user
+
+      context 'can create vote-down entity' do
+        it 'change Vote count' do
+          expect{ xhr :post, :vote_down, id: question.id }
+          .to change(Vote,:count)
+          .from(0).to(1)
+   
+        end
+
+        it 'new vote record is the question voting' do
+          xhr :post, :vote_down, id: question.id
+
+          expect(question.votes.first)
+          .to have_attributes(votable_id: question.id, votable_type:'Question', user_id: user.id, vote_type: 'down')
+
+        end
+      end
+    end
+  end
+
 end
 
