@@ -1,10 +1,9 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!, :set_votable
+  before_action :set_votable_vote_state, only: [:vote_up, :vote_down]
 
   def vote_up
-    state = current_user.vote_state_for @votable
-
-    case state
+    case @state
     when :no_vote
       current_user.votes.create!(votable: @votable, vote_type: 'up')
       s = { vote_up: 1 , vote_count: 1 }
@@ -20,9 +19,7 @@ class VotesController < ApplicationController
   end
 
   def vote_down
-    state = current_user.vote_state_for @votable
-
-    case state
+    case @state
     when :no_vote
       current_user.votes.create!(votable: @votable, vote_type: 'down')
       s = { vote_down: 1 , vote_count: 1 }
@@ -44,5 +41,9 @@ class VotesController < ApplicationController
 
   end
 
+  def set_votable_vote_state
+    @state = current_user.vote_state_for @votable
+
+  end
 end
 
