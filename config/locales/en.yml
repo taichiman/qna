@@ -47,6 +47,7 @@ en:
 
   votes:
      cancel-previous-vote-suggestion: Before revoting, you should cancel previous vote.
+     success-previous-vote-cancel: Succesfully cancel your vote
 
   question-not-owner: You can only handle your own question
   not-owner-of-answer: You can only handle your own answer
