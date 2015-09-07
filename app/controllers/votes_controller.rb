@@ -12,6 +12,10 @@ class VotesController < ApplicationController
       s = { error: t('votes.cancel-previous-vote-suggestion') }
       status = :unprocessable_entity
       
+    when :up_vote
+      vote = Vote.where( user: current_user, vote_type: 'up')
+      vote.destroy
+
     end
 
     render json: s, status: status
