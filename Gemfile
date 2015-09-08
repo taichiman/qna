@@ -49,5 +49,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara-webkit'
 
+  gem 'spring-commands-rspec'
+
 end
 
