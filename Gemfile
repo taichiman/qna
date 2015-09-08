@@ -41,7 +41,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', require: false
   gem 'fuubar'
   gem 'capybara'
   gem 'launchy'

@@ -3,7 +3,10 @@ ENV['RAILS_ENV'] ||= 'test'
 require 'spec_helper'
 
 require File.expand_path('../../config/environment', __FILE__)
+
 require 'rspec/rails'
+require 'shoulda-matchers'
+
 require 'database_cleaner'
 require 'capybara/rails'
 
@@ -68,6 +71,8 @@ RSpec.configure do |config|
     #Warden.test_mode!
 
   #end
+
+  config.backtrace_exclusion_patterns << /ruby-2\.2\.0@qna\/gems/
 
 end
 
