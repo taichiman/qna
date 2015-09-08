@@ -9,12 +9,15 @@ class VotesController < ApplicationController
       s = { vote_up: 1 , vote_count: 1 }
 
     when :down_vote
+      #TODO ref error to message
       s = { error: t('votes.cancel-previous-vote-suggestion') }
       status = :unprocessable_entity
       
     when :up_vote
       vote = Vote.where( user: current_user, vote_type: 'up')
-      vote.destroy
+      #TODO ref
+      vote.first.destroy!
+      s = { messages: t('votes.success-previous-vote-cancel') }
 
     end
 

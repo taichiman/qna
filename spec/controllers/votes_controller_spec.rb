@@ -70,7 +70,12 @@ describe VotesController do
 
         end
 
-        it 'render json \'succesfull cancel vote \' message'
+        it 'render json \'succesfull cancel vote \' message' do
+          go
+
+          expect(response.body).to include(t('votes.success-previous-vote-cancel'))
+
+        end
 
       end
 
