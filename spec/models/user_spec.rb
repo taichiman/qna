@@ -10,6 +10,41 @@ RSpec.describe User do
   it { should have_many(:voted_questions).through(:votes) }
   it { should have_many(:voted_answers).through(:votes) }
 
+  describe '#up_vote_for, #down_vote_for scopes for get vote instance' do
+    let(:user) { create :user }
+    let(:question) { create :question }
+
+    context 'has "up" voted' do
+      let(:vote) { create :vote, votable: question, user: user, vote_type: 'up' }
+
+      it 'return "up" vote' do
+        expect(user.up_vote_for(vote.votable)).to eq(vote)
+        
+      end
+
+    end
+
+    context 'has "down" voted' do
+      let(:vote) { create :vote, votable: question, user: user, vote_type: 'down' }
+
+      it 'return "down" vote' do
+        expect(user.down_vote_for(vote.votable)).to eq(vote)
+        
+      end
+
+    end
+
+    context 'has no vote voted' do
+      it 'return nil' do
+        expect(user.up_vote_for(question)).to be_nil
+        expect(user.down_vote_for(question)).to be_nil
+        
+      end
+
+    end
+
+  end
+  
   describe 'check owning' do
     let(:not_owner_user){ create :user }
 

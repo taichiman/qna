@@ -11,6 +11,16 @@ class User < ActiveRecord::Base
   has_many :voted_questions, through: :votes, source: :votable, source_type: 'Question'
   has_many :voted_answers, through: :votes, source: :votable, source_type: 'Answer'
 
+  def up_vote_for votable
+    self.votes.up_for(votable).first
+
+  end
+
+  def down_vote_for votable
+    self.votes.down_for(votable).first
+
+  end
+
   def owner_of? object
     self.id == object.user_id
   end

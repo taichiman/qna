@@ -5,6 +5,9 @@ class Vote < ActiveRecord::Base
   validates :votable, :user, presence: true
   validates :vote_type, inclusion: { in: %w(up down) }
 
+  scope :up_for, -> (votable) { where vote_type: 'up', votable: votable } 
+  scope :down_for, -> (votable) { where vote_type: 'down', votable: votable } 
+
   def self.result_votes votable
     Vote.where(votable: votable, vote_type:'up').count - Vote.where( votable: votable, vote_type: 'down').count
 
