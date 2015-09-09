@@ -17,6 +17,12 @@ $.fn.extend
     $(error_div).text(response.error)
     $(this).parents('table').before(error_div)
 
+$.fn.extend
+  turn_up_vote: ->
+    $(this).removeClass('vote-up-off').addClass('vote-up-on')
+  turn_off_up_vote: ->
+    $(this).removeClass('vote-up-on').addClass('vote-up-off')
+
 $ ->
   $('.votecell').bind 'ajax:before' , ->
     $('.vote-alert').remove()
@@ -26,7 +32,12 @@ $ ->
   .bind 'ajax:success', (e, data, status, xhr) ->
     answer = $.parseJSON(xhr.responseText)
     $(this).siblings('.vote-count-post').text(answer.vote_count)
-    $(this).removeClass('vote-up-off').addClass('vote-up-on')
+
+    if answer.vote_up == 1
+      $(this).turn_up_vote()
+    else
+      $(this).turn_off_up_vote()
+
   .bind 'ajax:error', (e, xhr, status, error) ->
      $(this).show_error(xhr) 
 
