@@ -14,9 +14,7 @@ class VotesController < ApplicationController
       status = :unprocessable_entity
       
     when :up_vote
-      vote = Vote.where( user: current_user, vote_type: 'up')
-      #TODO ref
-      vote.first.destroy!
+      current_user.up_vote_for(@votable).destroy!
       s = { messages: t('votes.success-previous-vote-cancel') }
 
     end
