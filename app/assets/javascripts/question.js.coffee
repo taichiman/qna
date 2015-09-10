@@ -10,12 +10,20 @@ $ ->
 
 # voting:
 
+#TODO refactoring: mybe it makes sense make one function 
 $.fn.extend
   show_error: (xhr) -> 
     response = $.parseJSON(xhr.responseText)
     error_div = $.parseHTML '<div class = "alert vote-alert alert-danger"></div>'
     $(error_div).text(response.error)
     $(this).parents('table').before(error_div)
+
+$.fn.extend
+  show_message: (xhr) -> 
+    response = $.parseJSON(xhr.responseText)
+    message_div = $.parseHTML '<div class = "alert vote-alert alert-success"></div>'
+    $(message_div).text(response.message)
+    $(this).parents('table').before(message_div)
 
 $.fn.extend
   turn_up_vote: ->
@@ -37,6 +45,8 @@ $ ->
       $(this).turn_up_vote()
     else
       $(this).turn_off_up_vote()
+
+    $(this).show_message(xhr)
 
   .bind 'ajax:error', (e, xhr, status, error) ->
      $(this).show_error(xhr) 

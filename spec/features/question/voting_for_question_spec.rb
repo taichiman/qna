@@ -75,6 +75,22 @@ feature 'User can vote for question',%q{
 
     end
 
+    xscenario 'ajax request changes vote counter', js: true do
+      within '.question-content .vote' do
+        expect(page).to have_content(/^0$/)
+        find('a.vote-down').click
+        expect(page).to have_content(/^-1$/)
+        find('a.vote-up').click
+        expect(page).to have_content(/^0$/)
+        find('a.vote-up').click
+        expect(page).to have_content(/^1$/)
+        find('a.vote-up').click
+        expect(page).to have_content(/^2$/)
+    
+      end
+
+    end
+
   end
 
   describe 'Revoting', js: true do

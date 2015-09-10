@@ -6,7 +6,7 @@ class VotesController < ApplicationController
     case @state
     when :no_vote
       current_user.votes.create!(votable: @votable, vote_type: 'up')
-      s = { vote_up: 1 , vote_count: 1 }
+      s = { vote_up: 1, vote_down: 0, vote_count: 1 }
 
     when :down_vote
       #TODO ref error to message
@@ -15,7 +15,7 @@ class VotesController < ApplicationController
       
     when :up_vote
       current_user.up_vote_for(@votable).destroy!
-      s = { messages: t('votes.success-previous-vote-cancel') }
+      s = { vote_up: 0, vote_down: 0, vote_count: 0, message: t('votes.success-previous-vote-cancel') }
 
     end
 
