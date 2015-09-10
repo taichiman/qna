@@ -170,8 +170,29 @@ feature 'User can vote for question',%q{
 
         end
 
-        scenario 'cancel "down"'
+        scenario 'cancel "down"' do
+          vote = create :vote, votable: question, vote_type: 'down', user: user
+          visit question_path(question)
+
+          within '.question-content .vote' do
+            expect(page).to have_css('a.vote-down-on')
+            expect(page).to have_css('a.vote-up-off')
+            expect(page).to have_content(/^-1$/)
+
+            find('a.vote-down').click
+
+            expect(page).to have_css('a.vote-up-off')
+            expect(page).to have_css('a.vote-down-off')
+            expect(page).to have_content(/^0$/)
+
+          end
+
+          expect(page).to have_content(t('.votes.success-previous-vote-cancel'))
+
+        end
+
       end
+
     end
 
   end
