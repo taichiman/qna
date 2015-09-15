@@ -6,7 +6,7 @@ class VotesController < ApplicationController
     case @state
     when :no_vote
       current_user.votes.create!(votable: @votable, vote_type: 'up')
-      s = { vote_up: 1, vote_down: 0, vote_count: 1 }
+      s = { vote_up: 1, vote_down: 0, vote_count: @votable.result_votes  }
 
     when :down_vote
       #TODO ref error to message

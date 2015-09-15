@@ -8,13 +8,13 @@ feature 'User can vote for question',%q{
   given(:question){ create :question}
   given(:user) { create :user }
 
-  background do
-    fill_form_and_sign_in user
-    visit question_path(question)
+  describe 'user can vote for question', js: true do
+    background do
+      fill_form_and_sign_in user
+      visit question_path(question)
 
-  end
+    end
   
-  describe 'User can vote for question', js: true do
     scenario '"up"' do
       within '.question-content .vote' do
         expect(page).to have_content(/^0$/)
@@ -75,18 +75,77 @@ feature 'User can vote for question',%q{
 
     end
 
-    xscenario 'ajax request changes vote counter', js: true do
-      within '.question-content .vote' do
-        expect(page).to have_content(/^0$/)
-        find('a.vote-down').click
-        expect(page).to have_content(/^-1$/)
-        find('a.vote-up').click
-        expect(page).to have_content(/^0$/)
-        find('a.vote-up').click
-        expect(page).to have_content(/^1$/)
-        find('a.vote-up').click
-        expect(page).to have_content(/^2$/)
-    
+    context 'try changing the vote counter value', js: true do
+      let(:question) { create :question }
+      let(:user) { create :user }
+
+      before do
+        1.upto(2) do
+          user = create :user
+          create :vote, user: user, votable: question, vote_type: 'up'
+        end 
+
+        fill_form_and_sign_in user
+
+      end
+
+      scenario 'to increase' do
+        visit question_path(question)
+
+        within '.question-content .vote' do
+          #TODO I think, mybe exclude it in common method 
+          expect(page).to have_css('a.vote-up-off')
+          expect(page).to have_css('a.vote-down-off')
+          expect(page).to have_content(/^2$/)
+          ##
+
+          find('a.vote-up').click
+
+          expect(page).to have_css('a.vote-up-on')
+          expect(page).to have_css('a.vote-down-off')
+          expect(page).to have_content(/^3$/)
+
+        end
+
+      end
+
+      scenario 'to decrease' do
+        visit question_path(question)
+
+        within '.question-content .vote' do
+          expect(page).to have_css('a.vote-up-off')
+          expect(page).to have_css('a.vote-down-off')
+          expect(page).to have_content(/^2$/)
+
+          find('a.vote-down').click
+
+          expect(page).to have_css('a.vote-up-off')
+          expect(page).to have_css('a.vote-down-on')
+          expect(page).to have_content(/^1$/)
+
+        end
+
+
+      end
+
+      scenario 'to negative value'
+
+      #TODO think: if there need scenario, changing the counter after cancel vote
+
+      xscenario 'ajax request changes vote counter', js: true do
+        within '.question-content .vote' do
+          expect(page).to have_content(/^0$/)
+          find('a.vote-down').click
+          expect(page).to have_content(/^-1$/)
+          find('a.vote-up').click
+          expect(page).to have_content(/^0$/)
+          find('a.vote-up').click
+          expect(page).to have_content(/^1$/)
+          find('a.vote-up').click
+          expect(page).to have_content(/^2$/)
+      
+        end
+
       end
 
     end
@@ -94,6 +153,12 @@ feature 'User can vote for question',%q{
   end
 
   describe 'Revoting', js: true do
+    background do
+      fill_form_and_sign_in user
+      visit question_path(question)
+
+    end
+  
     context 'when user clicks new vote' do
       describe 'he should see error message about cancel' do
         scenario 'previous "up" first' do
