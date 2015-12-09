@@ -117,7 +117,6 @@ feature 'User can vote for question',%q{
           expect(page).to have_css('a.vote-down-off')
           expect(page).to have_content(/^2$/)
 
-          save_and_open_page
           find('a.vote-down').click
 
           expect(page).to have_css('a.vote-up-off')
@@ -129,21 +128,17 @@ feature 'User can vote for question',%q{
 
       end
 
-      scenario 'to negative value'
-
-      #TODO think: if there need scenario, changing the counter after cancel vote
-
-      xscenario 'ajax request changes vote counter', js: true do
+      scenario 'ajax request changes vote counter', js: true do
         within '.question-content .vote' do
-          expect(page).to have_content(/^0$/)
+          expect(page).to have_content(/^2$/)
           find('a.vote-down').click
-          expect(page).to have_content(/^-1$/)
-          find('a.vote-up').click
-          expect(page).to have_content(/^0$/)
-          find('a.vote-up').click
           expect(page).to have_content(/^1$/)
           find('a.vote-up').click
+          expect(page).to have_content(/^1$/)
+          find('a.vote-down').click
           expect(page).to have_content(/^2$/)
+          find('a.vote-up').click
+          expect(page).to have_content(/^3$/)
       
         end
 
