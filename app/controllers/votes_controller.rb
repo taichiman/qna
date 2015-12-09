@@ -28,7 +28,7 @@ class VotesController < ApplicationController
     case @state
     when :no_vote
       current_user.votes.create!(votable: @votable, vote_type: 'down')
-      s = { vote_down: 1, vote_count: -1 }
+      s = { vote_down: 1, vote_count: @votable.result_votes }
 
     when :up_vote
       s = { error: t('votes.cancel-previous-vote-suggestion') }
@@ -36,7 +36,7 @@ class VotesController < ApplicationController
 
     when :down_vote
       current_user.down_vote_for(@votable).destroy!
-      s = { vote_up: 0, vote_down: 0, vote_count: 0, message: t('votes.success-previous-vote-cancel') }
+      s = { vote_up: 0, vote_down: 0, vote_count: @votable.result_votes, message: t('votes.success-previous-vote-cancel') }
       
     end
 

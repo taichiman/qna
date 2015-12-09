@@ -117,6 +117,7 @@ feature 'User can vote for question',%q{
           expect(page).to have_css('a.vote-down-off')
           expect(page).to have_content(/^2$/)
 
+          save_and_open_page
           find('a.vote-down').click
 
           expect(page).to have_css('a.vote-up-off')

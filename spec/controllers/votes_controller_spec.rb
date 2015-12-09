@@ -32,8 +32,6 @@ describe VotesController do
         it 'increase summary vote result' do
           2.times { create :vote, votable: question, vote_type: 'up' }
           go_up
-          binding.pry 
-#where are all bellow methods store, and waht its mean
           expect(JSON.parse(response.body)['vote_count']).to eq 3
 
         end
@@ -64,11 +62,9 @@ describe VotesController do
 
         end
 
-        xit 'no change summary vote result'
-
       end
 
-      context 'if the user previously voted "up", then cancel the vote' do
+      context 'if the user previously voted "up", then cancel the vote.' do
         let!(:vote) { create :vote, votable: question, user: user, vote_type: 'up' }
 
         it 'respond with :succesfull status' do
@@ -90,7 +86,11 @@ describe VotesController do
 
         end
 
-        xit 'decrease summary vote result'
+        it 'Decrease summary vote result' do
+          go_up
+          expect(JSON.parse(response.body)['vote_count']).to eq 0
+
+        end
 
       end
 
@@ -138,7 +138,11 @@ describe VotesController do
 
           end
 
-          xit 'decrease summary vote result'
+          it 'Create JSON with decrease summary vote result' do
+            go_down
+            expect(JSON.parse(response.body)['vote_count']).to eq -1
+
+          end
 
         end
 
@@ -159,8 +163,6 @@ describe VotesController do
             .to eq( t('.votes.cancel-previous-vote-suggestion') )
             
           end
-
-          xit 'no change summary vote result'
 
         end
 
@@ -186,11 +188,40 @@ describe VotesController do
 
           end
 
-          xit 'increase summary vote result'
+          it 'Increase summary vote result' do
+            go_down
+            expect(JSON.parse(response.body)['vote_count']).to eq (0)
+
+          end
+
+        end
+
+        context 'if another users previously voted "up", then decrease vote counter.' do
+          before do
+            2.times { create :vote, votable: question, vote_type: 'up' }
+          end
+
+          it 'Respond with :succesfull status' do
+            go_down
+            expect(response).to have_http_status :ok
+
+          end
+
+          it 'System should add a vote' do
+            expect{ go_down }.to change{ Vote.where(vote_type: 'down').count }
+            .from(0).to(1)
+
+          end
+
+          it 'Increase summary vote result' do
+            go_down
+            
+            expect(JSON.parse(response.body)['vote_count']).to eq 1
+
+          end
         end
 
       end
-
     end
 
   end
