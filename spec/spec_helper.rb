@@ -87,5 +87,5 @@ RSpec.configure do |config|
 =end
 
   config.warnings = false
-  config.deprecation_stream = open('\tmp\warn','w')
+  #config.deprecation_stream = open('\tmp\warn','w')
 end

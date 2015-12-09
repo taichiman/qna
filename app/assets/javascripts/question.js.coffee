@@ -21,10 +21,11 @@ $.fn.extend
 $.fn.extend
   show_message: (xhr) -> 
     response = $.parseJSON(xhr.responseText)
-    message_div = $.parseHTML '<div class = "alert vote-alert alert-success"></div>'
-    $(message_div).text(response.message)
-    $(this).parents('table').before(message_div)
-
+    if (response.message) 
+      message_div = $.parseHTML '<div class = "alert vote-alert alert-success"></div>'
+      $(message_div).text(response.message)
+      $(this).parents('table').before(message_div)
+    
 $.fn.extend
   turn_on_up_vote: ->
     $(this).removeClass('vote-up-off').addClass('vote-up-on')
